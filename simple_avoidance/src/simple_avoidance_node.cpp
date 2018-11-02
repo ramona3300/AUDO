@@ -31,6 +31,15 @@ int main(int argc, char** argv)
   // sensor message container
   std_msgs::Int16 motor, steering;
 
+  sensor_msgs::Range usr, usf, usl;
+
+  ros::Subscriber usrSub = nh.subscribe<sensor_msgs::Range>(
+      "/uc_bridge/usr", 10, boost::bind(usrCallback, _1, &usr));
+  ros::Subscriber uslSub = nh.subscribe<sensor_msgs::Range>(
+      "/uc_bridge/usl", 10, boost::bind(uslCallback, _1, &usl));
+  ros::Subscriber usfSub = nh.subscribe<sensor_msgs::Range>(
+      "/uc_bridge/usf", 10, boost::bind(usfCallback, _1, &usf));
+
 
   // generate control message publisher
     ros::Publisher motorCtrl =
