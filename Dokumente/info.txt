@@ -1,0 +1,19 @@
+ros over ip
+
+export ROS_IP=my_ip
+
+export ROS_MASTER_URI=http://master_ip:11311
+
+rostopic echo /uc_bridge/set_steering_level_msg
+läuft
+
+rostopic pub /uc_bridge/set_steering_level_msg std_msgs/Int16 500
+läuft
+
+
+
+
+export ROS_MASTER_URI=http://172.18.82.173:11311
+export ROS_IP=172.18.69.80
+
+
