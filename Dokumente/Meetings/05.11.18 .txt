@@ -1,0 +1,7 @@
+Todo:
+
+Fabi: Skripte schreiben: Start am Auto aller Programme und setzten der Master_Uri, Start am Rechner mit ssh, master_uri,..
+Maike: nachschauen was es für alte Abgaben gibt und brauchbare Codeteile oder Erfahrungen zusammenstellen
+Niko: rausfinden wie man Bilder an entfernten Rechnern anzeigen lassen kann
+Nils: herausfinden was es schon für Filter gibt und wie diese einzusetzen sind
+Ramona: nützliche Kommandozeilenbefehle aufschreiben
