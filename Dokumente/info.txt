@@ -21,6 +21,9 @@ rostopic list -v
 #SSH aufsetzen
 ssh pses@<ip des Autos>
 
+#Script mit Argument aufrufen
+./<Scriptname>.sh <Argument>
+
 
 #Beispiele:
 export ROS_MASTER_URI=http://172.18.82.173:11311
