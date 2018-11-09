@@ -1,18 +1,28 @@
-ros over ip
+#ros over ip
 
+#eigene IP für ros setzen
 export ROS_IP=my_ip
 
+#festlegen welche IP der master ist, IP vom Auto
 export ROS_MASTER_URI=http://master_ip:11311
 
+#Nachrichten zu Topic ausgeben lassen
 rostopic echo /uc_bridge/set_steering_level_msg
-läuft
 
-rostopic pub /uc_bridge/set_steering_level_msg std_msgs/Int16 500
-läuft
+#Nachricht publizieren
+rostopic pub /uc_bridge/set_steering_level_msg std_msgs/Int16 -- 500
+
+#dynamischer Graph anzeigen
+rosrun rqt_graph rqt_graph
+
+#Liste mit topics und type anzeigen
+rostopic list -v
+
+#SSH aufsetzen
+ssh pses@<ip des Autos>
 
 
-
-
+#Beispiele:
 export ROS_MASTER_URI=http://172.18.82.173:11311
 export ROS_IP=172.18.69.80
 
