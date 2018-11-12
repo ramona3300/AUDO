@@ -71,23 +71,23 @@ int main(int argc, char** argv)
     if(d_err*pd > 400) d_err = 500;
     else if (d_err*pd < -400) d_err = -500;
    
-    i_err = i_err + err;
+    i_err += err;
     if(i_err*pi > 500) i_err = 500;
     else if(i_err*pi < -500) i_err = -500;
 
-    s_out = -(0*pk * err + pd * d_err + pi * i_err);
+    s_out = -(0*pk * err + 0*pd * d_err + pi * i_err);
     if(s_out > 800) s_out = 800;
     else if(s_out < -800) s_out = -800;
 
     ROS_INFO("s_out %d", s_out);
 
-    steering.data = (int)s_out;
+    //steering.data = (int)s_out;
 
     if (usf.range < 0.45)
     {
       motor.data = 0;
     }
-    else motor.data = 300;
+    else motor.data = 00;
      // publish command messages on their topics
     motorCtrl.publish(motor);
     steeringCtrl.publish(steering);
