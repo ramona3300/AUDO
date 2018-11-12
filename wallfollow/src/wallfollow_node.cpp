@@ -51,7 +51,7 @@ int main(int argc, char** argv)
 
   double sollwert = 0.45;
   int pd = 5000;
-  int pk = 800;
+  int pk = 1500;
   int pi = 100;
   double last_err = 0;
   double err = 0;
