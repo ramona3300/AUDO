@@ -21,6 +21,6 @@ else
 
 	echo "Launch ucbridge"
 	roslaunch pses_ucbridge ucbridge.launch
-	echo "Launch kinect drivers"
-	roslaunch kinect2_bridge kinect2_bridge.launch
+	#echo "Launch kinect drivers"
+	#roslaunch kinect2_bridge kinect2_bridge.launch
 fi
