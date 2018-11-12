@@ -81,13 +81,13 @@ int main(int argc, char** argv)
 
     ROS_INFO("s_out %d", s_out);
 
-    //steering.data = (int)s_out;
+    steering.data = (int)s_out;
 
     if (usf.range < 0.45)
     {
       motor.data = 0;
     }
-    else motor.data = 00;
+    else motor.data = 300;
      // publish command messages on their topics
     motorCtrl.publish(motor);
     steeringCtrl.publish(steering);
