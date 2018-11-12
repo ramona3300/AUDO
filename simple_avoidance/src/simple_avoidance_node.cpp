@@ -51,30 +51,35 @@ int main(int argc, char** argv)
 
   // Loop starts here:
   // loop rate value is set in Hz
-  ros::Rate loop_rate(1);
+  ros::Rate loop_rate(50);
   while (ros::ok())
   {
      
     // simple wall crash avoidance algorithm ..
-    if (usr.range < 0.3 && usl.range >= 0.3)
+    if (usl.range >= 0.3 && usr.range < 0.3)
     {
       steering.data = -750;
-      motor.data = 500;
+      motor.data = 400;
     }
     else if (usl.range < 0.3 && usr.range >= 0.3)
     {
       steering.data = 750;
-      motor.data = 500;
+      motor.data = 400;
     }
     else if (usl.range > 0.3 && usr.range > 0.3)
     {
       steering.data = 0;
-      motor.data = 500;
+      motor.data = 400;
     }
     else
     {
       steering.data = 0;
       motor.data = 0;
+    }
+    if (usf.range < 0.4)
+    {
+      motor.data = 0;
+      steering.data = 0;
     }
      // publish command messages on their topics
     motorCtrl.publish(motor);
