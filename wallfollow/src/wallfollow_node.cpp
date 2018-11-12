@@ -50,11 +50,11 @@ int main(int argc, char** argv)
   ROS_INFO("A simple avoidance, just slightly better!");
 
   double sollwert = 0.45;
-  int pd = 80;
+  int pd = 5000;
   int pk = 800;
   double last_err = 0;
   double err = 0;
-  //uint64_t last_t = 0;
+  double d_err = 0;
 
   // Loop starts here:
   // loop rate value is set in Hz
@@ -64,14 +64,18 @@ int main(int argc, char** argv)
     int s_out = 0;
     
     err = sollwert - usr.range;
-    //uint64_t time = ros::Time::now().toNSec();
-    //ROS_INFO("double time sec %lu", time-last_t);
 
+    d_err = (err-last_err);
+    if(d_err*pd > 400) d_err = 500;
+    else if (d_err*pd < -400) d_err = -500;
+   
+    s_out = -(0*pk * err + pd * d_err);
+    if(s_out > 750) s_out = 800;
+    else if(s_out < -750) s_out = -800;
 
-    s_out = -(0*pk*err + pd * (err-last_err));
-    ROS_INFO("s_out %f", err-last_err);
+    ROS_INFO("s_out %d", s_out);
 
-    //steering.data = s_out;
+    steering.data = (int)s_out;
 
     if (usf.range < 0.45)
     {
