@@ -52,7 +52,7 @@ int main(int argc, char** argv)
   double sollwert = 0.3;
   int pd = 5000;
   int pk = 800;
-  int pi = 150;
+  int pi = 100;
   double last_err = 0;
   double err = 0;
   double d_err = 0;
@@ -68,16 +68,16 @@ int main(int argc, char** argv)
     err = sollwert - usr.range;
 
     d_err = (err-last_err);
-    if(d_err*pd > 400) d_err = 500/pd;
-    else if (d_err*pd < -400) d_err = -500/pd;
+    if(d_err*pd > 200) d_err = 200/pd;
+    else if (d_err*pd < -200) d_err = -200/pd;
    
     i_err += err;
-    if(i_err*pi > 500) i_err = 500/pi;
-    else if(i_err*pi < -500) i_err = -500/pi;
+    if(i_err*pi > 200) i_err = 200/pi;
+    else if(i_err*pi < -200) i_err = -200/pi;
 
     s_out = -(pk * err + pd * d_err + pi * i_err);
-    if(s_out > 800) s_out = 800;
-    else if(s_out < -800) s_out = -800;
+    if(s_out > 400) s_out = 400;
+    else if(s_out < -400) s_out = -400;
 
     ROS_INFO("s_out %d", s_out);
 
