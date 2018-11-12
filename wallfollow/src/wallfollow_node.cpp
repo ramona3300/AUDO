@@ -52,7 +52,7 @@ int main(int argc, char** argv)
   double sollwert = 0.3;
   int pd = 5000;
   int pk = 800;
-  int pi = 100;
+  int pi = 150;
   double last_err = 0;
   double err = 0;
   double d_err = 0;
@@ -75,7 +75,7 @@ int main(int argc, char** argv)
     if(i_err*pi > 500) i_err = 500/pi;
     else if(i_err*pi < -500) i_err = -500/pi;
 
-    s_out = -(0*pk * err + 0*pd * d_err + pi * i_err);
+    s_out = -(0*pk * err + pd * d_err + 0*pi * i_err);
     if(s_out > 800) s_out = 800;
     else if(s_out < -800) s_out = -800;
 
