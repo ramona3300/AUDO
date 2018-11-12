@@ -49,16 +49,18 @@ int main(int argc, char** argv)
 
   ROS_INFO("A simple avoidance, just slightly better!");
 
-  double sollwert = 0.45;
+  double sollwert = 0.3;
   int pd = 5000;
   int pk = 800;
+  int pi = 100;
   double last_err = 0;
   double err = 0;
   double d_err = 0;
+  double i_err = 0;
 
   // Loop starts here:
   // loop rate value is set in Hz
-  ros::Rate loop_rate(20);
+  ros::Rate loop_rate(10);
   while (ros::ok())
   {
     int s_out = 0;
@@ -69,9 +71,13 @@ int main(int argc, char** argv)
     if(d_err*pd > 400) d_err = 500;
     else if (d_err*pd < -400) d_err = -500;
    
-    s_out = -(0*pk * err + pd * d_err);
-    if(s_out > 750) s_out = 800;
-    else if(s_out < -750) s_out = -800;
+    i_err = i_err + err;
+    if(i_err*pi > 500) i_err = 500;
+    else if(i_err*pi < -500) i_err = -500;
+
+    s_out = -(0*pk * err + pd * d_err + pi * i_err);
+    if(s_out > 800) s_out = 800;
+    else if(s_out < -800) s_out = -800;
 
     ROS_INFO("s_out %d", s_out);
 
