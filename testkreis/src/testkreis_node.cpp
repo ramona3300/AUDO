@@ -54,6 +54,7 @@ int main(int argc, char** argv)
        std::stringstream ss;
        ss << "Testkreis " << count;
        msg.data = ss.str();
+       ROS_INFO("neue Nachricht");
 
     // publish command messages on their topics
     motorCtrl.publish(motor);

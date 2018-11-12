@@ -15,6 +15,9 @@ rostopic pub /uc_bridge/set_steering_level_msg std_msgs/Int16 -- 500
 #dynamischer Graph anzeigen
 rosrun rqt_graph rqt_graph
 
+#neue Node erstellen
+catkin_create_pkg [node_name] std_msgs rospy roscpp
+
 #Liste mit topics und type anzeigen
 rostopic list -v
 
