@@ -50,8 +50,8 @@ int main(int argc, char** argv)
   ROS_INFO("A simple avoidance, just slightly better!");
 
   double sollwert = 0.45;
-  int pd = 5000;
-  int pk = 3000;
+  int pd = 6000;
+  int pk = 2000;
   int pi = 100;
   double last_err = 0;
   double err = 0;
@@ -70,11 +70,13 @@ int main(int argc, char** argv)
     d_err = (err-last_err);
     if(d_err*pd > 400) d_err = 400/pd;
     else if (d_err*pd < -400) d_err = -400/pd;
+
     /*
     i_err += err;
     if(i_err*pi > 200) i_err = 200/pi;
     else if(i_err*pi < -200) i_err = -200/pi;
     */
+
     s_out = -(pk * err + pd * d_err + 0*pi * i_err);
     if(s_out > 400) s_out = 400;
     else if(s_out < -400) s_out = -400;
