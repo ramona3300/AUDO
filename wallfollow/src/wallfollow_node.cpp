@@ -68,8 +68,8 @@ int main(int argc, char** argv)
     err = sollwert - usr.range;
 
     d_err = (err-last_err);
-    if(d_err*pd > 200) d_err = 200/pd;
-    else if (d_err*pd < -200) d_err = -200/pd;
+    if(d_err*pd > 400) d_err = 400/pd;
+    else if (d_err*pd < -400) d_err = -400/pd;
     /*
     i_err += err;
     if(i_err*pi > 200) i_err = 200/pi;
