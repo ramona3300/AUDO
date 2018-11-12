@@ -51,7 +51,7 @@ int main(int argc, char** argv)
 
   double sollwert = 0.45;
   int pd = 5000;
-  int pk = 1500;
+  int pk = 3000;
   int pi = 100;
   double last_err = 0;
   double err = 0;
@@ -60,7 +60,7 @@ int main(int argc, char** argv)
 
   // Loop starts here:
   // loop rate value is set in Hz
-  ros::Rate loop_rate(10);
+  ros::Rate loop_rate(15);
   while (ros::ok())
   {
     int s_out = 0;
@@ -75,7 +75,7 @@ int main(int argc, char** argv)
     if(i_err*pi > 200) i_err = 200/pi;
     else if(i_err*pi < -200) i_err = -200/pi;
     */
-    s_out = -(pk * err + pd * d_err + pi * i_err);
+    s_out = -(pk * err + 0*pd * d_err + 0*pi * i_err);
     if(s_out > 400) s_out = 400;
     else if(s_out < -400) s_out = -400;
 
