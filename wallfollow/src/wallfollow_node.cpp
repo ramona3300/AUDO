@@ -75,7 +75,7 @@ int main(int argc, char** argv)
     if(i_err*pi > 200) i_err = 200/pi;
     else if(i_err*pi < -200) i_err = -200/pi;
     */
-    s_out = -(pk * err + 0*pd * d_err + 0*pi * i_err);
+    s_out = -(pk * err + pd * d_err + 0*pi * i_err);
     if(s_out > 400) s_out = 400;
     else if(s_out < -400) s_out = -400;
 
