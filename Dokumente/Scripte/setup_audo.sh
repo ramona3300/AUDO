@@ -21,6 +21,11 @@ else
 
 	echo "Launch ucbridge"
 	roslaunch pses_ucbridge ucbridge.launch
-	#echo "Launch kinect drivers"
-	#roslaunch kinect2_bridge kinect2_bridge.launch
+
+	gnome-terminal -- echo "Launch kinect drivers"
+	roslaunch kinect2_bridge kinect2_bridge.launch
+
+	#may be deleted later
+	gnome-terminal -- echo "Launch sub for keeping kinect alive"
+	rosrun listener listener_node
 fi
