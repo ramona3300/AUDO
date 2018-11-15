@@ -12,7 +12,8 @@ else
 	echo "aduoURI:  $audoURI"
 	#Fuert die Befehle aus
 	export ROS_IP=$deviceIp
-	echo "export ROS_IP=$deviceIp"
+	echo "export ROS_IP=$deviceIp done"
 	export ROS_MASTER_URI=$audoURI
-	echo "export ROS_MASTER_URI=$audoURI"
+	echo "export ROS_MASTER_URI=$audoURI done"
+	rviz
 fi
