@@ -13,6 +13,30 @@
 #include <image_transport/image_transport.h>
 
 static const std::string OPENCV_WINDOW = "Image window";
+static const std::string OPENCV_RAW = "Image RAAAAAWW window";
+
+std::string type2str(int type) {
+  std::string r;
+
+  uchar depth = type & CV_MAT_DEPTH_MASK;
+  uchar chans = 1 + (type >> CV_CN_SHIFT);
+
+  switch ( depth ) {
+    case CV_8U:  r = "8U"; break;
+    case CV_8S:  r = "8S"; break;
+    case CV_16U: r = "16U"; break;
+    case CV_16S: r = "16S"; break;
+    case CV_32S: r = "32S"; break;
+    case CV_32F: r = "32F"; break;
+    case CV_64F: r = "64F"; break;
+    default:     r = "User"; break;
+  }
+
+  r += "C";
+  r += (chans+'0');
+
+  return r;
+}
 
 void imageCallback(const sensor_msgs::ImageConstPtr& msg){
     
@@ -32,23 +56,38 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg){
     std::string enc = cv_ptr->encoding;
     char enco[20];
     strcpy(enco, enc.c_str());
+    ROS_INFO("Encoding: %s", enco);
     */
-    //ROS_INFO("Encoding: %s", enco);
-
+    cv::imshow(OPENCV_RAW, cv_ptr->image);
+    cv::waitKey(3);
+    ROS_INFO("BGR2HSV");
     //  cv::COLOR_BGR2HSV 
-    cv::Mat hsv;
-    cv::cvtColor(cv_ptr->image, hsv, cv::COLOR_BGR2HSV);
+    cv::Mat hsv  = cv::Mat::zeros( (cv_ptr->image).size(), CV_8UC3 );
+    cv::cvtColor(cv_ptr->image, hsv, cv::COLOR_BGR2HSV, 3);
     
-    cv::Mat hsv_filtered;
-    cv::inRange(hsv, cv::Scalar(50, 20, 100), cv::Scalar(70, 255, 255), hsv_filtered);
-
-    //cv::Mat bgr;
-    cv::Mat bgr = cv::Mat::zeros( hsv_filtered.size(), CV_32FC3 );
-    cv::cvtColor(hsv_filtered, bgr, cv::COLOR_HSV2BGR_FULL);
+    cv::Mat hsv_filtered   = cv::Mat::zeros( hsv.size(), CV_8UC3 );
+    //cv::inRange(hsv, cv::Scalar(50, 20, 100), cv::Scalar(70, 255, 255), hsv_filtered);
+    cv::inRange(hsv, cv::Scalar(100, 20, 100), cv::Scalar(115, 255, 255), hsv_filtered);
+    // H 107
+    // S 255
+    // V 224
+    
+    //cv::imshow(OPENCV_WINDOW, hsv_filtered);
+    /*
+    std::string temp = type2str(hsv_filtered_good.type());
+    char fil_type[20];
+    strcpy(fil_type, temp.c_str());
+    ROS_INFO("Type: %s", fil_type);
+    ROS_INFO("HSV2BGR");
+    */
+    //cv::Mat bgr; CV_32FC3
+    // conversion fails do something about it
+    //cv::Mat bgr  = cv::Mat::zeros( hsv_filtered.size(), CV_8UC3 );
+    //cv::cvtColor(hsv_filtered, bgr, cv::COLOR_HSV2BGR, 3);
 
     // convert the image to grayscale
-    cv::Mat gray;
-    cv::cvtColor(bgr, gray, cv::COLOR_BGR2GRAY);
+    cv::Mat gray = hsv_filtered;
+    //cv::cvtColor(bgr, gray, cv::COLOR_BGR2GRAY);
     // blur the image
     cv::blur( gray, gray, cv::Size(3,3) );
     // edge detection with our friend Kenny (Canny)
@@ -68,17 +107,27 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg){
         cv::approxPolyDP( contours[i], contours_poly[i], 3, true );
         boundRect[i] = cv::boundingRect( contours_poly[i] );
     }
+    // 10000 pixel²
+    int rect_count = 100;
+    std::vector<cv::Rect> boundRect_filtered( rect_count );
+    for( size_t i = 0; i < rect_count; i++ )
+    {
+        if( boundRect[i].width * boundRect[i].height >= 1000 )
+          boundRect_filtered[i] = boundRect[i];
+    }
+
+
     // Create new Mat of unsigned 8-bit chars, filled with zeros.
     // It will contain all the drawings we are going to make (rects and circles).
     int type = CV_8UC3;
     cv::Mat drawing = cv::Mat::zeros( canny_output.size(), type );
     // For every contour: pick a random color, draw the contour, the bounding rectangle
     cv::RNG rng(12345);
-    for( size_t i = 0; i< contours.size(); i++ )
+    for( size_t i = 0; i< rect_count; i++ )
     {
         cv::Scalar color = cv::Scalar( rng.uniform(0, 256), rng.uniform(0,256), rng.uniform(0,256) );
-        cv::drawContours( drawing, contours_poly, (int)i, color );
-        cv::rectangle( drawing, boundRect[i].tl(), boundRect[i].br(), color, 2 );
+        //cv::drawContours( drawing, contours_poly, (int)i, color );
+        cv::rectangle( drawing, boundRect_filtered[i].tl(), boundRect_filtered[i].br(), color, 2 );
     }
 
 
@@ -101,11 +150,14 @@ int main(int argc, char** argv)
   // create a window the show things
   cv::namedWindow(OPENCV_WINDOW);
   cv::waitKey(3);
+  cv::namedWindow(OPENCV_RAW);
+  cv::waitKey(3);
   
   image_transport::ImageTransport it(nh);
-  image_transport::Subscriber sub = it.subscribe("kinect2/qhd/image_color", 1, imageCallback);
+  image_transport::Subscriber sub = it.subscribe("cv_camera/image_raw", 1, imageCallback);
   //image_transport::Publisher pub = it.advertise("out_image_base_topic", 1);
-  
+  ///cv_camera/image_raw
+  //kinect2/qhd/image_color
   
   ROS_INFO("Contour Detection Start");
 
