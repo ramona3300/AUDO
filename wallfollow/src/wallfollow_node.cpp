@@ -2,7 +2,22 @@
 #include <sensor_msgs/Range.h>
 #include <std_msgs/Int16.h>
 #include <std_msgs/String.h>
+#include <nav_msgs/Odometry.h>
+#include <math.h>
+#include <tf/tf.h>
 
+double roll, pitch, yaw, last_t, t;
+
+void odomCallback(nav_msgs::Odometry::ConstPtr odomMsg, nav_msgs::Odometry* odom)
+{
+    *odom = *odomMsg;
+
+    //Conversion to euler angles
+    tf::Quaternion q;
+    tf::quaternionMsgToTF(odom->pose.pose.orientation, q);
+    tf::Matrix3x3 mat(q);
+    mat.getEulerYPR(yaw, pitch, roll);
+}
 // gets called whenever a new message is availible in the input puffer
 void uslCallback(sensor_msgs::Range::ConstPtr uslMsg, sensor_msgs::Range* usl)
 {
@@ -24,15 +39,18 @@ void usrCallback(sensor_msgs::Range::ConstPtr usrMsg, sensor_msgs::Range* usr)
 int main(int argc, char** argv)
 {
   // init this node
-  ros::init(argc, argv, "testkreis_node");
+  ros::init(argc, argv, "wallfollow_node");
   // get ros node handle
   ros::NodeHandle nh;
 
   // sensor message container
   std_msgs::Int16 motor, steering;
-
   sensor_msgs::Range usr, usf, usl;
+  nav_msgs::Odometry odom;
 
+
+  ros::Subscriber odomSub = nh.subscribe<nav_msgs::Odometry>(
+      "/odom", 10, boost::bind(odomCallback, _1, &odom));
   ros::Subscriber usrSub = nh.subscribe<sensor_msgs::Range>(
       "/uc_bridge/usr", 10, boost::bind(usrCallback, _1, &usr));
   ros::Subscriber uslSub = nh.subscribe<sensor_msgs::Range>(
@@ -42,46 +60,40 @@ int main(int argc, char** argv)
 
 
   // generate control message publisher
-    ros::Publisher motorCtrl =
+  ros::Publisher motorCtrl =
       nh.advertise<std_msgs::Int16>("/uc_bridge/set_motor_level_msg", 1);
   ros::Publisher steeringCtrl =
       nh.advertise<std_msgs::Int16>("/uc_bridge/set_steering_level_msg", 1);
 
-  ROS_INFO("A simple avoidance, just slightly better!");
+  ROS_INFO("A simple Wallfollow");
 
-  double sollwert = 0.45;
-  int pd = 5000;
-  int pk = 2000;
-  int pi = 100;
+  double sollwert = 0.4;
+  int pd = 80;
+  int pk = 800;
   double last_err = 0;
   double err = 0;
   double d_err = 0;
-  double i_err = 0;
+  last_t = ((double)clock()/CLOCKS_PER_SEC);
 
   // Loop starts here:
   // loop rate value is set in Hz
   ros::Rate loop_rate(15);
   while (ros::ok())
   {
+    t = ((double)clock()/CLOCKS_PER_SEC);
     int s_out = 0;
-    
-    err = sollwert - usr.range;
+
+    // Regelabweichung
+    err = sollwert - usr.range*cos(yaw);
 
     d_err = (err-last_err);
-    if(d_err*pd > 400) d_err = 400/pd;
-    else if (d_err*pd < -400) d_err = -400/pd;
 
-    /*
-    i_err += err;
-    if(i_err*pi > 200) i_err = 200/pi;
-    else if(i_err*pi < -200) i_err = -200/pi;
-    */
+    s_out = -(pk * err + pd * d_err / (t - last_t) );
+    if(s_out > 600) s_out = 600;
+    else if(s_out < -600) s_out = -600;
 
-    s_out = -(pk * err + pd * d_err + 0*pi * i_err);
-    if(s_out > 400) s_out = 400;
-    else if(s_out < -400) s_out = -400;
 
-    ROS_INFO("s_out %d", s_out);
+    ROS_INFO("s_out: %d \t d_err: %f", s_out, d_err);
 
     steering.data = (int)s_out;
 
@@ -97,6 +109,7 @@ int main(int argc, char** argv)
     // changed is actually stupid but for this demo it doesn't matter too much.
     
     last_err = err;
+    last_t = t;
 
     // clear input/output buffers
     ros::spinOnce();
