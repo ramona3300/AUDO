@@ -20,12 +20,12 @@ else
 	echo "export ROS_MASTER_URI=$audoURI"
 
 	echo "Launch ucbridge"
-	roslaunch pses_ucbridge ucbridge.launch
+	gnome-terminal -- roslaunch pses_ucbridge ucbridge.launch
 
-	gnome-terminal -- echo "Launch kinect drivers"
-	roslaunch kinect2_bridge kinect2_bridge.launch
+	echo "Launch kinect drivers"
+	gnome-terminal -- roslaunch kinect2_bridge kinect2_bridge.launch
 
 	#may be deleted later
-	gnome-terminal -- echo "Launch sub for keeping kinect alive"
-	rosrun listener listener_node
+	echo "Launch sub for keeping kinect alive"
+	gnome-terminal -- rosrun listener listener_node
 fi
