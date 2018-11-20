@@ -1,0 +1,4 @@
+\select@language {ngerman}
+\contentsline {chapter}{\numberline {1}Einleitung}{2}{chapter.1}
+\contentsline {chapter}{\numberline {2}Lösung}{3}{chapter.2}
+\contentsline {chapter}{\numberline {3}Probleme}{4}{chapter.3}
