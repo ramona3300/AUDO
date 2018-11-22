@@ -12,8 +12,10 @@
 #include <sensor_msgs/image_encodings.h>
 #include <image_transport/image_transport.h>
 
+
 static const std::string OPENCV_WINDOW = "Image window";
 static const std::string OPENCV_RAW = "Image RAAAAAWW window";
+static const std::string OPENCV_STRANGE = "Image filtered window";
 
 std::string type2str(int type) {
   std::string r;
@@ -63,8 +65,8 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg){
     cv::Point2f inputQuad[4]; 
     // The 4 points that select quadilateral on the input , from top-left in clockwise order
     // These four pts are the sides of the rect box used as input 
-    inputQuad[0] = cv::Point2f( 1,1 ); //topleft
-    inputQuad[1] = cv::Point2f( 1279,1 ); //topright
+    inputQuad[0] = cv::Point2f( 1,400 ); //topleft
+    inputQuad[1] = cv::Point2f( 1279,400 ); //topright
     inputQuad[2] = cv::Point2f( 1279,719 ); //bottomright
     inputQuad[3] = cv::Point2f( 1,719  ); //bottomleft
     // Output Quadilateral or World plane coordinates
@@ -89,25 +91,45 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg){
     cv::Mat bird  = cv::Mat::zeros( (cv_ptr->image).size(), (cv_ptr->image).type() );
     cv::warpPerspective(cv_ptr->image,bird,lambda,bird.size() );
     
-    cv::imshow(OPENCV_WINDOW, bird);
-    cv::waitKey(3);
-    
-    cv::imshow(OPENCV_RAW, cv_ptr->image);
+    /* Set Region of Interest */
+
+    int offset_x = 300;
+    int offset_y = 0;
+
+    cv::Rect roi;
+    roi.x = offset_x;
+    roi.y = offset_y;
+    roi.width = bird.size().width - (offset_x*2);
+    roi.height = bird.size().height - 150;
+
+    /* Crop the original image to the defined ROI */
+
+    cv::Mat crop = bird(roi);
+
+
+    //cv::imshow(OPENCV_WINDOW, crop);
+    //cv::waitKey(3);
+    cv::Mat lowPassed;
+    cv::bilateralFilter(cv_ptr->image, lowPassed, 5, 120, 120);
+    cv::imshow(OPENCV_RAW, lowPassed);
     cv::waitKey(3);
     
     ROS_INFO("BGR2HSV");
     //  cv::COLOR_BGR2HSV 
-    cv::Mat hsv  = cv::Mat::zeros( (cv_ptr->image).size(), CV_8UC3 );
-    cv::cvtColor(cv_ptr->image, hsv, cv::COLOR_BGR2HSV, 3);
-    
+    cv::Mat hsv  = cv::Mat::zeros( crop.size(), CV_8UC3 );
+    cv::cvtColor(crop, hsv, cv::COLOR_BGR2HSV, 3);
+
     cv::Mat hsv_filtered   = cv::Mat::zeros( hsv.size(), CV_8UC3 );
     cv::inRange(hsv, cv::Scalar(50, 20, 100), cv::Scalar(70, 255, 255), hsv_filtered);
     //cv::inRange(hsv, cv::Scalar(100, 20, 100), cv::Scalar(115, 255, 255), hsv_filtered);
     // H 107
     // S 255
     // V 224
-    
-    //cv::imshow(OPENCV_WINDOW, hsv_filtered);
+    //cv::GaussianBlur( hsv_filtered, lowPassed, Size( 5, 5 ), 2, 2 );
+
+    //cv::bilateralFilter(hsv_filtered, lowPassed, 5, 120, 120);
+    cv::imshow(OPENCV_STRANGE, lowPassed);
+    cv::waitKey(3);
     /*
     std::string temp = type2str(hsv_filtered_good.type());
     char fil_type[20];
@@ -144,11 +166,14 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg){
     }
     // 10000 pixel²
     int rect_count = 100;
+    int rect_count_actual = 0;
     std::vector<cv::Rect> boundRect_filtered( rect_count );
     for( size_t i = 0; i < rect_count; i++ )
     {
-        if( boundRect[i].width * boundRect[i].height >= 1000 )
+        if( boundRect[i].width * boundRect[i].height >= 500 ){
           boundRect_filtered[i] = boundRect[i];
+          rect_count_actual++;
+        }
     }
 
 
@@ -156,22 +181,22 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg){
     // It will contain all the drawings we are going to make (rects and circles).
     int type = CV_8UC3;
     //cv::Mat drawing = cv::Mat::zeros( canny_output.size(), type );
-    cv::Mat drawing = cv_ptr->image;
+    cv::Mat drawing = crop;
     // For every contour: pick a random color, draw the contour, the bounding rectangle
     cv::RNG rng(12345);
-    for( size_t i = 0; i< rect_count; i++ )
+    for( size_t i = 0; i< rect_count_actual; i++ )
     {
         cv::Scalar color = cv::Scalar( rng.uniform(0, 256), rng.uniform(0,256), rng.uniform(0,256) );
         //cv::drawContours( drawing, contours_poly, (int)i, color );
         cv::rectangle( drawing, boundRect_filtered[i].tl(), boundRect_filtered[i].br(), color, 2 );
     }
-    cv::Scalar color = cv::Scalar( rng.uniform(0, 256), rng.uniform(0,256), rng.uniform(0,256) );
-    cv::rectangle( drawing, cv::Point( 0,0 ), cv::Point( 400,200 ), color, 2 );
+    //cv::Scalar color = cv::Scalar( rng.uniform(0, 256), rng.uniform(0,256), rng.uniform(0,256) );
+    //cv::rectangle( drawing, cv::Point( 0,0 ), cv::Point( 400,200 ), color, 2 );
 
 
     // Update GUI Window
-    //cv::imshow(OPENCV_WINDOW, /* cv_ptr->image */ drawing);
-    //cv::waitKey(3);
+    cv::imshow(OPENCV_WINDOW, /* cv_ptr->image */ drawing);
+    cv::waitKey(3);
     
     //ROS_INFO("I heard: %v", img->data);
 }
@@ -186,6 +211,8 @@ int main(int argc, char** argv)
 
   // create a window the show things
   cv::namedWindow(OPENCV_WINDOW);
+  cv::waitKey(3);
+  cv::namedWindow(OPENCV_STRANGE);
   cv::waitKey(3);
   cv::namedWindow(OPENCV_RAW);
   cv::waitKey(3);
