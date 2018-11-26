@@ -104,39 +104,96 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg){
 
     /* Crop the original image to the defined ROI */
 
-    cv::Mat crop = bird(roi);
-
-
-    //cv::imshow(OPENCV_WINDOW, crop);
-    //cv::waitKey(3);
-    cv::Mat lowPassed;
-    cv::bilateralFilter(cv_ptr->image, lowPassed, 5, 120, 120);
-    cv::imshow(OPENCV_RAW, lowPassed);
-    cv::waitKey(3);
+    //cv::Mat crop = bird(roi);
+    
+    cv::Mat brighton = cv::Mat::zeros((cv_ptr->image).size(), CV_8UC3);
+    double alpha = 1.0; /*< Simple contrast control */
+    int beta = 100;       /*< Simple brightness control */
+    
+    for( int y = 0; y < bird.rows; y++ ) {
+        for( int x = 0; x < bird.cols; x++ ) {
+            for( int c = 0; c < bird.channels(); c++ ) {
+                brighton.at<cv::Vec3b>(y,x)[c] =
+                  cv::saturate_cast<uchar>( alpha*bird.at<cv::Vec3b>(y,x)[c] + beta );
+            }
+        }
+    }
+    cv::Mat crop = brighton(roi);
+    
     
     ROS_INFO("BGR2HSV");
     //  cv::COLOR_BGR2HSV 
-    cv::Mat hsv  = cv::Mat::zeros( crop.size(), CV_8UC3 );
-    cv::cvtColor(crop, hsv, cv::COLOR_BGR2HSV, 3);
+    cv::Mat hsv1  = cv::Mat::zeros( crop.size(), CV_8UC3 );
+    cv::cvtColor(crop, hsv1, cv::COLOR_BGR2HSV, 3);
 
-    cv::Mat hsv_filtered   = cv::Mat::zeros( hsv.size(), CV_8UC3 );
-    cv::inRange(hsv, cv::Scalar(50, 20, 100), cv::Scalar(70, 255, 255), hsv_filtered);
+    cv::Mat hsv_filtered   = cv::Mat::zeros( hsv1.size(), CV_8UC3 );
+    cv::inRange(hsv1, cv::Scalar(50, 20, 100), cv::Scalar(70, 255, 255), hsv_filtered);
+
+    /*
+    cv::Mat hsv2 = cv::Mat::zeros(brighton.size(), CV_8UC3);
+    cv::cvtColor(brighton, hsv2, cv::COLOR_BGR2HSV, 3);
+
+    cv::Mat hsv_original = cv::Mat::zeros(hsv2.size(), CV_8UC3);
+    cv::inRange(hsv2, cv::Scalar(50, 20, 100), cv::Scalar(70, 255, 255), hsv_original);
+    
+
+    cv::imshow(OPENCV_WINDOW, hsv_original);
+    cv::waitKey(3);
+    */
+    cv::imshow(OPENCV_RAW, hsv_filtered);
+    cv::waitKey(3);
+
+    ROS_INFO("AAHAHHAHAHAH");
+
+    int last = 0;
+    int index = 0;
+    int length = ( (int) ( (bird.cols / 10) + 1 ) );
+    cv::Point points_in_space[length];
+    for( int y = 0; y < bird.rows; y++ ) {
+        for( int x = 0; x < bird.cols; x++ ) {
+            
+            if(last < y + 10){
+              last = y;
+
+              if(200 < hsv_filtered.at<uchar>(x,y)){
+                points_in_space[index] = cv::Point(x,y);
+                index++;
+                break;
+              }
+            }
+            
+            
+        }
+    }
+    //ROS_INFO("BBEBEBEBEBEBEBEE");
+    cv::Mat bgr  = cv::Mat::zeros( hsv_filtered.size() * 3, CV_8UC3 );
+    cv::cvtColor(hsv_filtered, bgr,  cv::COLOR_GRAY2BGR, 3);
+    cv::Scalar color = cv::Scalar( 0, 0, 255 );
+
+    ROS_INFO("BBEBEBEBEBEBEBEE");
+    for( int i = 0; i < index; i++ ) {
+      ROS_INFO("i = %d",i);
+      cv::rectangle( bgr, points_in_space[i], points_in_space[i] + cv::Point( 2,2 ), color, 2 );
+      
+    }
+    cv::imshow(OPENCV_WINDOW, bgr);
+    cv::waitKey(3);
+
+
+
     //cv::inRange(hsv, cv::Scalar(100, 20, 100), cv::Scalar(115, 255, 255), hsv_filtered);
     // H 107
     // S 255
     // V 224
     //cv::GaussianBlur( hsv_filtered, lowPassed, Size( 5, 5 ), 2, 2 );
-
+   // cv::Mat lowPassed;
     //cv::bilateralFilter(hsv_filtered, lowPassed, 5, 120, 120);
-    cv::imshow(OPENCV_STRANGE, lowPassed);
-    cv::waitKey(3);
     /*
-    std::string temp = type2str(hsv_filtered_good.type());
-    char fil_type[20];
-    strcpy(fil_type, temp.c_str());
-    ROS_INFO("Type: %s", fil_type);
-    ROS_INFO("HSV2BGR");
+    cv::resize(hsv_filtered, hsv_filtered, cv::Size(0,0), 0.5, 0.5, CV_INTER_LINEAR);
+    cv::imshow(OPENCV_STRANGE, hsv_filtered);
+    cv::waitKey(3);
     */
+    /*
     //cv::Mat bgr; CV_32FC3
     // conversion fails do something about it
     //cv::Mat bgr  = cv::Mat::zeros( hsv_filtered.size(), CV_8UC3 );
@@ -195,9 +252,9 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg){
 
 
     // Update GUI Window
-    cv::imshow(OPENCV_WINDOW, /* cv_ptr->image */ drawing);
+    cv::imshow(OPENCV_WINDOW,  drawing);
     cv::waitKey(3);
-    
+    */
     //ROS_INFO("I heard: %v", img->data);
 }
 
