@@ -32,4 +32,6 @@ ssh pses@<ip des Autos>
 export ROS_MASTER_URI=http://172.18.82.173:11311
 export ROS_IP=172.18.69.80
 
+fabi
+
 
