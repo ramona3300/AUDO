@@ -107,8 +107,8 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg){
     //cv::Mat crop = bird(roi);
     
     cv::Mat brighton = cv::Mat::zeros((cv_ptr->image).size(), CV_8UC3);
-    double alpha = 1.0; /*< Simple contrast control */
-    int beta = 100;       /*< Simple brightness control */
+    double alpha = 1.0; /*< Simple contrast control [1.0-3.0]*/
+    int beta = 100;       /*< Simple brightness control [0-100]*/
     
     for( int y = 0; y < bird.rows; y++ ) {
         for( int x = 0; x < bird.cols; x++ ) {
@@ -121,7 +121,7 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg){
     cv::Mat crop = brighton(roi);
     
     
-    ROS_INFO("BGR2HSV");
+    //ROS_INFO("BGR2HSV");
     //  cv::COLOR_BGR2HSV 
     cv::Mat hsv1  = cv::Mat::zeros( crop.size(), CV_8UC3 );
     cv::cvtColor(crop, hsv1, cv::COLOR_BGR2HSV, 3);
@@ -140,42 +140,85 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg){
     cv::imshow(OPENCV_WINDOW, hsv_original);
     cv::waitKey(3);
     */
-    cv::imshow(OPENCV_RAW, hsv_filtered);
-    cv::waitKey(3);
+    
 
-    ROS_INFO("AAHAHHAHAHAH");
+    //ROS_INFO("AAHAHHAHAHAH");
+    /*
+    for( int y = 0; y < hsv_filtered.cols; y++ ) {
+      for( int x = 0; x < hsv_filtered.rows; x++ ) {
+        if(240 < hsv_filtered.at<uchar>(x,y)){
+          hsv_filtered[x][y] = 1;
+        }else{
+          hsv_filtered[x][y] = 0;
+        }
+      }
+    }
+    */
+    cv::Mat bin;
+    //cv::threshold( hsv_filtered, bin, threshold_value, max_BINARY_value,threshold_type );
+    cv::threshold( hsv_filtered, bin, 240, 255,CV_THRESH_BINARY );
+    //cv::imshow(OPENCV_RAW, bin);
+    //cv::waitKey(3);
 
+
+    std::vector<cv::Vec4i> lines;
+    //threshold: The minimum number of intersections to “detect” a line
+    //minLinLength: The minimum number of points that can form a line. Lines with less than this number of points are disregarded.
+    //maxLineGap: The maximum gap between two points to be considered in the same line.
+    //cv::HoughLinesP(bin, lines, 1, CV_PI/180, threshold, minLinLength, maxLineGap );
+    cv::HoughLinesP(bin, lines, 1, CV_PI/180, 100, 100, 50 );
+
+    ROS_INFO("lines:\t%d",lines.size());
+
+    /*
     int last = 0;
     int index = 0;
-    int length = ( (int) ( (bird.cols / 10) + 1 ) );
+    int length = ( (int) ( (bin.cols / 10) + 1 ) );
     cv::Point points_in_space[length];
-    for( int y = 0; y < bird.rows; y++ ) {
-        for( int x = 0; x < bird.cols; x++ ) {
-            
-            if(last < y + 10){
-              last = y;
+    for( int y = 0; y < bin.rows; y++ ) {
+        
+        if(last + 10 < y){
+          last = y;
+        
+          for( int x = 0; x < bin.cols; x++ ) {
 
-              if(200 < hsv_filtered.at<uchar>(x,y)){
-                points_in_space[index] = cv::Point(x,y);
-                index++;
-                break;
-              }
+            if(
+              bin.at<uchar>(y,x)
+              //&& 0 == hsv_filtered.at<uchar>(x+1,y)
+              //&& 240 < hsv_filtered.at<uchar>(x+2,y)
+              ){
+
+
+            //if(240 < hsv_filtered.at<uchar>(x,y)){
+              points_in_space[index] = cv::Point(x,y);
+              index++;
+              break;
             }
-            
+          }
             
         }
     }
     //ROS_INFO("BBEBEBEBEBEBEBEE");
+    */
     cv::Mat bgr  = cv::Mat::zeros( hsv_filtered.size() * 3, CV_8UC3 );
     cv::cvtColor(hsv_filtered, bgr,  cv::COLOR_GRAY2BGR, 3);
+    
     cv::Scalar color = cv::Scalar( 0, 0, 255 );
-
-    ROS_INFO("BBEBEBEBEBEBEBEE");
+    /*
+    int points_expected = (int)(hsv_filtered.rows / 10);
+    ROS_INFO("ROWS / COLS = %d / %d",hsv_filtered.rows,hsv_filtered.cols);
+    ROS_INFO("Points = %d / %d",index,points_expected);
     for( int i = 0; i < index; i++ ) {
-      ROS_INFO("i = %d",i);
-      cv::rectangle( bgr, points_in_space[i], points_in_space[i] + cv::Point( 2,2 ), color, 2 );
+      //ROS_INFO("i = %d",i);
+      //cv::rectangle( bgr, points_in_space[i], points_in_space[i] + cv::Point( 1,1 ), color, 2 );
       
     }
+    */
+    for( int i = 0; i < lines.size(); i++ ) {
+      cv::Vec4i vec = lines[i];
+      line(bgr, cv::Point(vec[0],vec[1]), cv::Point(vec[2],vec[3]), color, 2, 8, 0);
+    }
+    //ROS_INFO("ROWS / COLS = %d / %d",bgr.rows,bgr.cols);
     cv::imshow(OPENCV_WINDOW, bgr);
     cv::waitKey(3);
 
@@ -269,10 +312,10 @@ int main(int argc, char** argv)
   // create a window the show things
   cv::namedWindow(OPENCV_WINDOW);
   cv::waitKey(3);
-  cv::namedWindow(OPENCV_STRANGE);
-  cv::waitKey(3);
-  cv::namedWindow(OPENCV_RAW);
-  cv::waitKey(3);
+  //cv::namedWindow(OPENCV_STRANGE);
+  //cv::waitKey(3);
+  //cv::namedWindow(OPENCV_RAW);
+  //cv::waitKey(3);
   
   image_transport::ImageTransport it(nh);
   //image_transport::Subscriber sub = it.subscribe("cv_camera/image_raw", 1, imageCallback);
