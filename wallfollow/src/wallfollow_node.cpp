@@ -68,7 +68,7 @@ int main(int argc, char** argv)
   ROS_INFO("A simple Wallfollow");
 
   double sollwert = 0.4;
-  int pd = 80;
+  int pd = 200;
   int pk = 800;
   double last_err = 0;
   double err = 0;

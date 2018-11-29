@@ -11,6 +11,7 @@
 #include <sensor_msgs/Image.h>
 #include <sensor_msgs/image_encodings.h>
 #include <image_transport/image_transport.h>
+#include <math.h>
 
 
 static const std::string OPENCV_WINDOW = "Image window";
@@ -72,12 +73,6 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg){
     // Output Quadilateral or World plane coordinates
     cv::Point2f outputQuad[4];
     // The 4 points where the mapping is to be done , from top-left in clockwise order
-    /*
-    outputQuad[0] = cv::Point2f( 1,1 ); //topleft mapped
-    outputQuad[1] = cv::Point2f( 1279,719 ); //topright mapped
-    outputQuad[2] = cv::Point2f( 750,719 ); //bottomright mapped
-    outputQuad[3] = cv::Point2f( 600,719  ); //bottomleft mapped
-    */
     outputQuad[0] = cv::Point2f( 1,1 ); //topleft mapped
     outputQuad[1] = cv::Point2f( 1279,1 ); //topright mapped
     outputQuad[2] = cv::Point2f( 800,719 ); //bottomright mapped
@@ -129,31 +124,7 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg){
     cv::Mat hsv_filtered   = cv::Mat::zeros( hsv1.size(), CV_8UC3 );
     cv::inRange(hsv1, cv::Scalar(50, 20, 100), cv::Scalar(70, 255, 255), hsv_filtered);
 
-    /*
-    cv::Mat hsv2 = cv::Mat::zeros(brighton.size(), CV_8UC3);
-    cv::cvtColor(brighton, hsv2, cv::COLOR_BGR2HSV, 3);
-
-    cv::Mat hsv_original = cv::Mat::zeros(hsv2.size(), CV_8UC3);
-    cv::inRange(hsv2, cv::Scalar(50, 20, 100), cv::Scalar(70, 255, 255), hsv_original);
     
-
-    cv::imshow(OPENCV_WINDOW, hsv_original);
-    cv::waitKey(3);
-    */
-    
-
-    //ROS_INFO("AAHAHHAHAHAH");
-    /*
-    for( int y = 0; y < hsv_filtered.cols; y++ ) {
-      for( int x = 0; x < hsv_filtered.rows; x++ ) {
-        if(240 < hsv_filtered.at<uchar>(x,y)){
-          hsv_filtered[x][y] = 1;
-        }else{
-          hsv_filtered[x][y] = 0;
-        }
-      }
-    }
-    */
     cv::Mat bin;
     //cv::threshold( hsv_filtered, bin, threshold_value, max_BINARY_value,threshold_type );
     cv::threshold( hsv_filtered, bin, 240, 255,CV_THRESH_BINARY );
@@ -168,62 +139,68 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg){
     //cv::HoughLinesP(bin, lines, 1, CV_PI/180, threshold, minLinLength, maxLineGap );
     cv::HoughLinesP(bin, lines, 1, CV_PI/180, 100, 100, 50 );
 
-    ROS_INFO("lines:\t%d",lines.size());
+    ROS_INFO("lines:\t%i",(int)(lines.size()));
 
-    /*
-    int last = 0;
-    int index = 0;
-    int length = ( (int) ( (bin.cols / 10) + 1 ) );
-    cv::Point points_in_space[length];
-    for( int y = 0; y < bin.rows; y++ ) {
-        
-        if(last + 10 < y){
-          last = y;
-        
-          for( int x = 0; x < bin.cols; x++ ) {
+    int lengths[lines.size()];
+    double alphas[lines.size()];
 
-            if(
-              bin.at<uchar>(y,x)
-              //&& 0 == hsv_filtered.at<uchar>(x+1,y)
-              //&& 240 < hsv_filtered.at<uchar>(x+2,y)
-              ){
-
-
-            //if(240 < hsv_filtered.at<uchar>(x,y)){
-              points_in_space[index] = cv::Point(x,y);
-              index++;
-              break;
-            }
-          }
-            
-        }
+    for( int i = 0; i < lines.size(); i++ ) {
+      cv::Vec4i vec = lines[i];
+      lengths[i] = sqrt( pow( abs( vec[2] - vec[0] ), 2 ) + pow( abs( vec[3] - vec[1] ), 2 ) );
+      alphas[i] = asin( (double) (abs( vec[3] - vec[1] )) / (double)(lengths[i]) ) * 180 / M_PI;
+      ROS_INFO("line[%i]: x1 = %i, y1 = %i, x2 = %i; y2 = %i, length = %i, alpha = %f",i,vec[0],vec[1],vec[2],vec[3],lengths[i],alphas[i]);
+      
     }
-    //ROS_INFO("BBEBEBEBEBEBEBEE");
-    */
+    
     cv::Mat bgr  = cv::Mat::zeros( hsv_filtered.size() * 3, CV_8UC3 );
     cv::cvtColor(hsv_filtered, bgr,  cv::COLOR_GRAY2BGR, 3);
     
     cv::Scalar color = cv::Scalar( 0, 0, 255 );
-    /*
-    int points_expected = (int)(hsv_filtered.rows / 10);
-    ROS_INFO("ROWS / COLS = %d / %d",hsv_filtered.rows,hsv_filtered.cols);
-    ROS_INFO("Points = %d / %d",index,points_expected);
-    for( int i = 0; i < index; i++ ) {
-      //ROS_INFO("i = %d",i);
-      //cv::rectangle( bgr, points_in_space[i], points_in_space[i] + cv::Point( 1,1 ), color, 2 );
-      
+    
+    // #########################################################
+    // only when driving on the right side
+    // search for the line with smallest x and biggest y start point
+    
+    int x_min = 300;
+    int y_max = 0;
+    for( int i = 0; i < lines.size(); i++ ) {
+      cv::Vec4i vec = lines[i];
+      if( x_min > vec[2] && vec[3] > 320){
+        x_min = vec[2];
+      }
+      if( y_max < vec[3]){
+        y_max = vec[3];
+      }
     }
-    */
+
+    // find start line
+    int start;
+    for( int i = 0; i < lines.size(); i++ ) {
+      cv::Vec4i vec = lines[i];
+      if( x_min == vec[2]){
+        start = i;
+        break;
+      }
+    }
+    // start line is found pretty consistantly
+    // now search for the lines that connect with the start line and store them in a new vector
+    // after that the new vector should only contain lines that form a curve
+
+    // only draw start line
+    cv::Vec4i vec = lines[start];
+    line(bgr, cv::Point(vec[0],vec[1]), cv::Point(vec[2],vec[3]), color, 2, 8, 0);
+    /*
     for( int i = 0; i < lines.size(); i++ ) {
       cv::Vec4i vec = lines[i];
       line(bgr, cv::Point(vec[0],vec[1]), cv::Point(vec[2],vec[3]), color, 2, 8, 0);
     }
+    */
     //ROS_INFO("ROWS / COLS = %d / %d",bgr.rows,bgr.cols);
     cv::imshow(OPENCV_WINDOW, bgr);
     cv::waitKey(3);
 
 
-
+    // Color dings versuche für andere Webcam
     //cv::inRange(hsv, cv::Scalar(100, 20, 100), cv::Scalar(115, 255, 255), hsv_filtered);
     // H 107
     // S 255
@@ -231,74 +208,7 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg){
     //cv::GaussianBlur( hsv_filtered, lowPassed, Size( 5, 5 ), 2, 2 );
    // cv::Mat lowPassed;
     //cv::bilateralFilter(hsv_filtered, lowPassed, 5, 120, 120);
-    /*
-    cv::resize(hsv_filtered, hsv_filtered, cv::Size(0,0), 0.5, 0.5, CV_INTER_LINEAR);
-    cv::imshow(OPENCV_STRANGE, hsv_filtered);
-    cv::waitKey(3);
-    */
-    /*
-    //cv::Mat bgr; CV_32FC3
-    // conversion fails do something about it
-    //cv::Mat bgr  = cv::Mat::zeros( hsv_filtered.size(), CV_8UC3 );
-    //cv::cvtColor(hsv_filtered, bgr, cv::COLOR_HSV2BGR, 3);
-
-    // convert the image to grayscale
-    cv::Mat gray = hsv_filtered;
-    //cv::cvtColor(bgr, gray, cv::COLOR_BGR2GRAY);
-    // blur the image
-    cv::blur( gray, gray, cv::Size(3,3) );
-    // edge detection with our friend Kenny (Canny)
-    int thresh = 100;
-    cv::Mat canny_output;
-    cv::Canny( gray, canny_output, thresh, thresh*2 );
-    // now find contours
-    std::vector<std::vector<cv::Point> > contours;
-    cv::findContours( canny_output, contours, cv::RETR_TREE, cv::CHAIN_APPROX_SIMPLE );
-    // For every found contour we now apply approximation to polygons 
-    // with accuracy +-3 and stating that the curve must be closed.
-    // After that we find a bounding rect for every polygon and save it to boundRect
-    std::vector<std::vector<cv::Point> > contours_poly( contours.size() );
-    std::vector<cv::Rect> boundRect( contours.size() );
-    for( size_t i = 0; i < contours.size(); i++ )
-    {
-        cv::approxPolyDP( contours[i], contours_poly[i], 3, true );
-        boundRect[i] = cv::boundingRect( contours_poly[i] );
-    }
-    // 10000 pixel²
-    int rect_count = 100;
-    int rect_count_actual = 0;
-    std::vector<cv::Rect> boundRect_filtered( rect_count );
-    for( size_t i = 0; i < rect_count; i++ )
-    {
-        if( boundRect[i].width * boundRect[i].height >= 500 ){
-          boundRect_filtered[i] = boundRect[i];
-          rect_count_actual++;
-        }
-    }
-
-
-    // Create new Mat of unsigned 8-bit chars, filled with zeros.
-    // It will contain all the drawings we are going to make (rects and circles).
-    int type = CV_8UC3;
-    //cv::Mat drawing = cv::Mat::zeros( canny_output.size(), type );
-    cv::Mat drawing = crop;
-    // For every contour: pick a random color, draw the contour, the bounding rectangle
-    cv::RNG rng(12345);
-    for( size_t i = 0; i< rect_count_actual; i++ )
-    {
-        cv::Scalar color = cv::Scalar( rng.uniform(0, 256), rng.uniform(0,256), rng.uniform(0,256) );
-        //cv::drawContours( drawing, contours_poly, (int)i, color );
-        cv::rectangle( drawing, boundRect_filtered[i].tl(), boundRect_filtered[i].br(), color, 2 );
-    }
-    //cv::Scalar color = cv::Scalar( rng.uniform(0, 256), rng.uniform(0,256), rng.uniform(0,256) );
-    //cv::rectangle( drawing, cv::Point( 0,0 ), cv::Point( 400,200 ), color, 2 );
-
-
-    // Update GUI Window
-    cv::imshow(OPENCV_WINDOW,  drawing);
-    cv::waitKey(3);
-    */
-    //ROS_INFO("I heard: %v", img->data);
+  
 }
 
 
