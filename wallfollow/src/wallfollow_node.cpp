@@ -5,8 +5,11 @@
 #include <nav_msgs/Odometry.h>
 #include <math.h>
 #include <tf/tf.h>
+#include <signal.h>
 
 double roll, pitch, yaw, last_t, t;
+std_msgs::Int16 motor, steering;
+bool stop = false;
 
 void odomCallback(nav_msgs::Odometry::ConstPtr odomMsg, nav_msgs::Odometry* odom)
 {
@@ -35,13 +38,17 @@ void usrCallback(sensor_msgs::Range::ConstPtr usrMsg, sensor_msgs::Range* usr)
 {
   *usr = *usrMsg;
 }
+void mySiginthandler(int sig){
+    stop = true;
+}
 
 int main(int argc, char** argv)
 {
   // init this node
-  ros::init(argc, argv, "wallfollow_node");
+  ros::init(argc, argv, "wallfollow_node", ros::init_options::NoSigintHandler);
   // get ros node handle
   ros::NodeHandle nh;
+  signal(SIGINT, mySiginthandler);
 
   // sensor message container
   std_msgs::Int16 motor, steering;
@@ -102,6 +109,14 @@ int main(int argc, char** argv)
       motor.data = 0;
     }
     else motor.data = 300;
+    if (stop){
+        ROS_INFO("Stop Request send");
+        motor.data = 0;
+        steering.data = 0;
+        motorCtrl.publish(motor);
+        steeringCtrl.publish(steering);
+        ros::shutdown();
+    }
      // publish command messages on their topics
     motorCtrl.publish(motor);
     steeringCtrl.publish(steering);
