@@ -111,6 +111,15 @@ int main(int argc, char** argv)
     last_err = err;
     last_t = t;
 
+    // TODO:
+    // get values from odom.pose.pose.position (and odom.twist.twist.linear.x an odom.twist.twist.linear.y)
+    // if new image from contour_detection is received
+    //  then:   save position of audo, save line to follow
+    //          reset position = 0
+    // if  wallfollow wants to calc new value and no new image is available
+    //  then:   use odomerty position for calculation until next image is received
+
+
     // clear input/output buffers
     ros::spinOnce();
     // this is needed to ensure a const. loop rate

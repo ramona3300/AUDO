@@ -113,9 +113,13 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg){
             }
         }
     }
-    cv::Mat crop = brighton(roi);
+    //cv::Mat crop = brighton(roi);
+    cv::Mat crop = bird(roi);
+    ROS_INFO("Height: %i", crop.size().height);
+    cv::imshow(OPENCV_STRANGE, crop);
+    cv::waitKey(3);
     
-    
+    /*
     //ROS_INFO("BGR2HSV");
     //  cv::COLOR_BGR2HSV 
     cv::Mat hsv1  = cv::Mat::zeros( crop.size(), CV_8UC3 );
@@ -138,6 +142,10 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg){
     //maxLineGap: The maximum gap between two points to be considered in the same line.
     //cv::HoughLinesP(bin, lines, 1, CV_PI/180, threshold, minLinLength, maxLineGap );
     cv::HoughLinesP(bin, lines, 1, CV_PI/180, 100, 100, 50 );
+
+    if(lines.size() == 0){
+      // anhalten!!!!!!
+    }
 
     ROS_INFO("lines:\t%i",(int)(lines.size()));
 
@@ -165,39 +173,61 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg){
     int y_max = 0;
     for( int i = 0; i < lines.size(); i++ ) {
       cv::Vec4i vec = lines[i];
-      if( x_min > vec[2] && vec[3] > 320){
+      if( x_min > vec[2] && vec[3] > 300){
         x_min = vec[2];
+        if( y_max < vec[3]){
+          y_max = vec[3];
+        }
+        ROS_INFO("new x_min = %i",x_min);
       }
-      if( y_max < vec[3]){
-        y_max = vec[3];
-      }
+
     }
 
     // find start line
-    int start;
+    int start = 0;
+    
     for( int i = 0; i < lines.size(); i++ ) {
       cv::Vec4i vec = lines[i];
-      if( x_min == vec[2]){
+      if( x_min + 10 >= vec[2] && vec[2] >= x_min - 10){
         start = i;
         break;
       }
     }
+    if(start == 0){
+      start = 1;
+    }
+
+    ROS_INFO("start = %i",start);
+    // 260
+    
     // start line is found pretty consistantly
     // now search for the lines that connect with the start line and store them in a new vector
     // after that the new vector should only contain lines that form a curve
 
     // only draw start line
     cv::Vec4i vec = lines[start];
-    line(bgr, cv::Point(vec[0],vec[1]), cv::Point(vec[2],vec[3]), color, 2, 8, 0);
-    /*
-    for( int i = 0; i < lines.size(); i++ ) {
-      cv::Vec4i vec = lines[i];
-      line(bgr, cv::Point(vec[0],vec[1]), cv::Point(vec[2],vec[3]), color, 2, 8, 0);
-    }
-    */
+    line(bgr, cv::Point(vec[2],vec[3]), cv::Point(vec[0],vec[1]), color, 2, 8, 0);
+    
+
+    // height = 390
+    // width = 360
+    // blindspot length = 35cm, meassured from alu case
+    // 10cm_real = 4,3cm_screen
+    // pixel/cm_real = 15,97
+    // Extend line
+    double m = (vec[2]- vec[0])/(vec[3]-vec[1]);
+    double b = vec[2] - m * vec[3];
+    cv::Point upper = cv::Point((int)b,0);
+    cv::Point lower = cv::Point((int) (m * bin.size().height + b), (int) bin.size().width);
+    ROS_INFO("Upper = (%i,%i), Lower = (%i,%i)", upper.x, upper.y, lower.x, lower.y);
     //ROS_INFO("ROWS / COLS = %d / %d",bgr.rows,bgr.cols);
     cv::imshow(OPENCV_WINDOW, bgr);
     cv::waitKey(3);
+    
+    */
+    
+
+
 
 
     // Color dings versuche für andere Webcam
@@ -222,8 +252,8 @@ int main(int argc, char** argv)
   // create a window the show things
   cv::namedWindow(OPENCV_WINDOW);
   cv::waitKey(3);
-  //cv::namedWindow(OPENCV_STRANGE);
-  //cv::waitKey(3);
+  cv::namedWindow(OPENCV_STRANGE);
+  cv::waitKey(3);
   //cv::namedWindow(OPENCV_RAW);
   //cv::waitKey(3);
   
