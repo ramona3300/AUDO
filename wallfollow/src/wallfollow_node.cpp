@@ -1,6 +1,7 @@
 #include <ros/ros.h>
 #include <sensor_msgs/Range.h>
 #include <std_msgs/Int16.h>
+#include <std_msgs/Int32.h>
 #include <std_msgs/String.h>
 #include <nav_msgs/Odometry.h>
 #include <math.h>
@@ -10,7 +11,37 @@
 double roll, pitch, yaw, last_t, t;
 std_msgs::Int16 motor, steering;
 bool stop = false;
+// current position
 geometry_msgs::Point pos;
+// position from when received current image
+geometry_msgs::Point last_pos;
+// received new image
+int new_image = 1;
+
+int x_1;
+int y_1;
+int x_2;
+int y_2;
+
+// return the distance between AUDO and line in cm
+int get_distance(){
+    int current_x = pos.x;
+    int current_y = pos.y;
+    int last_x = last_pos.x;
+    int last_y = last_pos.y;
+    // calculate y offset from last_pos
+    int y_offset = current_y - last_y;
+    // calculate distance with offset with help of m
+    double m = ( (double)(x_2) - (double)(x_1) ) / ( (double)(y_2) - (double)(y_1) );
+    // where is the line now?
+    int y_offset_in_px = 0; // = ???
+
+    int x_now = x_1 - y_offset_in_px * m;
+    // x_now is the distance in pixels from the line
+    // x_now should be regualated to be 260 at all times
+    return x_now;
+}
+
 
 void odomCallback(nav_msgs::Odometry::ConstPtr odomMsg, nav_msgs::Odometry* odom)
 {
@@ -22,10 +53,36 @@ void odomCallback(nav_msgs::Odometry::ConstPtr odomMsg, nav_msgs::Odometry* odom
     tf::Matrix3x3 mat(q);
     mat.getEulerYPR(yaw, pitch, roll);
 
+    // set image received position
+    if( new_image ){
+        last_pos = odom->pose.pose.position;
+        new_image = 0;
+    }
     // get Position
     pos = odom->pose.pose.position;
     
 }
+
+void x1_Callback(std_msgs::Int32::ConstPtr msg, int* data)
+{
+  // inform odomCallback that a new image arrived
+  new_image = 1;
+  *data = msg->data;
+}
+void y1_Callback(std_msgs::Int32::ConstPtr msg, int* data)
+{
+  *data = msg->data;
+}
+void x2_Callback(std_msgs::Int32::ConstPtr msg, int* data)
+{
+  *data = msg->data;
+}
+void y2_Callback(std_msgs::Int32::ConstPtr msg, int* data)
+{
+  *data = msg->data;
+}
+
+
 // gets called whenever a new message is availible in the input puffer
 void uslCallback(sensor_msgs::Range::ConstPtr uslMsg, sensor_msgs::Range* usl)
 {
@@ -69,6 +126,17 @@ int main(int argc, char** argv)
       "/uc_bridge/usl", 10, boost::bind(uslCallback, _1, &usl));
   ros::Subscriber usfSub = nh.subscribe<sensor_msgs::Range>(
       "/uc_bridge/usf", 10, boost::bind(usfCallback, _1, &usf));
+  
+  // subscribe to the line_recoqnition
+  ros::Subscriber x1_sub = nh.subscribe<std_msgs::Int32>(
+      "/line_recoqnition/x1", 1, boost::bind(x1_Callback, _1, &x_1));
+  ros::Subscriber y1_sub = nh.subscribe<std_msgs::Int32>(
+      "/line_recoqnition/y1", 1, boost::bind(y1_Callback, _1, &y_1));
+  ros::Subscriber x2_sub = nh.subscribe<std_msgs::Int32>(
+      "/line_recoqnition/x2", 1, boost::bind(x2_Callback, _1, &x_2));
+  ros::Subscriber y2_sub = nh.subscribe<std_msgs::Int32>(
+      "/line_recoqnition/y2", 1, boost::bind(y2_Callback, _1, &y_2));
+  
 
 
   // generate control message publisher

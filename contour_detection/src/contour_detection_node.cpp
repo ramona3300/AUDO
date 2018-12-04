@@ -1,6 +1,7 @@
 #include <ros/ros.h>
 #include <sensor_msgs/Range.h>
 #include <std_msgs/Int16.h>
+#include <std_msgs/Int32.h>
 #include <std_msgs/String.h>
 #include <opencv2/core/ocl.hpp>
 #include <opencv2/imgcodecs.hpp>
@@ -18,28 +19,14 @@ static const std::string OPENCV_WINDOW = "Image window";
 static const std::string OPENCV_RAW = "Image RAAAAAWW window";
 static const std::string OPENCV_STRANGE = "Image filtered window";
 
-std::string type2str(int type) {
-  std::string r;
+cv::Point upper;
+cv::Point lower;
 
-  uchar depth = type & CV_MAT_DEPTH_MASK;
-  uchar chans = 1 + (type >> CV_CN_SHIFT);
+// Are the two points set?
+int is_set = 0;
+// where the points updated?
+int new_points = 0;
 
-  switch ( depth ) {
-    case CV_8U:  r = "8U"; break;
-    case CV_8S:  r = "8S"; break;
-    case CV_16U: r = "16U"; break;
-    case CV_16S: r = "16S"; break;
-    case CV_32S: r = "32S"; break;
-    case CV_32F: r = "32F"; break;
-    case CV_64F: r = "64F"; break;
-    default:     r = "User"; break;
-  }
-
-  r += "C";
-  r += (chans+'0');
-
-  return r;
-}
 
 void imageCallback(const sensor_msgs::ImageConstPtr& msg){
     
@@ -201,8 +188,15 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg){
     cv::Vec4i vec = lines[start];
     double m = ( (double)(vec[2]) - (double)(vec[0]) ) / ( (double)(vec[3]) - (double)(vec[1]) );
     double b = vec[2] - m * vec[3];
-    cv::Point upper = cv::Point((int)( vec[0] - m * vec[1] ),0);
-    cv::Point lower = cv::Point((int) (m * bin.size().width + b), (int) bin.size().height);
+    upper = cv::Point((int)( vec[0] - m * vec[1] ),0);
+    lower = cv::Point((int) (m * bin.size().width + b), (int) bin.size().height);
+    
+    // mark the points as set 
+    is_set = 1;
+    // mark the points as updated
+    new_points = 1;
+
+
     ROS_INFO("m = %f, Upper = (%i,%i), Lower = (%i,%i)", m, upper.x, upper.y, lower.x, lower.y);
     ROS_INFO("line[%i]: x1 = %i, y1 = %i, x2 = %i; y2 = %i, length = %i, alpha = %f",start,vec[0],vec[1],vec[2],vec[3],lengths[start],alphas[start]);
 
@@ -249,10 +243,15 @@ int main(int argc, char** argv)
   image_transport::ImageTransport it(nh);
   //image_transport::Subscriber sub = it.subscribe("cv_camera/image_raw", 1, imageCallback);
   image_transport::Subscriber sub = it.subscribe("kinect2/qhd/image_color", 1, imageCallback);
-  //image_transport::Publisher pub = it.advertise("out_image_base_topic", 1);
-  ///cv_camera/image_raw
-  //kinect2/qhd/image_color
   
+  // publish the line as four points
+  ros::Publisher x1 = nh.advertise<std_msgs::Int32>("/line_recoqnition/x1", 1);
+  ros::Publisher y1 = nh.advertise<std_msgs::Int32>("/line_recoqnition/y1", 1);
+  ros::Publisher x2 = nh.advertise<std_msgs::Int32>("/line_recoqnition/x2", 1);
+  ros::Publisher y2 = nh.advertise<std_msgs::Int32>("/line_recoqnition/y2", 1);
+  
+
+
   ROS_INFO("Contour Detection Start");
 
   
@@ -261,6 +260,30 @@ int main(int argc, char** argv)
   ros::Rate loop_rate(0.5);
   while (ros::ok())
   {
+
+    if( is_set ){
+      // only try to publish points if they where initialized
+      if( new_points ){
+        // only publish points if they where updated
+        new_points = 0;
+
+        std_msgs::Int32 x_1;
+        std_msgs::Int32 y_1;
+        std_msgs::Int32 x_2;
+        std_msgs::Int32 y_2;
+
+        x_1.data = lower.x;
+        y_1.data = lower.y;
+        x_2.data = upper.x;
+        y_2.data = upper.y;
+
+        // publish the points
+        x1.publish( x_1 );
+        y1.publish( y_1 );
+        x2.publish( x_2 );
+        y2.publish( y_2 );
+      }
+    }
     // clear input/output buffers
     ros::spinOnce();
     // this is needed to ensure a const. loop rate
