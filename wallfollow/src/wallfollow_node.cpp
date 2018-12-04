@@ -10,6 +10,7 @@
 double roll, pitch, yaw, last_t, t;
 std_msgs::Int16 motor, steering;
 bool stop = false;
+geometry_msgs::Point pos;
 
 void odomCallback(nav_msgs::Odometry::ConstPtr odomMsg, nav_msgs::Odometry* odom)
 {
@@ -20,6 +21,10 @@ void odomCallback(nav_msgs::Odometry::ConstPtr odomMsg, nav_msgs::Odometry* odom
     tf::quaternionMsgToTF(odom->pose.pose.orientation, q);
     tf::Matrix3x3 mat(q);
     mat.getEulerYPR(yaw, pitch, roll);
+
+    // get Position
+    pos = odom->pose.pose.position;
+    
 }
 // gets called whenever a new message is availible in the input puffer
 void uslCallback(sensor_msgs::Range::ConstPtr uslMsg, sensor_msgs::Range* usl)

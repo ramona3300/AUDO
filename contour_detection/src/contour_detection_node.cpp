@@ -43,8 +43,9 @@ std::string type2str(int type) {
 
 void imageCallback(const sensor_msgs::ImageConstPtr& msg){
     
-    ROS_INFO("I heard:vvv");
+    ROS_INFO("Received an Image!");
 
+    // save image to a cv::Mat
     cv_bridge::CvImagePtr cv_ptr;
     try
     {
@@ -55,12 +56,10 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg){
       ROS_ERROR("cv_bridge exception: %s", e.what());
       return;
     }
-    /*
-    std::string enc = cv_ptr->encoding;
-    char enco[20];
-    strcpy(enco, enc.c_str());
-    ROS_INFO("Encoding: %s", enco);
-    */
+    
+    // #####################################################################################################
+    // #####  Transform perpective to birdeye view                                            ##############
+    // #####################################################################################################
 
     // Input Quadilateral or Image plane coordinates
     cv::Point2f inputQuad[4]; 
@@ -79,28 +78,15 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg){
     outputQuad[3] = cv::Point2f( 300,719  ); //bottomleft mapped
 
     // Lambda Matrix
-    cv::Mat lambda;//( 2, 4, CV_32FC1 );
-    //lambda = cv::Mat::zeros( (cv_ptr->image).size(), (cv_ptr->image).type() );
+    cv::Mat lambda;
     // Get the Perspective Transform Matrix i.e. lambda 
     lambda = cv::getPerspectiveTransform( inputQuad, outputQuad );
     cv::Mat bird  = cv::Mat::zeros( (cv_ptr->image).size(), (cv_ptr->image).type() );
     cv::warpPerspective(cv_ptr->image,bird,lambda,bird.size() );
     
-    /* Set Region of Interest */
-
-    int offset_x = 300;
-    int offset_y = 0;
-
-    cv::Rect roi;
-    roi.x = offset_x;
-    roi.y = offset_y;
-    roi.width = bird.size().width - (offset_x*2);
-    roi.height = bird.size().height - 150;
-
-    /* Crop the original image to the defined ROI */
-
-    //cv::Mat crop = bird(roi);
-    
+    // #####################################################################################################
+    // #####  Make the image brighter for better color recoqnition                            ##############
+    // #####################################################################################################
     cv::Mat brighton = cv::Mat::zeros((cv_ptr->image).size(), CV_8UC3);
     double alpha = 1.0; /*< Simple contrast control [1.0-3.0]*/
     int beta = 100;       /*< Simple brightness control [0-100]*/
@@ -113,28 +99,44 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg){
             }
         }
     }
-    //cv::Mat crop = brighton(roi);
-    cv::Mat crop = bird(roi);
-    ROS_INFO("Height: %i", crop.size().height);
-    cv::imshow(OPENCV_STRANGE, crop);
-    cv::waitKey(3);
+    // #####################################################################################################
+    // #####  Crop the birdeye view to a rectangle                                            ##############
+    // #####################################################################################################
     
-    /*
-    //ROS_INFO("BGR2HSV");
-    //  cv::COLOR_BGR2HSV 
+    // Set Region of Interest
+    int offset_x = 300;
+    int offset_y = 0;
+    cv::Rect roi;
+    roi.x = offset_x;
+    roi.y = offset_y;
+    roi.width = bird.size().width - (offset_x*2);
+    roi.height = bird.size().height - 150;
+    //Crop the original image to the defined ROI
+    cv::Mat crop = brighton(roi);
+    
+    // #####################################################################################################
+    // #####  Filter out everything that isn't green                                          ##############
+    // #####################################################################################################
+    
+    // convert image from BGR to HSV
     cv::Mat hsv1  = cv::Mat::zeros( crop.size(), CV_8UC3 );
     cv::cvtColor(crop, hsv1, cv::COLOR_BGR2HSV, 3);
-
+    // only keep green
     cv::Mat hsv_filtered   = cv::Mat::zeros( hsv1.size(), CV_8UC3 );
     cv::inRange(hsv1, cv::Scalar(50, 20, 100), cv::Scalar(70, 255, 255), hsv_filtered);
+    // the image is now a grayscale
 
+    // #####################################################################################################
+    // #####  Convert the image from grayscale to binary (only black or white)                ##############
+    // #####################################################################################################
     
     cv::Mat bin;
     //cv::threshold( hsv_filtered, bin, threshold_value, max_BINARY_value,threshold_type );
     cv::threshold( hsv_filtered, bin, 240, 255,CV_THRESH_BINARY );
-    //cv::imshow(OPENCV_RAW, bin);
-    //cv::waitKey(3);
 
+    // #####################################################################################################
+    // #####  Detect straight lines with the probalistic Hough transformation                 ##############
+    // #####################################################################################################    
 
     std::vector<cv::Vec4i> lines;
     //threshold: The minimum number of intersections to “detect” a line
@@ -144,31 +146,22 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg){
     cv::HoughLinesP(bin, lines, 1, CV_PI/180, 100, 100, 50 );
 
     if(lines.size() == 0){
-      // anhalten!!!!!!
+      return; // there is nothing more to do
     }
 
+    // calculate some more information about the found lines
     ROS_INFO("lines:\t%i",(int)(lines.size()));
-
     int lengths[lines.size()];
     double alphas[lines.size()];
-
     for( int i = 0; i < lines.size(); i++ ) {
       cv::Vec4i vec = lines[i];
       lengths[i] = sqrt( pow( abs( vec[2] - vec[0] ), 2 ) + pow( abs( vec[3] - vec[1] ), 2 ) );
       alphas[i] = asin( (double) (abs( vec[3] - vec[1] )) / (double)(lengths[i]) ) * 180 / M_PI;
-      ROS_INFO("line[%i]: x1 = %i, y1 = %i, x2 = %i; y2 = %i, length = %i, alpha = %f",i,vec[0],vec[1],vec[2],vec[3],lengths[i],alphas[i]);
-      
+      //ROS_INFO("line[%i]: x1 = %i, y1 = %i, x2 = %i; y2 = %i, length = %i, alpha = %f",i,vec[0],vec[1],vec[2],vec[3],lengths[i],alphas[i]);
     }
-    
-    cv::Mat bgr  = cv::Mat::zeros( hsv_filtered.size() * 3, CV_8UC3 );
-    cv::cvtColor(hsv_filtered, bgr,  cv::COLOR_GRAY2BGR, 3);
-    
-    cv::Scalar color = cv::Scalar( 0, 0, 255 );
-    
-    // #########################################################
-    // only when driving on the right side
+    // To Do: write code for the left side
+    // CASE: driving on the right side
     // search for the line with smallest x and biggest y start point
-    
     int x_min = 300;
     int y_max = 0;
     for( int i = 0; i < lines.size(); i++ ) {
@@ -178,65 +171,61 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg){
         if( y_max < vec[3]){
           y_max = vec[3];
         }
-        ROS_INFO("new x_min = %i",x_min);
       }
-
     }
-
-    // find start line
+    // find the relevant line
     int start = 0;
-    
     for( int i = 0; i < lines.size(); i++ ) {
       cv::Vec4i vec = lines[i];
-      if( x_min + 10 >= vec[2] && vec[2] >= x_min - 10){
+      if( x_min + 10 >= vec[2] 
+          && vec[2] >= x_min - 10 
+          && y_max + 10 >= vec[3] 
+          && vec[3] >= y_max - 10 ){
         start = i;
         break;
       }
     }
+    // small hack if the relevant line was not found correctly - works surprisingly well
     if(start == 0){
       start = 1;
     }
-
     ROS_INFO("start = %i",start);
-    // 260
     
-    // start line is found pretty consistantly
-    // now search for the lines that connect with the start line and store them in a new vector
-    // after that the new vector should only contain lines that form a curve
-
-    // only draw start line
-    cv::Vec4i vec = lines[start];
-    line(bgr, cv::Point(vec[2],vec[3]), cv::Point(vec[0],vec[1]), color, 2, 8, 0);
-    
-
+    // AUDO is in the middle of the right track if the start point of the line is at x = 260px
     // height = 390
     // width = 360
     // blindspot length = 35cm, meassured from alu case
     // 10cm_real = 4,3cm_screen
     // pixel/cm_real = 15,97
     // Extend line
-    double m = (vec[2]- vec[0])/(vec[3]-vec[1]);
+    cv::Vec4i vec = lines[start];
+    double m = ( (double)(vec[2]) - (double)(vec[0]) ) / ( (double)(vec[3]) - (double)(vec[1]) );
     double b = vec[2] - m * vec[3];
-    cv::Point upper = cv::Point((int)b,0);
-    cv::Point lower = cv::Point((int) (m * bin.size().height + b), (int) bin.size().width);
-    ROS_INFO("Upper = (%i,%i), Lower = (%i,%i)", upper.x, upper.y, lower.x, lower.y);
-    //ROS_INFO("ROWS / COLS = %d / %d",bgr.rows,bgr.cols);
+    cv::Point upper = cv::Point((int)( vec[0] - m * vec[1] ),0);
+    cv::Point lower = cv::Point((int) (m * bin.size().width + b), (int) bin.size().height);
+    ROS_INFO("m = %f, Upper = (%i,%i), Lower = (%i,%i)", m, upper.x, upper.y, lower.x, lower.y);
+    ROS_INFO("line[%i]: x1 = %i, y1 = %i, x2 = %i; y2 = %i, length = %i, alpha = %f",start,vec[0],vec[1],vec[2],vec[3],lengths[start],alphas[start]);
+
+    // visualize for debug
+    cv::Mat bgr  = cv::Mat::zeros( hsv_filtered.size() * 3, CV_8UC3 );
+    cv::cvtColor(hsv_filtered, bgr,  cv::COLOR_GRAY2BGR, 3);
+    cv::Scalar red = cv::Scalar( 0, 0, 255 );
+    cv::Scalar blue = cv::Scalar( 255, 0, 0 );
+    // display the relevant line
+    line(bgr, cv::Point(vec[2],vec[3]), cv::Point(vec[0],vec[1]), red, 3, 8, 0);
+    line(bgr, lower, upper, blue, 2, 8, 0);
+    // show image
     cv::imshow(OPENCV_WINDOW, bgr);
     cv::waitKey(3);
     
-    */
-    
 
-
-
-
-    // Color dings versuche für andere Webcam
+    // Color filter attempts for other Webcam
     //cv::inRange(hsv, cv::Scalar(100, 20, 100), cv::Scalar(115, 255, 255), hsv_filtered);
     // H 107
     // S 255
     // V 224
     //cv::GaussianBlur( hsv_filtered, lowPassed, Size( 5, 5 ), 2, 2 );
-   // cv::Mat lowPassed;
+    // cv::Mat lowPassed;
     //cv::bilateralFilter(hsv_filtered, lowPassed, 5, 120, 120);
   
 }
@@ -252,8 +241,8 @@ int main(int argc, char** argv)
   // create a window the show things
   cv::namedWindow(OPENCV_WINDOW);
   cv::waitKey(3);
-  cv::namedWindow(OPENCV_STRANGE);
-  cv::waitKey(3);
+  //cv::namedWindow(OPENCV_STRANGE);
+  //cv::waitKey(3);
   //cv::namedWindow(OPENCV_RAW);
   //cv::waitKey(3);
   
