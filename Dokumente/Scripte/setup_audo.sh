@@ -21,9 +21,11 @@ else
 
 	echo "Launch ucbridge"
 	gnome-terminal -- roslaunch pses_ucbridge ucbridge.launch
+	sleep 5
 
 	echo "Launch kinect drivers"
 	gnome-terminal -- roslaunch kinect2_bridge kinect2_bridge.launch
+	sleep 5
 
 	#may be deleted later
 	echo "Launch sub for keeping kinect alive"
