@@ -18,28 +18,32 @@ geometry_msgs::Point last_pos;
 // received new image
 int new_image = 1;
 
-int x_1;
-int y_1;
-int x_2;
-int y_2;
+double x_1;
+double y_1;
+double x_2;
+double y_2;
 
 // return the distance between AUDO and line in cm
-int get_distance(){
-    int current_x = pos.x;
-    int current_y = pos.y;
-    int last_x = last_pos.x;
-    int last_y = last_pos.y;
+double get_distance(){
+    /*
+    // x and y coords are in 0.5m 
+    double current_y = pos.x * 50;
+    double current_x = pos.y * 50;
+    double last_x = last_pos.x * 50;
+    double last_y = last_pos.y * 50;
     // calculate y offset from last_pos
-    int y_offset = current_y - last_y;
+    double y_offset = current_y - last_y;
+    double x_offset = current_x - last_x;
+    
     // calculate distance with offset with help of m
-    double m = ( (double)(x_2) - (double)(x_1) ) / ( (double)(y_2) - (double)(y_1) );
+    double m = ( x_2 - x_1 ) / ( y_2 - y_1 );
     // where is the line now?
-    int y_offset_in_px = 0; // = ???
-
-    int x_now = x_1 - y_offset_in_px * m;
+    
+    double x_now = (x_1 / 16) - y_offset * m; //cm 
     // x_now is the distance in pixels from the line
     // x_now should be regualated to be 260 at all times
-    return x_now;
+    */
+    return ( x_1 - 180.0 ) / 160.0;
 }
 
 
@@ -63,11 +67,12 @@ void odomCallback(nav_msgs::Odometry::ConstPtr odomMsg, nav_msgs::Odometry* odom
     
 }
 
-void x1_Callback(std_msgs::Int32::ConstPtr msg, int* data)
+void x1_Callback(std_msgs::Int32::ConstPtr msg, double* data)
 {
   // inform odomCallback that a new image arrived
   new_image = 1;
-  *data = msg->data;
+  *data = (double) msg->data;
+  //ROS_INFO("x_1 = %f",x_1);
             // TODO:
     // get values from odom.pose.pose.position (and odom.twist.twist.linear.x an odom.twist.twist.linear.y)
     // if new image from contour_detection is received
@@ -76,17 +81,17 @@ void x1_Callback(std_msgs::Int32::ConstPtr msg, int* data)
     // if  wallfollow wants to calc new value and no new image is available
     //  then:   use odomerty position for calculation until next image is received
 }
-void y1_Callback(std_msgs::Int32::ConstPtr msg, int* data)
+void y1_Callback(std_msgs::Int32::ConstPtr msg, double* data)
 {
-  *data = msg->data;
+  *data = (double) msg->data;
 }
-void x2_Callback(std_msgs::Int32::ConstPtr msg, int* data)
+void x2_Callback(std_msgs::Int32::ConstPtr msg, double* data)
 {
-  *data = msg->data;
+  *data = (double) msg->data;
 }
-void y2_Callback(std_msgs::Int32::ConstPtr msg, int* data)
+void y2_Callback(std_msgs::Int32::ConstPtr msg, double* data)
 {
-  *data = msg->data;
+  *data =(double)  msg->data;
 }
 
 
@@ -157,7 +162,7 @@ int main(int argc, char** argv)
 
   ROS_INFO("A simple Wallfollow");
 
-  double sollwert = 0.4;
+  double sollwert = 0.1;
   int pd = 200;
   int pk = 800;
   double last_err = 0;
@@ -179,14 +184,14 @@ int main(int argc, char** argv)
    //     last_pos = pos;
    //     pos = 0;
         abstand = get_distance();
+        ROS_INFO("Abstand = %f",abstand);
    //     new_image = 0;
    // }
     
 
-
     // Regelabweichung
    // err = sollwert - usr.range*cos(yaw);
-    err = sollwert - abstand * cos(yaw);
+    err = sollwert - abstand /* * cos(yaw)*/;
 
     d_err = (err-last_err);
 
@@ -203,7 +208,7 @@ int main(int argc, char** argv)
     {
       motor.data = 0;
     }
-    else motor.data = 300;
+    else motor.data = 250;
 
     if (stop){
         ROS_INFO("Stop Request send");

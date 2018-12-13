@@ -73,21 +73,6 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg){
     cv::warpPerspective(cv_ptr->image,bird,lambda,bird.size() );
     
     // #####################################################################################################
-    // #####  Make the image brighter for better color recoqnition                            ##############
-    // #####################################################################################################
-    cv::Mat brighton = cv::Mat::zeros((cv_ptr->image).size(), CV_8UC3);
-    double alpha = 1.0; /*< Simple contrast control [1.0-3.0]*/
-    int beta = 100;       /*< Simple brightness control [0-100]*/
-    
-    for( int y = 0; y < bird.rows; y++ ) {
-        for( int x = 0; x < bird.cols; x++ ) {
-            for( int c = 0; c < bird.channels(); c++ ) {
-                brighton.at<cv::Vec3b>(y,x)[c] =
-                  cv::saturate_cast<uchar>( alpha*bird.at<cv::Vec3b>(y,x)[c] + beta );
-            }
-        }
-    }
-    // #####################################################################################################
     // #####  Crop the birdeye view to a rectangle                                            ##############
     // #####################################################################################################
     
@@ -100,19 +85,46 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg){
     roi.width = bird.size().width - (offset_x*2);
     roi.height = bird.size().height - 150;
     //Crop the original image to the defined ROI
-    cv::Mat crop = brighton(roi);
+    cv::Mat crop = bird(roi);
     
+
+    // #####################################################################################################
+    // #####  Make the image brighter for better color recoqnition                            ##############
+    // #####################################################################################################
+    //cv::Mat brighton = cv::Mat::zeros(crop.size(), CV_8UC3);
+    double alpha = 1.0; /*< Simple contrast control [1.0-3.0]*/
+    int beta = 10;       /*< Simple brightness control [0-100]*/
+    
+    for( int y = 0; y < crop.rows; y++ ) {
+        for( int x = 0; x < crop.cols; x++ ) {
+            for( int c = 0; c < crop.channels(); c++ ) {
+                crop.at<cv::Vec3b>(y,x)[c] =
+                  cv::saturate_cast<uchar>( alpha*crop.at<cv::Vec3b>(y,x)[c] + beta );
+            }
+        }
+    }
+    
+    cv::imshow(OPENCV_STRANGE, crop);
+    cv::waitKey(3);
     // #####################################################################################################
     // #####  Filter out everything that isn't green                                          ##############
     // #####################################################################################################
     
     // convert image from BGR to HSV
-    cv::Mat hsv1  = cv::Mat::zeros( crop.size(), CV_8UC3 );
-    cv::cvtColor(crop, hsv1, cv::COLOR_BGR2HSV, 3);
+    //cv::Mat hsv1  = cv::Mat::zeros( crop.size(), CV_8UC3 );
+    cv::cvtColor(crop, crop, cv::COLOR_BGR2HSV, 3);
     // only keep green
-    cv::Mat hsv_filtered   = cv::Mat::zeros( hsv1.size(), CV_8UC3 );
-    cv::inRange(hsv1, cv::Scalar(50, 20, 100), cv::Scalar(70, 255, 255), hsv_filtered);
+    cv::Mat hsv_filtered   = cv::Mat::zeros( crop.size(), CV_8UC3 );
+    //cv::inRange(hsv1, cv::Scalar(50, 20, 100), cv::Scalar(70, 255, 255), hsv_filtered);
+    cv::inRange(crop, cv::Scalar(40, 30, 100), cv::Scalar(70, 255, 255), hsv_filtered);
+    
     // the image is now a grayscale
+
+    cv::Mat blur = cv::Mat::zeros(crop.size(), CV_8UC3);
+    cv::GaussianBlur( hsv_filtered, blur, cv::Size( 15, 15 ), 0, 0 );
+    
+    cv::imshow(OPENCV_RAW, blur);
+    cv::waitKey(3);
 
     // #####################################################################################################
     // #####  Convert the image from grayscale to binary (only black or white)                ##############
@@ -120,7 +132,7 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg){
     
     cv::Mat bin;
     //cv::threshold( hsv_filtered, bin, threshold_value, max_BINARY_value,threshold_type );
-    cv::threshold( hsv_filtered, bin, 240, 255,CV_THRESH_BINARY );
+    cv::threshold( blur, bin, 245, 255,CV_THRESH_BINARY );
 
     // #####################################################################################################
     // #####  Detect straight lines with the probalistic Hough transformation                 ##############
@@ -236,10 +248,10 @@ int main(int argc, char** argv)
   // create a window the show things
   cv::namedWindow(OPENCV_WINDOW);
   cv::waitKey(3);
-  //cv::namedWindow(OPENCV_STRANGE);
-  //cv::waitKey(3);
-  //cv::namedWindow(OPENCV_RAW);
-  //cv::waitKey(3);
+  cv::namedWindow(OPENCV_STRANGE);
+  cv::waitKey(3);
+  cv::namedWindow(OPENCV_RAW);
+  cv::waitKey(3);
   
   image_transport::ImageTransport it(nh);
   //image_transport::Subscriber sub = it.subscribe("cv_camera/image_raw", 1, imageCallback);

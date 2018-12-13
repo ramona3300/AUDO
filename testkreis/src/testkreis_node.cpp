@@ -81,7 +81,7 @@ int main(int argc, char** argv)
   int count = 0;
   while (ros::ok())
   {
-    ROS_INFO("Odom %i te Pose, x %i, y %i, z %i", count, pos.x, pos.y, pos.z);
+    ROS_INFO("Odom %i te Pose, x %f, y %f, z %f", count, pos.x, pos.y, pos.z);
       steering.data = 0;
       motor.data = 200;
       /*std_msgs::String msg;
