@@ -68,6 +68,13 @@ void x1_Callback(std_msgs::Int32::ConstPtr msg, int* data)
   // inform odomCallback that a new image arrived
   new_image = 1;
   *data = msg->data;
+            // TODO:
+    // get values from odom.pose.pose.position (and odom.twist.twist.linear.x an odom.twist.twist.linear.y)
+    // if new image from contour_detection is received
+    //  then:   save position of audo, save line to follow
+    //          reset position = 0
+    // if  wallfollow wants to calc new value and no new image is available
+    //  then:   use odomerty position for calculation until next image is received
 }
 void y1_Callback(std_msgs::Int32::ConstPtr msg, int* data)
 {
@@ -145,6 +152,9 @@ int main(int argc, char** argv)
   ros::Publisher steeringCtrl =
       nh.advertise<std_msgs::Int16>("/uc_bridge/set_steering_level_msg", 1);
 
+
+ 
+
   ROS_INFO("A simple Wallfollow");
 
   double sollwert = 0.4;
@@ -153,6 +163,7 @@ int main(int argc, char** argv)
   double last_err = 0;
   double err = 0;
   double d_err = 0;
+  double abstand = 0;
   last_t = ((double)clock()/CLOCKS_PER_SEC);
 
   // Loop starts here:
@@ -163,8 +174,19 @@ int main(int argc, char** argv)
     t = ((double)clock()/CLOCKS_PER_SEC);
     int s_out = 0;
 
+
+   // if(new_image){
+   //     last_pos = pos;
+   //     pos = 0;
+        abstand = get_distance();
+   //     new_image = 0;
+   // }
+    
+
+
     // Regelabweichung
-    err = sollwert - usr.range*cos(yaw);
+   // err = sollwert - usr.range*cos(yaw);
+    err = sollwert - abstand * cos(yaw);
 
     d_err = (err-last_err);
 
@@ -182,6 +204,7 @@ int main(int argc, char** argv)
       motor.data = 0;
     }
     else motor.data = 300;
+
     if (stop){
         ROS_INFO("Stop Request send");
         motor.data = 0;
@@ -199,13 +222,7 @@ int main(int argc, char** argv)
     last_err = err;
     last_t = t;
 
-    // TODO:
-    // get values from odom.pose.pose.position (and odom.twist.twist.linear.x an odom.twist.twist.linear.y)
-    // if new image from contour_detection is received
-    //  then:   save position of audo, save line to follow
-    //          reset position = 0
-    // if  wallfollow wants to calc new value and no new image is available
-    //  then:   use odomerty position for calculation until next image is received
+
 
 
     // clear input/output buffers
