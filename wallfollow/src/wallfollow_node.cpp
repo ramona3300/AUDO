@@ -8,6 +8,8 @@
 #include <tf/tf.h>
 #include <signal.h>
 
+#define MAX_STEERING_ANGLE 650
+
 double roll, pitch, yaw, last_t, t;
 std_msgs::Int16 motor, steering;
 bool stop = false;
@@ -90,46 +92,57 @@ int main(int argc, char** argv)
 
   ROS_INFO("A simple Wallfollow");
 
-  double sollwert = 0.8;
-  int pd = 200;
-  int pk = 800;
+  double sollwert = 1.4;
+  int pk = 3000;
+  int pd = 1000;
+  int pi = 200;
+
   double last_err = 0;
   double err = 0;
+  double p_err = 0;
   double d_err = 0;
-  double abstand = 0;
+  double i_err = 0;
+  double istwert = 0;
   last_t = ((double)clock()/CLOCKS_PER_SEC);
 
   // Loop starts here:
   // loop rate value is set in Hz
-  ros::Rate loop_rate(15);
+  ros::Rate loop_rate(20);
   while (ros::ok())
   {
     t = ((double)clock()/CLOCKS_PER_SEC);
     int s_out = 0;
 
-    abstand = (double)x_1 / 100.0 ;
-    ROS_INFO("Abstand = %f",abstand);
+    istwert = (double)x_1 / 100.0 ;
+    ROS_INFO("Istwert = %f",istwert);
     
     // Regelabweichung
-    // err = sollwert - usr.range*cos(yaw);
-    err = sollwert - abstand /* * cos(yaw)*/;
+    err = sollwert - istwert;
+    // P-Anteil
+    p_err = pk * err;
+    // D-Anteil
+    d_err = pd * (err - last_err) / (t - last_t);
+    // I_Anteil mit Anti-Windup
+    i_err += pi*err;
+    if(i_err > 400) i_err = 400;
+    else if(i_err < -400) i_err = -400;
 
-    d_err = (err-last_err);
-
-    s_out = -(pk * err + pd * d_err / (t - last_t) ) *5;
-    if(s_out > 600) s_out = 600;
-    else if(s_out < -600) s_out = -600;
-
+    // calculate control value
+    s_out = -(p_err +  d_err /*+ i_err*/);
+    
+    // limit s_out to +-MAX_STEERING_ANGLE
+    if(s_out > MAX_STEERING_ANGLE) s_out = MAX_STEERING_ANGLE;
+    else if(s_out < -MAX_STEERING_ANGLE) s_out = -MAX_STEERING_ANGLE;
 
     ROS_INFO("s_out: %d \t d_err: %f", s_out, d_err);
 
     steering.data = (int)s_out;
 
-    if (usf.range < 0.45)
+    if (usf.range < 0.3)
     {
       motor.data = 0;
     }
-    else motor.data = 250;
+    else motor.data = 300;
 
     if (stop){
         ROS_INFO("Stop Request send");

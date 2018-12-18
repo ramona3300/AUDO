@@ -14,18 +14,124 @@
 #include <sensor_msgs/image_encodings.h>
 #include <image_transport/image_transport.h>
 #include <math.h>
+#define RANGE_OF_AVERAGE 5
 
 
 static const std::string OPENCV_WINDOW = "Image window";
 static const std::string OPENCV_RAW = "Image RAAAAAWW window";
 static const std::string OPENCV_STRANGE = "Image filtered window";
 
-int x_now;
+int x_now_right;
+int x_now_left;
+bool x_last_flag_right = true;
+bool x_last_flag_left = true;
+
+int y_greenline = 30;
+
+int x_greenlines_right[RANGE_OF_AVERAGE];
+int x_greenlines_left[RANGE_OF_AVERAGE];
+
+// right = true
+// left = false
+bool side = true;
+
 
 // Are the two points set?
 int is_set = 0;
 // where the points updated?
 int new_points = 0;
+
+int find_right_point(cv::Mat blur){
+  // find the highest x-point of the line
+    int x_greenline = 140; // should be the highest x-point 
+    // down most 45 lines 
+    // find middle of the white stripe
+    for( int y = 150; y < blur.rows - 15; y++ ) {
+        for( int x = blur.cols - 5; x > 0; x-- ) {
+            
+            if(  80 < ( blur.at<uchar>(y,x)
+              + blur.at<uchar>(y,x + 1)
+              + blur.at<uchar>(y,x + 2)
+              + blur.at<uchar>(y,x + 3)
+            )
+            ){
+                //yaay
+                x_greenline = x - 2;
+                y_greenline = y;
+                return x_greenline;
+            }
+        }
+    }
+    
+}
+
+int find_left_point(cv::Mat blur){
+  // find the highest x-point of the line
+    int x_greenline = 40; // should be the highest x-point 
+    // down most 45 lines 
+    // find middle of the white stripe
+    for( int y = 150; y < blur.rows - 15; y++ ) {
+        for( int x = 0; x < blur.cols - 5; x++ ) {
+            
+            if(  80 < ( blur.at<uchar>(y,x)
+              + blur.at<uchar>(y,x + 1)
+              + blur.at<uchar>(y,x + 2)
+              + blur.at<uchar>(y,x + 3)
+            )
+            ){
+                //yaay
+                x_greenline = x + 2;
+                y_greenline = y;
+                return x_greenline;
+            }
+        }
+    }
+    
+}
+
+int average_right(int x_right_line){
+  // initialization
+    if(x_last_flag_right){
+      for(int i = 0; i < RANGE_OF_AVERAGE; i++){
+        x_greenlines_right[i] = x_right_line;
+      }
+      x_last_flag_right = false;
+    }
+    // refresh array 
+    for(int i = 0; i < RANGE_OF_AVERAGE - 1; i++){
+        x_greenlines_right[i + 1] = x_greenlines_right[i];
+    }
+    x_greenlines_right[0] = x_right_line;
+
+    int x = 0;
+    // average
+    for(int i = 0; i < RANGE_OF_AVERAGE; i++){
+        x += x_greenlines_right[i];
+      }
+    return x / RANGE_OF_AVERAGE;
+}
+
+int average_left(int x_left_line){
+  // initialization
+    if(x_last_flag_left){
+      for(int i = 0; i < RANGE_OF_AVERAGE; i++){
+        x_greenlines_left[i] = x_left_line;
+      }
+      x_last_flag_left = false;
+    }
+    // refresh array 
+    for(int i = 0; i < RANGE_OF_AVERAGE - 1; i++){
+        x_greenlines_left[i + 1] = x_greenlines_left[i];
+    }
+    x_greenlines_left[0] = x_left_line;
+
+    int x = 0;
+    // average
+    for(int i = 0; i < RANGE_OF_AVERAGE; i++){
+        x += x_greenlines_left[i];
+      }
+    return x / RANGE_OF_AVERAGE;
+}
 
 
 void imageCallback(const sensor_msgs::ImageConstPtr& msg){
@@ -76,35 +182,18 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg){
     // #####################################################################################################
     
     // Set Region of Interest
-    int offset_x = 260;
-    int offset_y = 100;
+    int offset_x = 200;
+    int offset_y = 200;
     cv::Rect roi;
     roi.x = offset_x;
     roi.y = offset_y;
     //roi.width = bird.size().width - (offset_x*2);
-    roi.width = 120;
+    roi.width = 240;
     //roi.height = bird.size().height - 150;
-    roi.height = bird.size().height - 150;
+    roi.height = bird.size().height - 240;
     //Crop the original image to the defined ROI
     cv::Mat crop = bird(roi);
     
-
-    // #####################################################################################################
-    // #####  Make the image brighter for better color recoqnition                            ##############
-    // #####################################################################################################
-    //cv::Mat brighton = cv::Mat::zeros(crop.size(), CV_8UC3);
-    double alpha = 1.0; /*< Simple contrast control [1.0-3.0]*/
-    int beta = 0;       /*< Simple brightness control [0-100]*/
-    /*
-    for( int y = 0; y < crop.rows; y++ ) {
-        for( int x = 0; x < crop.cols; x++ ) {
-            for( int c = 0; c < crop.channels(); c++ ) {
-                crop.at<cv::Vec3b>(y,x)[c] =
-                  cv::saturate_cast<uchar>( alpha*crop.at<cv::Vec3b>(y,x)[c] + beta );
-            }
-        }
-    }
-    */
     cv::imshow(OPENCV_STRANGE, crop);
     cv::waitKey(3);
     // #####################################################################################################
@@ -117,7 +206,7 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg){
     // only keep green
     cv::Mat hsv_filtered   = cv::Mat::zeros( crop.size(), CV_8UC3 );
     //cv::inRange(hsv1, cv::Scalar(50, 20, 100), cv::Scalar(70, 255, 255), hsv_filtered);
-    cv::inRange(crop, cv::Scalar(62, 20, 100), cv::Scalar(78, 255, 255), hsv_filtered);
+    cv::inRange(crop, cv::Scalar(62, 25, 148), cv::Scalar(85, 178, 255), hsv_filtered);
     
     // the image is now a grayscale
 
@@ -125,33 +214,15 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg){
     cv::Mat blur = cv::Mat::zeros(crop.size(), CV_8UC3);
     cv::GaussianBlur( hsv_filtered, blur, cv::Size( 15, 15 ), 0, 0 );
     
-    //cv::imshow(OPENCV_RAW, blur);
-    //cv::waitKey(3);
+    
+    int x_right_line = find_right_point(blur);
 
-    // find the lowest x-point of the line
-    int x_ding = 80; // should be the lowest x-point 
-    int y_ding = 30;
-    // down most 45 lines 
-    // find middle of the white stripe
-    for( int y = 280; y < blur.rows - 15; y++ ) {
-        for( int x = 0; x < blur.cols - 5; x++ ) {
-            
-            if(  100 < ( blur.at<uchar>(x,y)
-              + blur.at<uchar>(y,x + 1 )
-              + blur.at<uchar>(y,x + 2)
-              + blur.at<uchar>(y,x + 3)
-              + blur.at<uchar>(y,x + 4)
-            )
-            ){
-                //yaay
-                x_ding = x + 1;
-                y_ding = y;
-                break;
-            }
-        }
-    }
-    x_now = x_ding;
-    ROS_INFO("Lowest X of line:\t%i",x_ding);
+    int x_left_line = find_left_point(blur);
+    
+    x_now_right = average_right(x_right_line);
+    x_now_left = average_left(x_left_line);
+
+    ROS_INFO("left:\t%i \tright: \t%i",x_now_left,x_now_right);
 
     // mark the points as set 
     is_set = 1;
@@ -163,15 +234,13 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg){
     cv::cvtColor(blur, bgr,  cv::COLOR_GRAY2BGR, 3);
     cv::Scalar red = cv::Scalar( 0, 0, 255 );
     cv::Scalar blue = cv::Scalar( 255, 0, 0 );
-    // display the relevant line
-    //line(bgr, cv::Point(vec[2],vec[3]), cv::Point(vec[0],vec[1]), red, 3, 8, 0);
-    //line(bgr, lower, upper, blue, 2, 8, 0);
-    cv::rectangle( bgr, cv::Point(x_ding,y_ding), cv::Point(x_ding,y_ding) + cv::Point( 2,2 ), red, 2 );
+    // display the point
+    cv::rectangle( bgr, cv::Point(x_right_line,y_greenline), cv::Point(x_right_line,y_greenline) + cv::Point( 2,2 ), red, 2 );
+    cv::rectangle( bgr, cv::Point(x_left_line,y_greenline), cv::Point(x_left_line,y_greenline) + cv::Point( 2,2 ), blue, 2 );
+    
     // show image
     cv::imshow(OPENCV_WINDOW, bgr);
     cv::waitKey(3);
-    
-  
 }
 
 
@@ -195,9 +264,9 @@ int main(int argc, char** argv)
   image_transport::Subscriber sub = it.subscribe("cv_camera/image_raw", 1, imageCallback);
   //image_transport::Subscriber sub = it.subscribe("kinect2/qhd/image_color", 1, imageCallback);
   
-  // publish the line as four points
+  // publish the two x points of the two lines
   ros::Publisher x1 = nh.advertise<std_msgs::Int32>("/line_recoqnition/x1", 1);
-  
+  ros::Publisher x2 = nh.advertise<std_msgs::Int32>("/line_recoqnition/x2", 1);
 
 
   ROS_INFO("Contour Detection Start");
@@ -215,9 +284,12 @@ int main(int argc, char** argv)
         // only publish points if they where updated
         new_points = 0;
         std_msgs::Int32 x_1;
-        x_1.data = x_now;
+        std_msgs::Int32 x_2;
+        x_1.data = x_now_right;
+        x_2.data = x_now_left;
         // publish the points
         x1.publish( x_1 );
+        x2.publish( x_2 );
       }
     }
     // clear input/output buffers
