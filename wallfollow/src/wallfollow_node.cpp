@@ -7,13 +7,73 @@
 #include <math.h>
 #include <tf/tf.h>
 #include <signal.h>
-
+// range of steering average for speed control
+#define RANGE_OF_AVERAGE 10
+// range of usf value average for collision protection
+#define RANGE_OF_USF_AVERAGE 20
 #define MAX_STEERING_ANGLE 650
 
 double roll, pitch, yaw, last_t, t;
 std_msgs::Int16 motor, steering;
 bool stop = false;
 double x_1;
+int steering_history[RANGE_OF_AVERAGE];
+bool steering_flag = true;
+double usf_history[RANGE_OF_AVERAGE];
+bool usf_flag = true;
+
+int speed_control(int s_out){
+    // initialization
+    if(steering_flag){
+      for(int i = 0; i < RANGE_OF_AVERAGE; i++){
+        steering_history[i] = s_out;
+      }
+      steering_flag = false;
+    }
+    // refresh array 
+    for(int i = 0; i < RANGE_OF_AVERAGE - 1; i++){
+        steering_history[i + 1] = steering_history[i];
+    }
+    steering_history[0] = s_out;
+
+    // average
+    int average = 0;
+    for(int i = 0; i < RANGE_OF_AVERAGE; i++){
+        average += steering_history[i];
+      }
+    average = average / RANGE_OF_AVERAGE;
+
+    // calculate speed
+    return 400 - 150 * average / MAX_STEERING_ANGLE;
+}
+
+bool collision_protection(double range){
+    // initialization
+    if(usf_flag){
+      for(int i = 0; i < RANGE_OF_USF_AVERAGE; i++){
+        usf_history[i] = 0;
+      }
+      usf_flag = false;
+      return true;
+    }
+    // refresh array 
+    if(range > 0){
+        for(int i = 0; i < RANGE_OF_USF_AVERAGE - 1; i++){
+            usf_history[i + 1] = usf_history[i];
+        }
+        usf_history[0] = range;
+    }
+
+    // average
+    double average = 0;
+    for(int i = 0; i < RANGE_OF_USF_AVERAGE; i++){
+        average += usf_history[i];
+      }
+    average = average / RANGE_OF_USF_AVERAGE;
+
+    if(average < 0.35) return true;
+    else return false;
+}
 
 void odomCallback(nav_msgs::Odometry::ConstPtr odomMsg, nav_msgs::Odometry* odom)
 {
@@ -24,13 +84,11 @@ void odomCallback(nav_msgs::Odometry::ConstPtr odomMsg, nav_msgs::Odometry* odom
     tf::quaternionMsgToTF(odom->pose.pose.orientation, q);
     tf::Matrix3x3 mat(q);
     mat.getEulerYPR(yaw, pitch, roll);
-    
 }
 
 void x1_Callback(std_msgs::Int32::ConstPtr msg, double* data)
 {
   *data = (double) msg->data;
-  
 }
 
 // gets called whenever a new message is availible in the input puffer
@@ -134,15 +192,19 @@ int main(int argc, char** argv)
     if(s_out > MAX_STEERING_ANGLE) s_out = MAX_STEERING_ANGLE;
     else if(s_out < -MAX_STEERING_ANGLE) s_out = -MAX_STEERING_ANGLE;
 
-    ROS_INFO("s_out: %d \t d_err: %f", s_out, d_err);
+    //ROS_INFO("s_out: %d \t d_err: %f", s_out, d_err);
 
     steering.data = (int)s_out;
 
-    if (usf.range < 0.3)
+    // speed control and collision protection
+    if (collision_protection((double)usf.range))
     {
       motor.data = 0;
     }
-    else motor.data = 300;
+    else motor.data = speed_control((int)abs(s_out));
+
+
+    ROS_INFO("speed: %d", motor.data);
 
     if (stop){
         ROS_INFO("Stop Request send");
@@ -155,8 +217,6 @@ int main(int argc, char** argv)
      // publish command messages on their topics
     motorCtrl.publish(motor);
     steeringCtrl.publish(steering);
-    // side note: setting steering and motor even though nothing might have
-    // changed is actually stupid but for this demo it doesn't matter too much.
     
     last_err = err;
     last_t = t;
