@@ -11,12 +11,13 @@
 #define RANGE_OF_AVERAGE 10
 // range of usf value average for collision protection
 #define RANGE_OF_USF_AVERAGE 20
-#define MAX_STEERING_ANGLE 650
+#define MAX_STEERING_ANGLE 700
 
 double roll, pitch, yaw, last_t, t;
 std_msgs::Int16 motor, steering;
 bool stop = false;
-double x_1;
+double x_right;
+double x_left;
 int steering_history[RANGE_OF_AVERAGE];
 bool steering_flag = true;
 double usf_history[RANGE_OF_AVERAGE];
@@ -71,7 +72,7 @@ bool collision_protection(double range){
       }
     average = average / RANGE_OF_USF_AVERAGE;
 
-    if(average < 0.35) return true;
+    if(average < 0.3) return true;
     else return false;
 }
 
@@ -85,8 +86,13 @@ void odomCallback(nav_msgs::Odometry::ConstPtr odomMsg, nav_msgs::Odometry* odom
     tf::Matrix3x3 mat(q);
     mat.getEulerYPR(yaw, pitch, roll);
 }
-
-void x1_Callback(std_msgs::Int32::ConstPtr msg, double* data)
+// receive right line
+void right_Callback(std_msgs::Int32::ConstPtr msg, double* data)
+{
+  *data = (double) msg->data;
+}
+// receive left line
+void left_Callback(std_msgs::Int32::ConstPtr msg, double* data)
 {
   *data = (double) msg->data;
 }
@@ -136,8 +142,10 @@ int main(int argc, char** argv)
       "/uc_bridge/usf", 10, boost::bind(usfCallback, _1, &usf));
   
   // subscribe to the line_recoqnition
-  ros::Subscriber x1_sub = nh.subscribe<std_msgs::Int32>(
-      "/line_recoqnition/x1", 1, boost::bind(x1_Callback, _1, &x_1));
+  ros::Subscriber right_sub = nh.subscribe<std_msgs::Int32>(
+      "/line_recoqnition/right", 1, boost::bind(right_Callback, _1, &x_right));
+  ros::Subscriber left_sub = nh.subscribe<std_msgs::Int32>(
+      "/line_recoqnition/left", 1, boost::bind(left_Callback, _1, &x_left));
   
   // generate control message publisher
   ros::Publisher motorCtrl =
@@ -150,9 +158,11 @@ int main(int argc, char** argv)
 
   ROS_INFO("A simple Wallfollow");
 
-  double sollwert = 1.4;
-  int pk = 3000;
-  int pd = 1000;
+  // 0 = right; 1 = left
+  int line_selection = 0;
+
+  int pk = 3000 * 0.5;
+  int pd = 1000 * 0.5;
   int pi = 200;
 
   double last_err = 0;
@@ -165,13 +175,16 @@ int main(int argc, char** argv)
 
   // Loop starts here:
   // loop rate value is set in Hz
-  ros::Rate loop_rate(20);
+  ros::Rate loop_rate(30);
   while (ros::ok())
   {
     t = ((double)clock()/CLOCKS_PER_SEC);
     int s_out = 0;
+    //TODO 1.4 right, 0.4 left
+    double sollwert = 1.4;
 
-    istwert = (double)x_1 / 100.0 ;
+    istwert = ((double)x_right * (1 - line_selection) 
+        + (double)x_left * line_selection) / 100.0 ;
     ROS_INFO("Istwert = %f",istwert);
     
     // Regelabweichung
@@ -204,7 +217,7 @@ int main(int argc, char** argv)
     else motor.data = speed_control((int)abs(s_out));
 
 
-    ROS_INFO("speed: %d", motor.data);
+    //ROS_INFO("speed: %d", motor.data);
 
     if (stop){
         ROS_INFO("Stop Request send");

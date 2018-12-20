@@ -31,10 +31,7 @@ int y_greenline = 30;
 int x_greenlines_right[RANGE_OF_AVERAGE];
 int x_greenlines_left[RANGE_OF_AVERAGE];
 
-// right = true
-// left = false
 bool side = true;
-
 
 // Are the two points set?
 int is_set = 0;
@@ -48,7 +45,7 @@ int find_right_point(cv::Mat blur){
     // find middle of the white stripe
     for( int y = 150; y < blur.rows - 15; y++ ) {
         for( int x = blur.cols - 5; x > 0; x-- ) {
-            
+            //4 folgende Pixel, die zusammen heller als 80 sind
             if(  80 < ( blur.at<uchar>(y,x)
               + blur.at<uchar>(y,x + 1)
               + blur.at<uchar>(y,x + 2)
@@ -133,27 +130,23 @@ int average_left(int x_left_line){
     return x / RANGE_OF_AVERAGE;
 }
 
-
+// receive and process images
 void imageCallback(const sensor_msgs::ImageConstPtr& msg){
-    
-    ROS_INFO("Received an Image!");
-
-    // save image to a cv::Mat
+    //ROS_INFO("Received an Image!");
+    // #####################################################################################################
+    // ##### Save the image to a cv::Mat for further processing                               ##############
+    // #####################################################################################################
     cv_bridge::CvImagePtr cv_ptr;
-    try
-    {
+    try{
       cv_ptr = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::BGR8);
     }
-    catch (cv_bridge::Exception& e)
-    {
+    catch (cv_bridge::Exception& e){
       ROS_ERROR("cv_bridge exception: %s", e.what());
       return;
     }
-    
     // #####################################################################################################
     // #####  Transform perpective to birdeye view                                            ##############
     // #####################################################################################################
-
     // Input Quadilateral or Image plane coordinates
     cv::Point2f inputQuad[4]; 
     // The 4 points that select quadilateral on the input , from top-left in clockwise order
@@ -169,18 +162,15 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg){
     outputQuad[1] = cv::Point2f( 639,1 ); //topright mapped
     outputQuad[2] = cv::Point2f( 380,439 ); //bottomright mapped
     outputQuad[3] = cv::Point2f( 260,439  ); //bottomleft mapped
-
     // Lambda Matrix
     cv::Mat lambda;
     // Get the Perspective Transform Matrix i.e. lambda 
     lambda = cv::getPerspectiveTransform( inputQuad, outputQuad );
     cv::Mat bird  = cv::Mat::zeros( (cv_ptr->image).size(), (cv_ptr->image).type() );
     cv::warpPerspective(cv_ptr->image,bird,lambda,bird.size() );
-    
     // #####################################################################################################
     // #####  Crop the birdeye view to a rectangle                                            ##############
     // #####################################################################################################
-    
     // Set Region of Interest
     int offset_x = 200;
     int offset_y = 200;
@@ -193,56 +183,52 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg){
     roi.height = bird.size().height - 240;
     //Crop the original image to the defined ROI
     cv::Mat crop = bird(roi);
-    
+    // debug view
     cv::imshow(OPENCV_STRANGE, crop);
     cv::waitKey(3);
     // #####################################################################################################
     // #####  Filter out everything that isn't green                                          ##############
     // #####################################################################################################
-    
     // convert image from BGR to HSV
-    //cv::Mat hsv1  = cv::Mat::zeros( crop.size(), CV_8UC3 );
     cv::cvtColor(crop, crop, cv::COLOR_BGR2HSV, 3);
     // only keep green
     cv::Mat hsv_filtered   = cv::Mat::zeros( crop.size(), CV_8UC3 );
-    //cv::inRange(hsv1, cv::Scalar(50, 20, 100), cv::Scalar(70, 255, 255), hsv_filtered);
     cv::inRange(crop, cv::Scalar(62, 25, 148), cv::Scalar(85, 178, 255), hsv_filtered);
-    
     // the image is now a grayscale
-
-    // blur the image
+    // #####################################################################################################
+    // #####  Blur the image                                                                  ##############
+    // #####################################################################################################
     cv::Mat blur = cv::Mat::zeros(crop.size(), CV_8UC3);
     cv::GaussianBlur( hsv_filtered, blur, cv::Size( 15, 15 ), 0, 0 );
-    
-    
+    // #####################################################################################################
+    // #####  Find a point at some distance on both lines                                     ##############
+    // #####################################################################################################
     int x_right_line = find_right_point(blur);
-
     int x_left_line = find_left_point(blur);
-    
+    // average with the last couple of points to mitigate hickups
     x_now_right = average_right(x_right_line);
-    x_now_left = average_left(x_left_line);
-
-    ROS_INFO("left:\t%i \tright: \t%i",x_now_left,x_now_right);
-
+    x_now_left = average_left(x_left_line) + 60; 
+    // x_now_left should be 80 but for the controller to function properly 
+    // we add 60 to get to 140, because the controller is tuned for 140
     // mark the points as set 
     is_set = 1;
     // mark the points as updated
     new_points = 1;
-
-    // visualize for debug
+    // #####################################################################################################
+    // #####  Visualize for debug                                                             ##############
+    // #####################################################################################################
+    ROS_INFO("left:\t%i \tright: \t%i",x_now_left,x_now_right);
     cv::Mat bgr  = cv::Mat::zeros( hsv_filtered.size() * 3, CV_8UC3 );
     cv::cvtColor(blur, bgr,  cv::COLOR_GRAY2BGR, 3);
     cv::Scalar red = cv::Scalar( 0, 0, 255 );
     cv::Scalar blue = cv::Scalar( 255, 0, 0 );
-    // display the point
+    // display the points
     cv::rectangle( bgr, cv::Point(x_right_line,y_greenline), cv::Point(x_right_line,y_greenline) + cv::Point( 2,2 ), red, 2 );
     cv::rectangle( bgr, cv::Point(x_left_line,y_greenline), cv::Point(x_left_line,y_greenline) + cv::Point( 2,2 ), blue, 2 );
-    
     // show image
     cv::imshow(OPENCV_WINDOW, bgr);
     cv::waitKey(3);
 }
-
 
 int main(int argc, char** argv)
 {
@@ -252,7 +238,6 @@ int main(int argc, char** argv)
   ros::NodeHandle nh;
 
   // create a window the show things
-  
   cv::namedWindow(OPENCV_WINDOW);
   cv::waitKey(3);
   cv::namedWindow(OPENCV_STRANGE);
@@ -260,36 +245,30 @@ int main(int argc, char** argv)
   //cv::namedWindow(OPENCV_RAW);
   //cv::waitKey(3);
   
+  // subscribe to receive video feed
   image_transport::ImageTransport it(nh);
   image_transport::Subscriber sub = it.subscribe("cv_camera/image_raw", 1, imageCallback);
-  //image_transport::Subscriber sub = it.subscribe("kinect2/qhd/image_color", 1, imageCallback);
-  
   // publish the two x points of the two lines
-  ros::Publisher x1 = nh.advertise<std_msgs::Int32>("/line_recoqnition/x1", 1);
-  ros::Publisher x2 = nh.advertise<std_msgs::Int32>("/line_recoqnition/x2", 1);
-
-
-  ROS_INFO("Contour Detection Start");
-
-  
+  ros::Publisher right_pub = nh.advertise<std_msgs::Int32>("/line_recoqnition/right", 1);
+  ros::Publisher left_pub = nh.advertise<std_msgs::Int32>("/line_recoqnition/left", 1);
   // Loop starts here:
+  ROS_INFO("Contour Detection Start");
   // loop rate value is set in Hz
-  ros::Rate loop_rate(10);
+  ros::Rate loop_rate(30);
   while (ros::ok())
   {
-
     if( is_set ){
       // only try to publish points if they where initialized
       if( new_points ){
         // only publish points if they where updated
         new_points = 0;
-        std_msgs::Int32 x_1;
-        std_msgs::Int32 x_2;
-        x_1.data = x_now_right;
-        x_2.data = x_now_left;
+        std_msgs::Int32 x_right;
+        std_msgs::Int32 x_left;
+        x_right.data = x_now_right;
+        x_left.data = x_now_left;
         // publish the points
-        x1.publish( x_1 );
-        x2.publish( x_2 );
+        right_pub.publish( x_right );
+        left_pub.publish( x_left );
       }
     }
     // clear input/output buffers
