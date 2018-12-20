@@ -53,12 +53,13 @@
 \usepackage{todonotes}
 \newcommand{\code}[1]{\texttt{#1}}
 \newcommand{\tod}[1]{\todo[inline]{#1}}
+\usepackage{graphicx}
 
 
 \title{\textbf{Projektseminar Echtzeitsysteme}}
 \subtitle{AUDO - Autonomous Unmanned Driving Unit}
 \subsubtitle{Nikolas Ziegelmayer, Nils Wittig, Fabian Burger, Ramona Volz und Maike Latsch \\
-			 Institut f\"ur Datentechnik \textbar Fachgebiet Echtzeitsysteme}
+			 Institut f\"ur Datentechnik \textbar \hspace{3px}Fachgebiet Echtzeitsysteme}
 %\settitlepicture{images/spartan}
 \begin{document}
 
@@ -75,12 +76,13 @@
 \pagestyle{headings}
 \pagenumbering{arabic}
 \tableofcontents
+\listoftodos
 \include{bericht_inhalt}
 
 
 %% Anhang %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\appendix
-%\bibliographystyle{plain}
+\bibliographystyle{plain}
 \clearpage
 % \nocite{*}
 \bibliography{literaturverzeichnis}
