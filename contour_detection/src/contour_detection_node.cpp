@@ -23,10 +23,20 @@ static const std::string OPENCV_STRANGE = "Image filtered window";
 
 int x_now_right;
 int x_now_left;
+
+int x_right_line_2;
+int x_left_line_2;
+int x_right_line_3;
+int x_left_line_3;
+
+
 bool x_last_flag_right = true;
 bool x_last_flag_left = true;
 
 int y_greenline = 30;
+
+int y_coords_left[3];
+int y_coords_right[3];
 
 int x_greenlines_right[RANGE_OF_AVERAGE];
 int x_greenlines_left[RANGE_OF_AVERAGE];
@@ -38,12 +48,14 @@ int is_set = 0;
 // where the points updated?
 int new_points = 0;
 
-int find_right_point(cv::Mat blur){
+// blur.rows = blur.cols =240
+// TODO Punkte weiter hoch verschieben, um schwarze Dreiecke zu vermeiden
+int find_right_point(cv::Mat blur, int height, int index){
   // find the highest x-point of the line
     int x_greenline = 140; // should be the highest x-point 
     // down most 45 lines 
     // find middle of the white stripe
-    for( int y = 150; y < blur.rows - 15; y++ ) {
+    for( int y = height; y < blur.rows - 15; y++ ) {
         for( int x = blur.cols - 5; x > 0; x-- ) {
             //4 folgende Pixel, die zusammen heller als 80 sind
             if(  80 < ( blur.at<uchar>(y,x)
@@ -53,8 +65,8 @@ int find_right_point(cv::Mat blur){
             )
             ){
                 //yaay
-                x_greenline = x - 2;
-                y_greenline = y;
+                x_greenline = x - 5;
+                y_coords_right[index] = y;
                 return x_greenline;
             }
         }
@@ -62,12 +74,65 @@ int find_right_point(cv::Mat blur){
     
 }
 
-int find_left_point(cv::Mat blur){
+// blur.rows = blur.cols =240
+int find_right_point_alternative(cv::Mat blur, int height, int index){
+  // find the highest x-point of the line
+    int x_greenline = 140; // should be the highest x-point 
+    // down most 45 lines 
+    // find middle of the white stripe
+    for( int y = blur.rows - 60; y > height; y-- ) {
+        for( int x = blur.cols - 5; x > 80; x-- ) {
+            //4 folgende Pixel, die zusammen heller als 80 sind
+            if(  80 < ( blur.at<uchar>(y,x)
+              + blur.at<uchar>(y,x + 1)
+              + blur.at<uchar>(y,x + 2)
+              + blur.at<uchar>(y,x + 3)
+            )
+            ){
+                //yaay
+                x_greenline = x - 5;
+                y_coords_right[index] = y;
+                return x_greenline;
+            }
+        }
+    }
+    return 140;
+    
+}
+
+// blur.rows = blur.cols =240
+int find_left_point_alternative(cv::Mat blur, int height, int index){
   // find the highest x-point of the line
     int x_greenline = 40; // should be the highest x-point 
     // down most 45 lines 
     // find middle of the white stripe
-    for( int y = 150; y < blur.rows - 15; y++ ) {
+    for( int y = blur.rows - 60; y > height; y--) {
+        for( int x = 5; x < blur.cols - 80; x++ ) {
+            
+            if(  80 < ( blur.at<uchar>(y,x)
+              + blur.at<uchar>(y,x + 1)
+              + blur.at<uchar>(y,x + 2)
+              + blur.at<uchar>(y,x + 3)
+            )
+            ){
+                //yaay
+                x_greenline = x + 5;
+                y_coords_left[index] = y;
+                return x_greenline;
+            }
+        }
+    }
+    return 40;
+    
+}
+
+// blur.rows = blur.cols =240
+int find_left_point(cv::Mat blur, int height, int index){
+  // find the highest x-point of the line
+    int x_greenline = 40; // should be the highest x-point 
+    // down most 45 lines 
+    // find middle of the white stripe
+    for( int y = height; y < blur.rows - 15; y++ ) {
         for( int x = 0; x < blur.cols - 5; x++ ) {
             
             if(  80 < ( blur.at<uchar>(y,x)
@@ -77,8 +142,8 @@ int find_left_point(cv::Mat blur){
             )
             ){
                 //yaay
-                x_greenline = x + 2;
-                y_greenline = y;
+                x_greenline = x + 5;
+                y_coords_left[index] = y;
                 return x_greenline;
             }
         }
@@ -203,13 +268,21 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg){
     // #####################################################################################################
     // #####  Find a point at some distance on both lines                                     ##############
     // #####################################################################################################
-    int x_right_line = find_right_point(blur);
-    int x_left_line = find_left_point(blur);
+    int x_right_line = find_right_point_alternative(blur, 150, 0);
+    int x_left_line = find_left_point_alternative(blur, 150, 0);
     // average with the last couple of points to mitigate hickups
+    // maybe weigthed average instead
     x_now_right = average_right(x_right_line);
-    x_now_left = average_left(x_left_line) + 60; 
+    x_now_left = average_left(x_left_line); 
     // x_now_left should be 80 but for the controller to function properly 
     // we add 60 to get to 140, because the controller is tuned for 140
+
+    // find two more points to differentiate between curves and straights 
+    x_right_line_2 = find_right_point(blur, 115, 1);
+    x_left_line_2 = find_left_point(blur, 115, 1);
+    x_right_line_3 = find_right_point(blur, 50, 2);
+    x_left_line_3 = find_left_point(blur, 50, 2);
+
     // mark the points as set 
     is_set = 1;
     // mark the points as updated
@@ -221,10 +294,15 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg){
     cv::Mat bgr  = cv::Mat::zeros( hsv_filtered.size() * 3, CV_8UC3 );
     cv::cvtColor(blur, bgr,  cv::COLOR_GRAY2BGR, 3);
     cv::Scalar red = cv::Scalar( 0, 0, 255 );
-    cv::Scalar blue = cv::Scalar( 255, 0, 0 );
+    cv::Scalar green = cv::Scalar( 0, 255, 0 );
     // display the points
-    cv::rectangle( bgr, cv::Point(x_right_line,y_greenline), cv::Point(x_right_line,y_greenline) + cv::Point( 2,2 ), red, 2 );
-    cv::rectangle( bgr, cv::Point(x_left_line,y_greenline), cv::Point(x_left_line,y_greenline) + cv::Point( 2,2 ), blue, 2 );
+    cv::rectangle( bgr, cv::Point(x_right_line,y_coords_right[0]), cv::Point(x_right_line,y_coords_right[0]) + cv::Point( 2,2 ), green, 2 );
+    cv::rectangle( bgr, cv::Point(x_left_line,y_coords_left[0]), cv::Point(x_left_line,y_coords_left[0]) + cv::Point( 2,2 ), red, 2 );
+    cv::rectangle( bgr, cv::Point(x_right_line_2,y_coords_right[1]), cv::Point(x_right_line_2,y_coords_right[1]) + cv::Point( 2,2 ), green, 2 );
+    cv::rectangle( bgr, cv::Point(x_left_line_2,y_coords_left[1]), cv::Point(x_left_line_2,y_coords_left[1]) + cv::Point( 2,2 ), red, 2 );
+    cv::rectangle( bgr, cv::Point(x_right_line_3,y_coords_right[2]), cv::Point(x_right_line_3,y_coords_right[2]) + cv::Point( 2,2 ), green, 2 );
+    cv::rectangle( bgr, cv::Point(x_left_line_3,y_coords_left[2]), cv::Point(x_left_line_3,y_coords_left[2]) + cv::Point( 2,2 ), red, 2 );
+    
     // show image
     cv::imshow(OPENCV_WINDOW, bgr);
     cv::waitKey(3);
@@ -251,6 +329,10 @@ int main(int argc, char** argv)
   // publish the two x points of the two lines
   ros::Publisher right_pub = nh.advertise<std_msgs::Int32>("/line_recoqnition/right", 1);
   ros::Publisher left_pub = nh.advertise<std_msgs::Int32>("/line_recoqnition/left", 1);
+  ros::Publisher right_pub_2 = nh.advertise<std_msgs::Int32>("/line_recoqnition/right_2", 1);
+  ros::Publisher left_pub_2 = nh.advertise<std_msgs::Int32>("/line_recoqnition/left_2", 1);
+  ros::Publisher right_pub_3 = nh.advertise<std_msgs::Int32>("/line_recoqnition/right_3", 1);
+  ros::Publisher left_pub_3 = nh.advertise<std_msgs::Int32>("/line_recoqnition/left_3", 1);
   // Loop starts here:
   ROS_INFO("Contour Detection Start");
   // loop rate value is set in Hz
@@ -264,11 +346,24 @@ int main(int argc, char** argv)
         new_points = 0;
         std_msgs::Int32 x_right;
         std_msgs::Int32 x_left;
+        std_msgs::Int32 x_right_2;
+        std_msgs::Int32 x_left_2;
+        std_msgs::Int32 x_right_3;
+        std_msgs::Int32 x_left_3;
+
         x_right.data = x_now_right;
         x_left.data = x_now_left;
+        x_right_2.data = x_right_line_2;
+        x_left_2.data = x_left_line_2;
+        x_right_3.data = x_right_line_3;
+        x_left_3.data = x_left_line_3;
         // publish the points
         right_pub.publish( x_right );
         left_pub.publish( x_left );
+        right_pub_2.publish( x_right_2 );
+        left_pub_2.publish( x_left_2 );
+        right_pub_3.publish( x_right_3 );
+        left_pub_3.publish( x_left_3 );
       }
     }
     // clear input/output buffers

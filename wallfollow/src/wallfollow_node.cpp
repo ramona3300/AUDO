@@ -18,10 +18,15 @@ std_msgs::Int16 motor, steering;
 bool stop = false;
 double x_right;
 double x_left;
+double x_right_2;
+double x_left_2;
+double x_right_3;
+double x_left_3;
 int steering_history[RANGE_OF_AVERAGE];
 bool steering_flag = true;
 double usf_history[RANGE_OF_AVERAGE];
 bool usf_flag = true;
+bool is_curve = false;
 
 int speed_control(int s_out){
     // initialization
@@ -97,6 +102,28 @@ void left_Callback(std_msgs::Int32::ConstPtr msg, double* data)
   *data = (double) msg->data;
 }
 
+// receive right line
+void right_Callback_2(std_msgs::Int32::ConstPtr msg, double* data)
+{
+  *data = (double) msg->data;
+}
+// receive left line
+void left_Callback_2(std_msgs::Int32::ConstPtr msg, double* data)
+{
+  *data = (double) msg->data;
+}
+
+// receive right line
+void right_Callback_3(std_msgs::Int32::ConstPtr msg, double* data)
+{
+  *data = (double) msg->data;
+}
+// receive left line
+void left_Callback_3(std_msgs::Int32::ConstPtr msg, double* data)
+{
+  *data = (double) msg->data;
+}
+
 // gets called whenever a new message is availible in the input puffer
 void uslCallback(sensor_msgs::Range::ConstPtr uslMsg, sensor_msgs::Range* usl)
 {
@@ -146,6 +173,14 @@ int main(int argc, char** argv)
       "/line_recoqnition/right", 1, boost::bind(right_Callback, _1, &x_right));
   ros::Subscriber left_sub = nh.subscribe<std_msgs::Int32>(
       "/line_recoqnition/left", 1, boost::bind(left_Callback, _1, &x_left));
+  ros::Subscriber right_sub_2 = nh.subscribe<std_msgs::Int32>(
+      "/line_recoqnition/right_2", 1, boost::bind(right_Callback, _1, &x_right_2));
+  ros::Subscriber left_sub_2 = nh.subscribe<std_msgs::Int32>(
+      "/line_recoqnition/left_2", 1, boost::bind(left_Callback, _1, &x_left_2));
+  ros::Subscriber right_sub_3 = nh.subscribe<std_msgs::Int32>(
+      "/line_recoqnition/right_3", 1, boost::bind(right_Callback, _1, &x_right_3));
+  ros::Subscriber left_sub_3 = nh.subscribe<std_msgs::Int32>(
+      "/line_recoqnition/left_3", 1, boost::bind(left_Callback, _1, &x_left_3));
   
   // generate control message publisher
   ros::Publisher motorCtrl =
@@ -160,10 +195,14 @@ int main(int argc, char** argv)
 
   // 0 = right; 1 = left
   int line_selection = 0;
-
-  int pk = 3000 * 0.5;
-  int pd = 1000 * 0.5;
+  int pk = 3000 * 0.7;
+  int pd = 1000 * 0.1;
   int pi = 200;
+
+  int pk_straight = 3000 * 0.15;
+  int pd_straight = 1000 * 0.05;
+  int pi_straight = 200;
+  
 
   double last_err = 0;
   double err = 0;
@@ -172,6 +211,11 @@ int main(int argc, char** argv)
   double i_err = 0;
   double istwert = 0;
   last_t = ((double)clock()/CLOCKS_PER_SEC);
+  int s_out_ar[10] = {0,0,0,0,0,0,0,0,0,0};
+
+  int curved[30] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+  bool actual_curve = false;
+  int curve_count = 0;
 
   // Loop starts here:
   // loop rate value is set in Hz
@@ -180,21 +224,92 @@ int main(int argc, char** argv)
   {
     t = ((double)clock()/CLOCKS_PER_SEC);
     int s_out = 0;
-    //TODO 1.4 right, 0.4 left
+    // TODO stimmt das noch
     double sollwert = 1.4;
 
-    istwert = ((double)x_right * (1 - line_selection) 
-        + (double)x_left * line_selection) / 100.0 ;
-    ROS_INFO("Istwert = %f",istwert);
+    if( x_left >= x_right - 10){
+        // only one line
+        // just choose the right line
+        line_selection = 0;
+    }
+
+    if(line_selection){
+        // left
+        istwert = ( (double)x_left + 60.0 ) / 100.0;
+    }else{
+        // right
+        istwert = (double)x_right / 100.0;
+    }
+    
+    double offset = 3;
+    double diff = 0;
+    // Curve or Straight?
+    if(line_selection){
+        // left
+         diff = x_left_2 - x_left;
+
+        // no curve
+        if((x_left_3 - x_left_2 < diff + offset) && (x_left_3 - x_left_2 > diff - offset)){
+            is_curve = false;
+        }
+        // curve
+        else{
+            is_curve = true;
+        }
+        
+
+    }else{
+        // right
+        diff = x_right - x_right_2;
+
+        // no curve
+        if((x_right_2 - x_right_3 < diff + offset) && (x_right_2 - x_right_3 > diff - offset)){
+            is_curve = false;
+        }
+        // curve
+        else{
+            is_curve = true;
+        }
+    }
+    // is there really a curve
+    for(int i = 1; i < 30; i++){
+        curved[i] = curved[i - 1];
+    }
+    curved[0] = is_curve ? 1 : 0;
+    curve_count = 0;
+    for(int i = 0; i < 30; i++){
+        curve_count += curved[i];
+    }
+    if(curve_count >= 25){
+        actual_curve = true;
+    }else if(curve_count <= 15){
+        actual_curve = false;
+    }
+
+    
+    // #####################################################################################################
+    // ##### Controlling                                                                      ##############
+    // #####################################################################################################
     
     // Regelabweichung
     err = sollwert - istwert;
-    // P-Anteil
-    p_err = pk * err;
-    // D-Anteil
-    d_err = pd * (err - last_err) / (t - last_t);
-    // I_Anteil mit Anti-Windup
-    i_err += pi*err;
+
+    if(actual_curve){
+        // P-Anteil
+        p_err = pk * err;
+        // D-Anteil
+        d_err = pd * (err - last_err) / (t - last_t);
+        // I_Anteil mit Anti-Windup
+        i_err += pi*err;
+    }else{
+        // P-Anteil
+        p_err = pk_straight * err;
+        // D-Anteil
+        d_err = pd_straight * (err - last_err) / (t - last_t);
+        // I_Anteil mit Anti-Windup
+        i_err += pi_straight * err;
+    }
+    
     if(i_err > 400) i_err = 400;
     else if(i_err < -400) i_err = -400;
 
@@ -206,15 +321,26 @@ int main(int argc, char** argv)
     else if(s_out < -MAX_STEERING_ANGLE) s_out = -MAX_STEERING_ANGLE;
 
     //ROS_INFO("s_out: %d \t d_err: %f", s_out, d_err);
+    for(int i = 1; i < 10; i++){
+        s_out_ar[i] = s_out_ar[i - 1];
+    }
+    s_out_ar[0] = s_out;
 
-    steering.data = (int)s_out;
+    int s_out_av = 0;
+    for(int i = 0; i < 10; i++){
+        s_out_av += s_out_ar[i] * 0.1 * (10 - i);
+    }
+    s_out_av = s_out_av / 5;
+    ROS_INFO("Istwert = %f Curve = %d, line_sel = %d, steer = %d",istwert, actual_curve, line_selection, s_out_av);
+
+    steering.data = (int)s_out_av;
 
     // speed control and collision protection
     if (collision_protection((double)usf.range))
     {
       motor.data = 0;
     }
-    else motor.data = speed_control((int)abs(s_out));
+    else motor.data = 300 /*speed_control((int)abs(s_out))*/;
 
 
     //ROS_INFO("speed: %d", motor.data);
