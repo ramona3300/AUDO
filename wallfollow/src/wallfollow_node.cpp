@@ -17,6 +17,14 @@
 #define DS_CURVE_AP 3 // straight mode
 #define DS_STRAIGHT_AP 4 // curve mode
 #define DS_STARTUP 5 // straight mode slow
+#define DS_CURVE_SLOW 6 // curve mode slow
+#define DS_STRAIGHT_SLOW 7 // straight mode slow
+#define DS_CURVE_AP_SLOW 8 // straight mode slow
+#define DS_STRAIGHT_AP_SLOW 9 // curve mode slow
+#define SWITCH_TO_LEFT 1
+#define SWITCH_TO_RIGHT 2
+#define NO_SWITCH 0
+#define RANGE_OF_STEERING_AVG 20 // for s_out lowpassfilter
 
 double roll, pitch, yaw, last_t, t;
 std_msgs::Int16 motor, steering;
@@ -31,6 +39,7 @@ int steering_history[RANGE_OF_AVERAGE];
 bool steering_flag = true;
 double usf_history[RANGE_OF_AVERAGE];
 bool usf_flag = true;
+
 
 int speed_control(int s_out){
     // initialization
@@ -85,7 +94,7 @@ bool collision_protection(double range){
     else return false;
 }
 
-int drive_state(int line_selection, int *curved, bool *actual_curve, int *straight_delay, int *curve_delay){
+int drive_state(int line_selection, int *curved, bool *actual_curve, int *straight_delay, int *curve_delay, int drive_mode){
     bool is_curve = false;
     int curve_count = 0;
     double offset = 3;
@@ -118,7 +127,7 @@ int drive_state(int line_selection, int *curved, bool *actual_curve, int *straig
     }
 
     //ROS_INFO("count = %d curve = %d curve_del = %d straight_del = %d",curve_count,*actual_curve,*curve_delay,*straight_delay);
-
+    //ROS_INFO("x_right = %f x_left = %f x_right_2 = %f x_left_2 = %f x_right_3 = %f x_left_3 = %f",x_right, x_left, x_right_2, x_left_2, x_right_3, x_left_3);
     // when approaching a curve wait for some time before switching to curve mode
     if(curve_count >= 16){
         // approaching a curve
@@ -127,15 +136,15 @@ int drive_state(int line_selection, int *curved, bool *actual_curve, int *straig
             if(*straight_delay == 0){
                 *actual_curve = true;
                 *curve_delay = 20;
-                return DS_CURVE;
+                return drive_mode ? DS_CURVE : DS_CURVE_SLOW;
             }else{
                 (*straight_delay)--;
-                return DS_CURVE_AP;
+                return drive_mode ? DS_CURVE_AP : DS_CURVE_AP_SLOW;
             }
         }else{
             *actual_curve = true;
             *curve_delay = 20;
-            return DS_CURVE;
+            return drive_mode ? DS_CURVE : DS_CURVE_SLOW;
         }
     }else if(curve_count <= 15){
         // approaching a straight
@@ -144,20 +153,20 @@ int drive_state(int line_selection, int *curved, bool *actual_curve, int *straig
             if(*curve_delay == 0){
                 *actual_curve = false;
                 *straight_delay = 20;
-                return DS_STRAIGHT;
+                return drive_mode ? DS_STRAIGHT : DS_STRAIGHT_SLOW;
             }else{
                 (*curve_delay)--;
-                return DS_STRAIGHT_AP;
+                return drive_mode ? DS_STRAIGHT_AP : DS_STRAIGHT_AP_SLOW;
             }
         }else{
             *actual_curve = false;
             *straight_delay = 20;
-            return DS_STRAIGHT;
+            return drive_mode ? DS_STRAIGHT : DS_STRAIGHT_SLOW;
         }
     }
 }
 
-int current_steering steering_characteristic(int s_out_av, int last_steer){
+int steering_characteristic(int s_out_av, int last_steer){
     // do clever things
     return s_out_av;
 }
@@ -203,6 +212,11 @@ void right_Callback_3(std_msgs::Int32::ConstPtr msg, double* data)
 void left_Callback_3(std_msgs::Int32::ConstPtr msg, double* data)
 {
   *data = (double) msg->data;
+}
+// receive lane_switch
+void lane_switch_Callback(std_msgs::Int32::ConstPtr msg, int* data)
+{
+  *data = (int) msg->data;
 }
 
 // gets called whenever a new message is availible in the input puffer
@@ -255,13 +269,19 @@ int main(int argc, char** argv)
   ros::Subscriber left_sub = nh.subscribe<std_msgs::Int32>(
       "/line_recoqnition/left", 1, boost::bind(left_Callback, _1, &x_left));
   ros::Subscriber right_sub_2 = nh.subscribe<std_msgs::Int32>(
-      "/line_recoqnition/right_2", 1, boost::bind(right_Callback, _1, &x_right_2));
+      "/line_recoqnition/right_2", 1, boost::bind(right_Callback_2, _1, &x_right_2));
   ros::Subscriber left_sub_2 = nh.subscribe<std_msgs::Int32>(
-      "/line_recoqnition/left_2", 1, boost::bind(left_Callback, _1, &x_left_2));
+      "/line_recoqnition/left_2", 1, boost::bind(left_Callback_2, _1, &x_left_2));
   ros::Subscriber right_sub_3 = nh.subscribe<std_msgs::Int32>(
-      "/line_recoqnition/right_3", 1, boost::bind(right_Callback, _1, &x_right_3));
+      "/line_recoqnition/right_3", 1, boost::bind(right_Callback_3, _1, &x_right_3));
   ros::Subscriber left_sub_3 = nh.subscribe<std_msgs::Int32>(
-      "/line_recoqnition/left_3", 1, boost::bind(left_Callback, _1, &x_left_3));
+      "/line_recoqnition/left_3", 1, boost::bind(left_Callback_3, _1, &x_left_3));
+
+  // switch the lane?
+  int lane_switch = 0;
+  // subscribe to lane switch
+  ros::Subscriber lane_switch_sub = nh.subscribe<std_msgs::Int32>(
+      "/lane_switch", 1, boost::bind(lane_switch_Callback, _1, &lane_switch));
   
   // generate control message publisher
   ros::Publisher motorCtrl =
@@ -288,7 +308,8 @@ int main(int argc, char** argv)
   double sollwert = 1.4;
   int s_out = 0;
   last_t = ((double)clock()/CLOCKS_PER_SEC);
-  int s_out_ar[10] = {0,0,0,0,0,0,0,0,0,0};
+  int s_out_ar[RANGE_OF_STEERING_AVG];
+  for(int i = 0; i < RANGE_OF_STEERING_AVG; i++){s_out_ar[i] = 0;}
   // drive_state variables
   int current_drive_state = DS_STARTUP;
   int curved[30];
@@ -297,6 +318,11 @@ int main(int argc, char** argv)
   int straight_delay = 0;
   int curve_delay = 0;
   int startup_delay = 20;
+
+  // Select drive mode: 1 = Race mode , 0 = Obstacle Detection mode
+  int drive_mode = 0;
+  int switch_state = NO_SWITCH;
+  int switch_state_del = 0;
 
   // #####################################################################################################
   // ##### Loop starts here:    loop rate value is set in Hz                                ##############
@@ -308,11 +334,34 @@ int main(int argc, char** argv)
     s_out = 0;
     motor_speed = 400; // works with 300 
     
+    /*
     // TODO do better
     if( x_left >= x_right - 10){// only one line
         line_selection = 0;// just choose the right line
     }
-
+    */
+    // steering positive -> drive to right
+    //ROS_INFO("switch = %d",lane_switch);
+    // switch lane?
+    // to switch lane: rostopic pub /lane_switch std_msgs/Int32 1
+    if(lane_switch){
+        if(line_selection){// left to right
+            switch_state = SWITCH_TO_RIGHT;
+            switch_state_del = 30;
+            line_selection = 0;
+        }else{// right to left
+            switch_state = SWITCH_TO_LEFT;
+            switch_state_del = 30;
+            line_selection = 1;
+        }
+        lane_switch  = 0;
+    }
+    // the lane switch takes some time
+    if(switch_state_del > 0){
+        switch_state_del--;
+    }else{
+        switch_state = NO_SWITCH;
+    }
     // which line to follow
     if(line_selection){
         istwert = ( (double)x_left + 60.0 ) / 100.0;// left
@@ -323,13 +372,18 @@ int main(int argc, char** argv)
     // ##### Controlling                                                                      ##############
     // #####################################################################################################
     // get drive state
-    current_drive_state = drive_state(line_selection, curved, &actual_curve, &straight_delay, &curve_delay);
+    current_drive_state = drive_state(line_selection, curved, &actual_curve, &straight_delay, &curve_delay, drive_mode);
     // ignore drive_state for some time after start
     if(startup_delay > 0){
         current_drive_state = DS_STARTUP;
         startup_delay--;
     }
+    // keep a steady drive state while switching
+    if(switch_state == SWITCH_TO_LEFT || switch_state == SWITCH_TO_RIGHT){
+        current_drive_state = DS_STARTUP;
+    }
     switch(current_drive_state){
+        // ####################### Race Mode ###############################
         case DS_CURVE: // Curve mode        1
             motor_speed = (int) ( (double)motor_speed * 0.8 );
             pk = (int) (3000.0 * 0.7 * ( 300.0  / (double)motor_speed ) );
@@ -350,6 +404,28 @@ int main(int argc, char** argv)
             pk = (int) (3000.0 * 0.3 * ( 300.0  / (double)motor_speed ) );
             pd = (int) (1000.0 * 0.05 * ( 300.0  / (double)motor_speed ) );
             break;
+        // ####################### Obstacle Detection Mode ###############################
+        case DS_CURVE_SLOW: // Curve mode        6
+            motor_speed = 300;
+            pk = (int) (3000.0 * 0.7 * ( 300.0  / (double)motor_speed ) );
+            pd = (int) (1000.0 * 0.1 * ( 300.0  / (double)motor_speed ) );
+            break;
+        case DS_CURVE_AP_SLOW: // Straight mode  7
+            motor_speed = 300;
+            pk = (int) (3000.0 * 0.15 * ( 300.0  / (double)motor_speed ) );
+            pd = (int) (1000.0 * 0.05 * ( 300.0  / (double)motor_speed ) );
+            break;
+        case DS_STRAIGHT_SLOW: // Straight mode  8
+            motor_speed = 300;
+            pk = (int) (3000.0 * 0.15 * ( 300.0 / (double)motor_speed ) );
+            pd = (int) (1000.0 * 0.05 * ( 300.0 / (double)motor_speed ) );
+            break;
+        case DS_STRAIGHT_AP_SLOW: // Curve mode  9
+            motor_speed = 300;
+            pk = (int) (3000.0 * 0.7 * ( 300.0  / (double)motor_speed ) );
+            pd = (int) (1000.0 * 0.1 * ( 300.0  / (double)motor_speed ) );
+            break;
+        // ####################### Startup Mode ###############################
         case DS_STARTUP:// Straight mode slow  5
             motor_speed = 300;
             pk = (int) (3000.0 * 0.15 * ( 300.0  / (double)motor_speed ) );
@@ -366,21 +442,31 @@ int main(int argc, char** argv)
     if(s_out > MAX_STEERING_ANGLE) s_out = MAX_STEERING_ANGLE;
     else if(s_out < -MAX_STEERING_ANGLE) s_out = -MAX_STEERING_ANGLE;
 
-    // flatten s_out
-    int temp[10];
-    for(int i = 0; i < 10; i++){temp[i] = s_out_ar[i];}
-    for(int i = 1; i < 10; i++){s_out_ar[i] = temp[i - 1];}
+    // flatten s_out (Lowpassfilter)
+    int temp[RANGE_OF_STEERING_AVG];
+    for(int i = 0; i < RANGE_OF_STEERING_AVG; i++){temp[i] = s_out_ar[i];}
+    for(int i = 1; i < RANGE_OF_STEERING_AVG; i++){s_out_ar[i] = temp[i - 1];}
     s_out_ar[0] = s_out;
     int s_out_av = 0;
-    for(int i = 0; i < 10; i++){
-        s_out_av += s_out_ar[i] * 0.1 * (10 - i);
+    for(int i = 0; i < RANGE_OF_STEERING_AVG; i++){
+        s_out_av += s_out_ar[i] * 0.1 * (RANGE_OF_STEERING_AVG - i);
     }
-    s_out_av = s_out_av / 5;
-    // steering adjustments
+    s_out_av = s_out_av / 20;
+    // overwrite controlling to switch lane
+    // mainly to wait until the new line is in the camera focus
+    switch(switch_state){
+        case SWITCH_TO_LEFT:    
+            s_out_av = -MAX_STEERING_ANGLE;
+            break;
+        case SWITCH_TO_RIGHT:   
+            s_out_av = MAX_STEERING_ANGLE;
+            break;
+    }
+    // steering adjustments TODO
     int current_steering = steering_characteristic(s_out_av, last_steer);
     last_steer = current_steering;
     steering.data = (int)s_out_av;
-    ROS_INFO("State = %d, line = %d, steer = %d, speed = %d",current_drive_state, line_selection, s_out_av, motor_speed);
+    ROS_INFO("State = %d, line = %d, steer = %d, speed = %d IST = %f",current_drive_state, line_selection, s_out_av, motor_speed, istwert);
     // speed control and collision protection
     if (collision_protection((double)usf.range)){
       motor.data = 0;
