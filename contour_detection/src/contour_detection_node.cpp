@@ -30,6 +30,8 @@ int x_left_line_2;
 int x_right_line_3;
 int x_left_line_3;
 
+int x_obstacle;
+
 
 bool x_last_flag_right = true;
 bool x_last_flag_left = true;
@@ -200,9 +202,9 @@ int obstacle_detection(cv::Mat blur, int height, int index){
   // find the highest x-point of the line
     int x_obstacle = NO_OBSTACLE; // default value, no obstacle detected
     // find white stripe
-    for( int y = height; y < blur.rows - 15; y++ ) {
-        for( int x = blur.cols - 15; x > 0; x-- ) {
-            //10 folgende Pixel, die zusammen heller als 200 sind
+    for( int y = height; y < blur.rows - 20; y++ ) {
+        for( int x = blur.cols - 20; x > 20; x-- ) {
+            //10 folgende Pixel, die zusammen heller als 1500 sind
             if(  1500 < ( blur.at<uchar>(y,x)
               + blur.at<uchar>(y,x + 1)
               + blur.at<uchar>(y,x + 2)
@@ -327,7 +329,7 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg){
     // #####  Obstacle detection                                                             ##############
     // #####################################################################################################
     
-    int obstacle_detected = obstacle_detection(hsv_filtered_or, 10, 3);
+    x_obstacle = obstacle_detection(hsv_filtered_or, 100, 3);
 
     // #####################################################################################################
     // #####  Visualize for debug                                                             ##############
@@ -349,7 +351,8 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg){
     cv::rectangle( bgr, cv::Point(x_left_line_2,y_coords_left[1]), cv::Point(x_left_line_2,y_coords_left[1]) + cv::Point( 2,2 ), red, 2 );
     cv::rectangle( bgr, cv::Point(x_right_line_3,y_coords_right[2]), cv::Point(x_right_line_3,y_coords_right[2]) + cv::Point( 2,2 ), green, 2 );
     cv::rectangle( bgr, cv::Point(x_left_line_3,y_coords_left[2]), cv::Point(x_left_line_3,y_coords_left[2]) + cv::Point( 2,2 ), red, 2 );
-    cv::rectangle( bgr_or, cv::Point(obstacle_detected,y_coords_right[3]), cv::Point(obstacle_detected,y_coords_right[3]) + cv::Point( 2,2 ), orange, 2 );
+    cv::rectangle( bgr_or, cv::Point(x_obstacle,y_coords_right[3]), cv::Point(x_obstacle,y_coords_right[3]) + cv::Point( 2,2 ), orange, 2 );
+    cv::rectangle( bgr, cv::Point(x_obstacle,y_coords_right[3]), cv::Point(x_obstacle,y_coords_right[3]) + cv::Point( 2,2 ), orange, 2 );
 
     // show images
     cv::imshow(OPENCV_WINDOW, bgr);
@@ -383,6 +386,7 @@ int main(int argc, char** argv)
   ros::Publisher left_pub_2 = nh.advertise<std_msgs::Int32>("/line_recoqnition/left_2", 1);
   ros::Publisher right_pub_3 = nh.advertise<std_msgs::Int32>("/line_recoqnition/right_3", 1);
   ros::Publisher left_pub_3 = nh.advertise<std_msgs::Int32>("/line_recoqnition/left_3", 1);
+  ros::Publisher obstacle_pub = nh.advertise<std_msgs::Int32>("/line_recoqnition/obstacle", 1);
   // Loop starts here:
   ROS_INFO("Contour Detection Start");
   // loop rate value is set in Hz
@@ -400,6 +404,7 @@ int main(int argc, char** argv)
         std_msgs::Int32 x_left_2;
         std_msgs::Int32 x_right_3;
         std_msgs::Int32 x_left_3;
+        std_msgs::Int32 obstacle;
 
         x_right.data = x_now_right;
         x_left.data = x_now_left;
@@ -407,6 +412,8 @@ int main(int argc, char** argv)
         x_left_2.data = x_left_line_2;
         x_right_3.data = x_right_line_3;
         x_left_3.data = x_left_line_3;
+        obstacle.data = x_obstacle;
+
         // publish the points
         right_pub.publish( x_right );
         left_pub.publish( x_left );
@@ -414,6 +421,7 @@ int main(int argc, char** argv)
         left_pub_2.publish( x_left_2 );
         right_pub_3.publish( x_right_3 );
         left_pub_3.publish( x_left_3 );
+        obstacle_pub.publish( obstacle );
       }
     }
     // clear input/output buffers

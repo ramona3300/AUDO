@@ -12,6 +12,7 @@
 // range of usf value average for collision protection
 #define RANGE_OF_USF_AVERAGE 20
 #define MAX_STEERING_ANGLE 700
+// driving states
 #define DS_CURVE 1 // curve mode
 #define DS_STRAIGHT 2 // straight mode
 #define DS_CURVE_AP 3 // curve approach
@@ -21,12 +22,16 @@
 #define DS_STRAIGHT_SLOW 7 // straight mode slow
 #define DS_CURVE_AP_SLOW 8 // curve approach slow
 #define DS_STRAIGHT_AP_SLOW 9 // straight approach slow
-#define SWITCH_TO_LEFT 1
-#define SWITCH_TO_RIGHT 2
-#define NO_SWITCH 0
+#define DS_SWITCH_L2R 10 // lane switch from left to right
+#define DS_SWITCH_R2L 11 // lane switch from right to left
+
+#define OBSTACLE_ON_RIGHT_LANE 20
+#define OBSTACLE_ON_LEFT_LANE 21
+#define NO_OBSTACLE 9999
+
 #define RANGE_OF_STEERING_AVG 20 // for s_out lowpassfilter
 
-double roll, pitch, yaw, last_t, t;
+double last_t, t;
 std_msgs::Int16 motor, steering;
 bool stop = false;
 double x_right;
@@ -35,36 +40,23 @@ double x_right_2;
 double x_left_2;
 double x_right_3;
 double x_left_3;
-int steering_history[RANGE_OF_AVERAGE];
-bool steering_flag = true;
+int x_obstacle = NO_OBSTACLE;
+
 double usf_history[RANGE_OF_AVERAGE];
 bool usf_flag = true;
 
 
-int speed_control(int s_out){
-    // initialization
-    if(steering_flag){
-      for(int i = 0; i < RANGE_OF_AVERAGE; i++){
-        steering_history[i] = s_out;
-      }
-      steering_flag = false;
-    }
-    // refresh array 
-    for(int i = 0; i < RANGE_OF_AVERAGE - 1; i++){
-        steering_history[i + 1] = steering_history[i];
-    }
-    steering_history[0] = s_out;
 
-    // average
-    int average = 0;
-    for(int i = 0; i < RANGE_OF_AVERAGE; i++){
-        average += steering_history[i];
-      }
-    average = average / RANGE_OF_AVERAGE;
-
-    // calculate speed
-    return 400 - 150 * average / MAX_STEERING_ANGLE;
+int obstacle_detection(int line_selection){
+    // driving on left lane
+    if(line_selection && x_obstacle < 100 && x_obstacle > 0) return OBSTACLE_ON_LEFT_LANE;
+    // driving on right lane
+    if(!line_selection && x_obstacle > 120 && x_obstacle < 300) return OBSTACLE_ON_RIGHT_LANE;
+    
+    else return NO_OBSTACLE;
+    //ROS_INFO("x_obst = %d",x_obstacle);
 }
+
 
 bool collision_protection(double range){
     // initialization
@@ -90,7 +82,7 @@ bool collision_protection(double range){
       }
     average = average / RANGE_OF_USF_AVERAGE;
 
-    if(average < 0.3) return true;
+    if(average < 0.4) return true;
     else return false;
 }
 
@@ -172,15 +164,6 @@ int steering_characteristic(int s_out_av, int last_steer){
 }
 
 
-void odomCallback(nav_msgs::Odometry::ConstPtr odomMsg, nav_msgs::Odometry* odom)
-{
-    *odom = *odomMsg;
-    //Conversion to euler angles
-    tf::Quaternion q;
-    tf::quaternionMsgToTF(odom->pose.pose.orientation, q);
-    tf::Matrix3x3 mat(q);
-    mat.getEulerYPR(yaw, pitch, roll);
-}
 // receive right line
 void right_Callback(std_msgs::Int32::ConstPtr msg, double* data)
 {
@@ -219,6 +202,12 @@ void lane_switch_Callback(std_msgs::Int32::ConstPtr msg, int* data)
   *data = (int) msg->data;
 }
 
+// receive x position of obstacle
+void obstacle_Callback(std_msgs::Int32::ConstPtr msg, int* data)
+{
+  *data = (int) msg->data;
+}
+
 // gets called whenever a new message is availible in the input puffer
 void uslCallback(sensor_msgs::Range::ConstPtr uslMsg, sensor_msgs::Range* usl)
 {
@@ -251,11 +240,8 @@ int main(int argc, char** argv)
   // sensor message container
   std_msgs::Int16 motor, steering;
   sensor_msgs::Range usr, usf, usl;
-  nav_msgs::Odometry odom;
 
   // subscribe to ultra sonic
-  ros::Subscriber odomSub = nh.subscribe<nav_msgs::Odometry>(
-      "/odom", 10, boost::bind(odomCallback, _1, &odom));
   ros::Subscriber usrSub = nh.subscribe<sensor_msgs::Range>(
       "/uc_bridge/usr", 10, boost::bind(usrCallback, _1, &usr));
   ros::Subscriber uslSub = nh.subscribe<sensor_msgs::Range>(
@@ -276,10 +262,12 @@ int main(int argc, char** argv)
       "/line_recoqnition/right_3", 1, boost::bind(right_Callback_3, _1, &x_right_3));
   ros::Subscriber left_sub_3 = nh.subscribe<std_msgs::Int32>(
       "/line_recoqnition/left_3", 1, boost::bind(left_Callback_3, _1, &x_left_3));
+  ros::Subscriber obstacle_sub = nh.subscribe<std_msgs::Int32>(
+      "/line_recoqnition/obstacle", 1, boost::bind(obstacle_Callback, _1, &x_obstacle));
 
   // switch the lane?
   int lane_switch = 0;
-  // subscribe to lane switch
+  // subscribe to manual lane switch
   ros::Subscriber lane_switch_sub = nh.subscribe<std_msgs::Int32>(
       "/lane_switch", 1, boost::bind(lane_switch_Callback, _1, &lane_switch));
   
@@ -312,17 +300,19 @@ int main(int argc, char** argv)
   for(int i = 0; i < RANGE_OF_STEERING_AVG; i++){s_out_ar[i] = 0;}
   // drive_state variables
   int current_drive_state = DS_STARTUP;
+  int current_obstacle_state = NO_OBSTACLE;
   int curved[30];
   for(int i = 0; i < 30; i++){curved[i] = 0;}
   bool actual_curve = false;
   int straight_delay = 0;
   int curve_delay = 0;
   int startup_delay = 20;
+  int s_out_av = 0;
 
   // Select drive mode: 1 = Race mode , 0 = Obstacle Detection mode
-  int drive_mode = 1;
-  int switch_state = NO_SWITCH;
-  int switch_state_del = 0;
+  int drive_mode = 0;
+  int switch_state_del_r2l = 0;
+  int switch_state_del_l2r = 0;
 
   // #####################################################################################################
   // ##### Loop starts here:    loop rate value is set in Hz                                ##############
@@ -334,34 +324,7 @@ int main(int argc, char** argv)
     s_out = 0;
     motor_speed = 400; // works with 300 
     
-    /*
-    // TODO do better
-    if( x_left >= x_right - 10){// only one line
-        line_selection = 0;// just choose the right line
-    }
-    */
-    // steering positive -> drive to right
-    //ROS_INFO("switch = %d",lane_switch);
-    // switch lane?
-    // to switch lane: rostopic pub /lane_switch std_msgs/Int32 1
-    if(lane_switch){
-        if(line_selection){// left to right
-            switch_state = SWITCH_TO_RIGHT;
-            switch_state_del = 30;
-            line_selection = 0;
-        }else{// right to left
-            switch_state = SWITCH_TO_LEFT;
-            switch_state_del = 30;
-            line_selection = 1;
-        }
-        lane_switch  = 0;
-    }
-    // the lane switch takes some time
-    if(switch_state_del > 0){
-        switch_state_del--;
-    }else{
-        switch_state = NO_SWITCH;
-    }
+
     // which line to follow
     if(line_selection){
         istwert = ( (double)x_left + 65.0 ) / 100.0;// left
@@ -371,17 +334,40 @@ int main(int argc, char** argv)
     // #####################################################################################################
     // ##### Controlling                                                                      ##############
     // #####################################################################################################
-    // get drive state
+    // get drive state and obstacle state
     current_drive_state = drive_state(line_selection, curved, &actual_curve, &straight_delay, &curve_delay, drive_mode);
+    current_obstacle_state = obstacle_detection(line_selection);
+
     // ignore drive_state for some time after start
     if(startup_delay > 0){
         current_drive_state = DS_STARTUP;
         startup_delay--;
     }
-    // keep a steady drive state while switching
-    if(switch_state == SWITCH_TO_LEFT || switch_state == SWITCH_TO_RIGHT){
-        current_drive_state = DS_STARTUP;
+
+    //ignore drive_state if obstacle is detected
+    if (current_obstacle_state == OBSTACLE_ON_RIGHT_LANE && !line_selection){
+        // car and obstacle are on right lane
+        switch_state_del_r2l = 30;
+        line_selection = 1;
     }
+    if (current_obstacle_state == OBSTACLE_ON_LEFT_LANE && line_selection){
+        // car and obstacle are on left lane
+        switch_state_del_l2r = 30;
+        line_selection = 0;
+    }
+    // delay -- the lane switch takes some time
+    if(switch_state_del_r2l > 0){
+        switch_state_del_r2l--;
+        current_drive_state = DS_SWITCH_R2L;
+        switch_state_del_l2r = 0;
+    }
+    if(switch_state_del_l2r > 0){
+        switch_state_del_l2r--;
+        current_drive_state = DS_SWITCH_L2R;
+        switch_state_del_r2l = 0;
+    }
+
+    
     switch(current_drive_state){
         // ####################### Race Mode ###############################
         case DS_CURVE: // Curve mode        1
@@ -425,6 +411,12 @@ int main(int argc, char** argv)
             pk = (int) (3000.0 * 0.7 * ( 300.0  / (double)motor_speed ) );
             pd = (int) (1000.0 * 0.1 * ( 300.0  / (double)motor_speed ) );
             break;
+        case DS_SWITCH_R2L: // switch from right lane to left lane 11
+            motor_speed = 300;
+            break;
+        case DS_SWITCH_L2R: //switch from left lane to right lane 10
+            motor_speed = 300;
+            break;
         // ####################### Startup Mode ###############################
         case DS_STARTUP:// Straight mode slow  5
             motor_speed = 300;
@@ -432,34 +424,37 @@ int main(int argc, char** argv)
             pd = (int) (1000.0 * 0.05 * ( 300.0  / (double)motor_speed ) );
             break;
     }
-    // Regelabweichung
-    err = sollwert - istwert;
-    p_err = pk * err;// P-Anteil
-    d_err = pd * (err - last_err) / (t - last_t);// D-Anteil
-    // calculate control value
-    s_out = -(p_err +  d_err);
-    // limit s_out to +-MAX_STEERING_ANGLE
-    if(s_out > MAX_STEERING_ANGLE) s_out = MAX_STEERING_ANGLE;
-    else if(s_out < -MAX_STEERING_ANGLE) s_out = -MAX_STEERING_ANGLE;
-
-    // flatten s_out (Lowpassfilter)
-    int temp[RANGE_OF_STEERING_AVG];
-    for(int i = 0; i < RANGE_OF_STEERING_AVG; i++){temp[i] = s_out_ar[i];}
-    for(int i = 1; i < RANGE_OF_STEERING_AVG; i++){s_out_ar[i] = temp[i - 1];}
-    s_out_ar[0] = s_out;
-    int s_out_av = 0;
-    for(int i = 0; i < RANGE_OF_STEERING_AVG; i++){
-        s_out_av += s_out_ar[i] * 0.1 * (RANGE_OF_STEERING_AVG - i);
-    }
-    s_out_av = s_out_av / 20;
+    
     // overwrite controlling to switch lane
     // mainly to wait until the new line is in the camera focus
-    switch(switch_state){
-        case SWITCH_TO_LEFT:    
+    // else calculate controller values
+    switch(current_drive_state){
+        case DS_SWITCH_R2L:
             s_out_av = -MAX_STEERING_ANGLE;
             break;
-        case SWITCH_TO_RIGHT:   
+        case DS_SWITCH_L2R:   
             s_out_av = MAX_STEERING_ANGLE;
+            break;
+        default:
+            // calculate controller values
+            err = sollwert - istwert;
+            p_err = pk * err;// P-Anteil
+            d_err = pd * (err - last_err) / (t - last_t);// D-Anteil
+            s_out = -(p_err +  d_err);
+            // limit s_out to +-MAX_STEERING_ANGLE
+            if(s_out > MAX_STEERING_ANGLE) s_out = MAX_STEERING_ANGLE;
+            else if(s_out < -MAX_STEERING_ANGLE) s_out = -MAX_STEERING_ANGLE;
+
+            // flatten s_out (Lowpassfilter)
+            int temp[RANGE_OF_STEERING_AVG];
+            for(int i = 0; i < RANGE_OF_STEERING_AVG; i++){temp[i] = s_out_ar[i];}
+            for(int i = 1; i < RANGE_OF_STEERING_AVG; i++){s_out_ar[i] = temp[i - 1];}
+            s_out_ar[0] = s_out;
+            s_out_av = 0;
+            for(int i = 0; i < RANGE_OF_STEERING_AVG; i++){
+                s_out_av += s_out_ar[i] * 0.1 * (RANGE_OF_STEERING_AVG - i);
+            }
+            s_out_av = s_out_av / 20;
             break;
     }
     // steering adjustments TODO
