@@ -14,13 +14,13 @@
 #define MAX_STEERING_ANGLE 700
 #define DS_CURVE 1 // curve mode
 #define DS_STRAIGHT 2 // straight mode
-#define DS_CURVE_AP 3 // straight mode
-#define DS_STRAIGHT_AP 4 // curve mode
-#define DS_STARTUP 5 // straight mode slow
+#define DS_CURVE_AP 3 // curve approach
+#define DS_STRAIGHT_AP 4 // straight approach
+#define DS_STARTUP 5 // startup mode (straight mode slow)
 #define DS_CURVE_SLOW 6 // curve mode slow
 #define DS_STRAIGHT_SLOW 7 // straight mode slow
-#define DS_CURVE_AP_SLOW 8 // straight mode slow
-#define DS_STRAIGHT_AP_SLOW 9 // curve mode slow
+#define DS_CURVE_AP_SLOW 8 // curve approach slow
+#define DS_STRAIGHT_AP_SLOW 9 // straight approach slow
 #define SWITCH_TO_LEFT 1
 #define SWITCH_TO_RIGHT 2
 #define NO_SWITCH 0
@@ -320,7 +320,7 @@ int main(int argc, char** argv)
   int startup_delay = 20;
 
   // Select drive mode: 1 = Race mode , 0 = Obstacle Detection mode
-  int drive_mode = 0;
+  int drive_mode = 1;
   int switch_state = NO_SWITCH;
   int switch_state_del = 0;
 
@@ -364,7 +364,7 @@ int main(int argc, char** argv)
     }
     // which line to follow
     if(line_selection){
-        istwert = ( (double)x_left + 60.0 ) / 100.0;// left
+        istwert = ( (double)x_left + 65.0 ) / 100.0;// left
     }else{
         istwert = (double)x_right / 100.0;// right
     }

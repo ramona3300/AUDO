@@ -15,6 +15,7 @@
 #include <image_transport/image_transport.h>
 #include <math.h>
 #define RANGE_OF_AVERAGE 5
+#define NO_OBSTACLE 9999
 
 
 static const std::string OPENCV_WINDOW = "Image window";
@@ -35,8 +36,8 @@ bool x_last_flag_left = true;
 
 int y_greenline = 30;
 
-int y_coords_left[3];
-int y_coords_right[3];
+int y_coords_left[4];
+int y_coords_right[4];
 
 int x_greenlines_right[RANGE_OF_AVERAGE];
 int x_greenlines_left[RANGE_OF_AVERAGE];
@@ -195,6 +196,35 @@ int average_left(int x_left_line){
     return x / RANGE_OF_AVERAGE;
 }
 
+int obstacle_detection(cv::Mat blur, int height, int index){
+  // find the highest x-point of the line
+    int x_obstacle = NO_OBSTACLE; // default value, no obstacle detected
+    // find white stripe
+    for( int y = height; y < blur.rows - 15; y++ ) {
+        for( int x = blur.cols - 15; x > 0; x-- ) {
+            //10 folgende Pixel, die zusammen heller als 200 sind
+            if(  1500 < ( blur.at<uchar>(y,x)
+              + blur.at<uchar>(y,x + 1)
+              + blur.at<uchar>(y,x + 2)
+              + blur.at<uchar>(y,x + 3)
+              + blur.at<uchar>(y,x + 4)
+              + blur.at<uchar>(y,x + 5)
+              + blur.at<uchar>(y,x + 6)
+              + blur.at<uchar>(y,x + 7)
+              + blur.at<uchar>(y,x + 8)
+              + blur.at<uchar>(y,x + 9)
+            )
+            ){
+                //yaay
+                x_obstacle = x - 5;
+                y_coords_right[index] = y;
+                return x_obstacle;
+            }
+        }
+    }
+    return x_obstacle;
+}
+
 // receive and process images
 void imageCallback(const sensor_msgs::ImageConstPtr& msg){
     //ROS_INFO("Received an Image!");
@@ -259,12 +289,17 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg){
     // only keep green
     cv::Mat hsv_filtered   = cv::Mat::zeros( crop.size(), CV_8UC3 );
     cv::inRange(crop, cv::Scalar(62, 25, 148), cv::Scalar(85, 178, 255), hsv_filtered);
+    // only keep orange
+    cv::Mat hsv_filtered_or   = cv::Mat::zeros( crop.size(), CV_8UC3 );
+    cv::inRange(crop, cv::Scalar(2, 150, 180), cv::Scalar(15, 255, 255), hsv_filtered_or);
+    
     // the image is now a grayscale
     // #####################################################################################################
-    // #####  Blur the image                                                                  ##############
+    // #####  Blur the images                                                                 ##############
     // #####################################################################################################
     cv::Mat blur = cv::Mat::zeros(crop.size(), CV_8UC3);
     cv::GaussianBlur( hsv_filtered, blur, cv::Size( 15, 15 ), 0, 0 );
+    cv::GaussianBlur( hsv_filtered_or, hsv_filtered_or, cv::Size( 15, 15 ), 0, 0 );
     // #####################################################################################################
     // #####  Find a point at some distance on both lines                                     ##############
     // #####################################################################################################
@@ -287,14 +322,26 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg){
     is_set = 1;
     // mark the points as updated
     new_points = 1;
+
+    // #####################################################################################################
+    // #####  Obstacle detection                                                             ##############
+    // #####################################################################################################
+    
+    int obstacle_detected = obstacle_detection(hsv_filtered_or, 10, 3);
+
     // #####################################################################################################
     // #####  Visualize for debug                                                             ##############
     // #####################################################################################################
     ROS_INFO("left:\t%i \tright: \t%i",x_now_left,x_now_right);
     cv::Mat bgr  = cv::Mat::zeros( hsv_filtered.size() * 3, CV_8UC3 );
     cv::cvtColor(blur, bgr,  cv::COLOR_GRAY2BGR, 3);
+
+    cv::Mat bgr_or  = cv::Mat::zeros( hsv_filtered_or.size() * 3, CV_8UC3 );
+    cv::cvtColor(hsv_filtered_or, bgr_or,  cv::COLOR_GRAY2BGR, 3);
+
     cv::Scalar red = cv::Scalar( 0, 0, 255 );
     cv::Scalar green = cv::Scalar( 0, 255, 0 );
+    cv::Scalar orange = cv::Scalar( 0, 165, 254 );
     // display the points
     cv::rectangle( bgr, cv::Point(x_right_line,y_coords_right[0]), cv::Point(x_right_line,y_coords_right[0]) + cv::Point( 2,2 ), green, 2 );
     cv::rectangle( bgr, cv::Point(x_left_line,y_coords_left[0]), cv::Point(x_left_line,y_coords_left[0]) + cv::Point( 2,2 ), red, 2 );
@@ -302,9 +349,12 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg){
     cv::rectangle( bgr, cv::Point(x_left_line_2,y_coords_left[1]), cv::Point(x_left_line_2,y_coords_left[1]) + cv::Point( 2,2 ), red, 2 );
     cv::rectangle( bgr, cv::Point(x_right_line_3,y_coords_right[2]), cv::Point(x_right_line_3,y_coords_right[2]) + cv::Point( 2,2 ), green, 2 );
     cv::rectangle( bgr, cv::Point(x_left_line_3,y_coords_left[2]), cv::Point(x_left_line_3,y_coords_left[2]) + cv::Point( 2,2 ), red, 2 );
-    
-    // show image
+    cv::rectangle( bgr_or, cv::Point(obstacle_detected,y_coords_right[3]), cv::Point(obstacle_detected,y_coords_right[3]) + cv::Point( 2,2 ), orange, 2 );
+
+    // show images
     cv::imshow(OPENCV_WINDOW, bgr);
+    cv::waitKey(3);
+    cv::imshow(OPENCV_RAW, bgr_or);
     cv::waitKey(3);
 }
 
@@ -320,8 +370,8 @@ int main(int argc, char** argv)
   cv::waitKey(3);
   cv::namedWindow(OPENCV_STRANGE);
   cv::waitKey(3);
-  //cv::namedWindow(OPENCV_RAW);
-  //cv::waitKey(3);
+  cv::namedWindow(OPENCV_RAW);
+  cv::waitKey(3);
   
   // subscribe to receive video feed
   image_transport::ImageTransport it(nh);

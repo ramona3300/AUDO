@@ -1,0 +1,92 @@
+TODOs
+
+##################################################################################
+Abschluss Präsi
+    Generalprobe
+        08.03.2019 - 14:00 Uhr - Da wo wir immer sind
+    Gliederung
+
+    Bilder!!!!!!!!!!!!!
+        - Schritte der Bildverarbeitung
+        - Nettes Video wo das AUDO schön/schnell fährt
+
+    
+    Schicke Graphiken!!!!!!!!!!
+        - Schaubilder zu den Konzepten
+        - Yed
+
+##################################################################################
+Dokument - Verwaltung: 
+    Einleitung
+        Wer?
+            - Ramona
+            - 
+    Grundlagen 
+        Wer?
+            - Ramona
+            - 
+        -> Schaue in Grundlagen der Bachelorarbeit vom Nicolas 
+    Lösung
+        Wer?
+            - Nikolas
+            - Fabian
+        Was?
+            - Bildverarbeitung
+            - Kurvenerkennung
+            - Regelung
+            - Fallunterscheidung
+            - Filterung
+    Organisation
+        Wer?
+            - Maike
+            - 
+        Was?
+            - Aufgabenverteilung
+            - Versionsverwaltung
+    Probleme
+        Wer?
+            - Nils
+        Was?
+            - Kinect
+            - Helligkeit von Webcam
+            - Beleuchtung
+            
+##################################################################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
