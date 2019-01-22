@@ -40,7 +40,9 @@ double x_right_2;
 double x_left_2;
 double x_right_3;
 double x_left_3;
-int x_obstacle = NO_OBSTACLE;
+int x_obstacle_r = NO_OBSTACLE;
+int x_obstacle_l = NO_OBSTACLE;
+
 
 double usf_history[RANGE_OF_AVERAGE];
 bool usf_flag = true;
@@ -49,10 +51,21 @@ bool usf_flag = true;
 
 int obstacle_detection(int line_selection){
     // driving on left lane
-    if(line_selection && x_obstacle < 100 && x_obstacle > 0) return OBSTACLE_ON_LEFT_LANE;
+    if(line_selection){
+        if(    x_left_2 < x_obstacle_r 
+            && x_left_2 + 20 > x_obstacle_l)
+            {
+                return OBSTACLE_ON_LEFT_LANE;
+            }
+    } 
     // driving on right lane
-    if(!line_selection && x_obstacle > 120 && x_obstacle < 300) return OBSTACLE_ON_RIGHT_LANE;
-    
+    if(!line_selection){
+        if(    x_right_2 > x_obstacle_l 
+            && x_right_2 - 20 < x_obstacle_r)
+            {
+                return OBSTACLE_ON_RIGHT_LANE;
+            }
+    } 
     else return NO_OBSTACLE;
     //ROS_INFO("x_obst = %d",x_obstacle);
 }
@@ -82,7 +95,7 @@ bool collision_protection(double range){
       }
     average = average / RANGE_OF_USF_AVERAGE;
 
-    if(average < 0.4) return true;
+    if(average < 0.35) return true;
     else return false;
 }
 
@@ -91,17 +104,22 @@ int drive_state(int line_selection, int *curved, bool *actual_curve, int *straig
     int curve_count = 0;
     double offset = 3;
     double diff = 0;
+    double diff_2 = 0;
     // Curve or Straight?
     if(line_selection){// left
         diff = x_left_2 - x_left;
-        if((x_left_3 - x_left_2 < diff + offset) && (x_left_3 - x_left_2 > diff - offset)){
+        diff_2 = x_left_3 - x_left_2;
+        if( (diff_2 < diff + offset) && 
+            (diff_2 > diff - offset)){
             is_curve = false;// no curve
         }else{// curve
             is_curve = true;
         }
     }else{// right
         diff = x_right - x_right_2;
-        if((x_right_2 - x_right_3 < diff + offset) && (x_right_2 - x_right_3 > diff - offset)){
+        diff_2 = x_right_2 - x_right_3;
+        if( (diff_2 < diff + offset) && 
+            (diff_2 > diff - offset)){
             is_curve = false;// no curve
         }else{// curve
             is_curve = true;
@@ -118,7 +136,7 @@ int drive_state(int line_selection, int *curved, bool *actual_curve, int *straig
         curve_count += curved[i];
     }
 
-    //ROS_INFO("count = %d curve = %d curve_del = %d straight_del = %d",curve_count,*actual_curve,*curve_delay,*straight_delay);
+    //ROS_INFO("count = %d curve = %d curve_del = %d straight_del = %d, diff = %f, diff_2 = %f",curve_count,*actual_curve,*curve_delay,*straight_delay, diff, diff_2);
     //ROS_INFO("x_right = %f x_left = %f x_right_2 = %f x_left_2 = %f x_right_3 = %f x_left_3 = %f",x_right, x_left, x_right_2, x_left_2, x_right_3, x_left_3);
     // when approaching a curve wait for some time before switching to curve mode
     if(curve_count >= 16){
@@ -203,7 +221,12 @@ void lane_switch_Callback(std_msgs::Int32::ConstPtr msg, int* data)
 }
 
 // receive x position of obstacle
-void obstacle_Callback(std_msgs::Int32::ConstPtr msg, int* data)
+void obstacle_Callback_right(std_msgs::Int32::ConstPtr msg, int* data)
+{
+  *data = (int) msg->data;
+}
+// receive x position of obstacle
+void obstacle_Callback_left(std_msgs::Int32::ConstPtr msg, int* data)
 {
   *data = (int) msg->data;
 }
@@ -262,8 +285,10 @@ int main(int argc, char** argv)
       "/line_recoqnition/right_3", 1, boost::bind(right_Callback_3, _1, &x_right_3));
   ros::Subscriber left_sub_3 = nh.subscribe<std_msgs::Int32>(
       "/line_recoqnition/left_3", 1, boost::bind(left_Callback_3, _1, &x_left_3));
-  ros::Subscriber obstacle_sub = nh.subscribe<std_msgs::Int32>(
-      "/line_recoqnition/obstacle", 1, boost::bind(obstacle_Callback, _1, &x_obstacle));
+  ros::Subscriber obstacle_sub_right = nh.subscribe<std_msgs::Int32>(
+      "/line_recoqnition/obstacle/right", 1, boost::bind(obstacle_Callback_right, _1, &x_obstacle_r));
+  ros::Subscriber obstacle_sub_left = nh.subscribe<std_msgs::Int32>(
+      "/line_recoqnition/obstacle/left", 1, boost::bind(obstacle_Callback_left, _1, &x_obstacle_l));
 
   // switch the lane?
   int lane_switch = 0;
