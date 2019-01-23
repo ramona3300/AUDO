@@ -1,0 +1,54 @@
+\chapter{Implementierung}
+\label{cha:Implementierung}
+\section{Bildverarbeitung und Erkennung von Fahrspuren}
+\label{sec:spurerkennung}
+
+TODO: Fabian
+
+\section{Erkennung von Kurven und Geraden}
+\label{sec:kurvenerkennung}
+
+TODO: Fabian
+
+\section{Erkennung von Hindernissen}
+\label{sec:hinderniserkennung}
+
+TODO: Fabian
+
+\section{Kollisionsvermeidung}
+\label{sec:kollision}
+
+Um in allen Fahrsituationen eine Beschädigung des Fahrzeugs zu vermeiden, wird eine Kollisionsvermeidung eingesetzt. Diese verhindert, dass es im Fahrbetrieb zu einem Zusammenstoß mit anderen Gegenständen oder der Wand kommt. Hierzu werden die Daten des vorderen Ultraschallsensors ausgewertet, der einen ungefähren Abstandswert zum nächstgelegenen Gegenstand liefert.
+
+Um aus dem fehlerbehafteten Signal verwertbare Daten zu erhalten werden die Werte des Sensors geglättet. Dies geschieht indem die letzten 20 Sensorwerte gemittelt werden. Liegt der Durchschnitt unter einem Schwellwert, wird der Motor angehalten. Als praxistauglicher Wert hat sich 0.35 erwiesen, also ein Abstand von 35 Zentimetern.
+
+Ein besonderes Problem ergibt sich aus der Tatsache, dass die Hardware des Sensors in unregelmäßigen Abständen kurzzeitig auf den Wert Null springt. Dies entspräche einem Gegenstand direkt vor dem Sensor, was schon alleine aufgrund der Fahrzeuggeometrie nicht plausibel ist. Diese Werte müssen daher von der Auswertung ausgenommen werden.
+
+(Codeausschnitt: collision_protection())
+(Bild des Ultraschallsensors)
+
+\section{Regelungskonzept und Spurhaltung}
+\label{sec:wallfollower}
+
+Nach umfangreichen Tests zu Beginn des Projekts wurde ein klassischer Regelungsansatz mit einem PD-Regler gewählt. Eine stationäre Genauigkeit ist in diesem Fall nicht erforderlich, solange die bleibende Regelabweichung in der Praxis so klein ist, dass alle Fahrsituationen der Rennstrecke ohne Linienüberschreitung gefahren werden können. Mit einem gut eingestellten PD-Regler lässt sich diese Anforderung erfüllen.
+
+Das Konzept sieht die Aufteilung einer zu fahrenden Strecke in vier Abschnitte vor:
+
+(Aufzählung: Geradeausfahrt, Kurvenfahrt, Überleitung von Geraden- zu Kurvenfahrt, Überleitung von Kurven- zu Geradenfahrt)
+
+Der Vorteil dieser Aufteilung liegt darin, dass für jede Fahrsituation unterschiedliche Reglerparameter vorgegeben werden können und die Fahrgeschwindigkeit ebenfalls variiert werden kann. 
+
+\section{Implementierung eines PD-Reglers}
+\label{sec:pdregler}
+
+TODO: Niko
+
+\section{Implementierung verschiedener Fahrsituationen}
+\label{sec:fahrsituationen}
+
+TODO: Niko
+
+\section{Einleitung eines Spurwechsels}
+\label{sec:spurwechsel}
+
+TODO: Niko
