@@ -30,25 +30,48 @@ Ein besonderes Problem ergibt sich aus der Tatsache, dass die Hardware des Senso
 \section{Regelungskonzept und Spurhaltung}
 \label{sec:wallfollower}
 
-Nach umfangreichen Tests zu Beginn des Projekts wurde ein klassischer Regelungsansatz mit einem PD-Regler gewählt. Eine stationäre Genauigkeit ist in diesem Fall nicht erforderlich, solange die bleibende Regelabweichung in der Praxis so klein ist, dass alle Fahrsituationen der Rennstrecke ohne Linienüberschreitung gefahren werden können. Mit einem gut eingestellten PD-Regler lässt sich diese Anforderung erfüllen.
+Nach umfangreichen Tests zu Beginn des Projekts wurde ein strukturvariabler Regelungsansatz mit PD-Reglern gewählt. Eine strukturvariable Regelung lässt sich vor Allem dann sinnvoll einsetzen, wenn zwischen wenigen bekannten Arbeitspunkten umgeschaltet werden muss. Die Rennstrecke des Projektseminars Echtzeitsysteme lässt sich Kurven- und Geradenabschnitte aufteilen. Aufgrund der hohen Nichtlinearität der Lenkungsmechanik (insbesondere Lose, Haftung) lässt sich mit einem einzigen PD-Regler kein zufriedenstellendes Regelverhalten in allen Fahrsituationen erzielen. Eine stationäre Genauigkeit ist in diesem Fall zur Spurhaltung im Übrigen nicht erforderlich, solange die bleibende Regelabweichung in der Praxis so klein ist, dass alle Fahrsituationen der Rennstrecke ohne Linienüberschreitung gefahren werden können. Mit einem gut eingestellten PD-Regler lässt sich diese Anforderung erfüllen.
 
-Das Konzept sieht die Aufteilung einer zu fahrenden Strecke in vier Abschnitte vor:
+Die Bildverarbeitung liefert die Positionsdaten aller Markierungslinien, die im Bildausschnitt der Kamera erfasst werden. Da die Position der Kamera auf dem Fahrzeug sich nicht ändert, kann ein fester Sollwert für den Abstand zu diesen Linien vorgegeben werden. Es muss zur Berechnung der Regelabweichung lediglich bekannt sein, ob das Fahrzeug sich an der rechten oder an der linken Fahrbahnbegrenzung orientieren soll. Näheres hierzu in Abschnitt \ref{sec:fahrsituationen}.
 
-(Aufzählung: Geradeausfahrt, Kurvenfahrt, Überleitung von Geraden- zu Kurvenfahrt, Überleitung von Kurven- zu Geradenfahrt)
 
-Der Vorteil dieser Aufteilung liegt darin, dass für jede Fahrsituation unterschiedliche Reglerparameter vorgegeben werden können und die Fahrgeschwindigkeit ebenfalls variiert werden kann. 
-
-\section{Implementierung eines PD-Reglers}
+\section{Implementierung des PD-Reglers}
 \label{sec:pdregler}
 
-TODO: Niko
+Die Berechnung der Lenkwinkelregelung erfolgt in mehreren Schritten. Zunächst wird aus den situationsabhängigen Reglerparametern sowie Führungsgröße und aktueller Position eine Stellgröße berechnet. Der differentielle Anteil des PD-Reglers greift hierbei auf den aktuellen und vorherigen Wert der Regelabweichung, sowie die verstrichene Zeitdauer seit der letzten Berechnung zu.
 
-\section{Implementierung verschiedener Fahrsituationen}
-\label{sec:fahrsituationen}
+Codeausschnitt: PD Regler
 
-TODO: Niko
+Anschließend erfolgt eine Begrenzung der Stellgröße. Die Hardware erlaubt Lenkwinkel im Bereich -800....+800. Um Beschädigungen zu vermeiden wird der maximale Lenkwinkel softwareseitig auf -700....+700 begrenzt. Bei höheren Werten kommt es zu einem Blockieren des Lenkgetriebes.
+
+Um ein ruhiges Lenkverhalten zu erreichen werden die Ausgangswerte des Reglers zum Schluss geglättet. Dazu wird ein gewichteter Mittelwert der letzten Stellgrößen gebildet. Die Gewichtung erfolgt in Abhängigkeit des zeitlichen Verlaufs. Dabei hat der zuletzt berechnete Wert das größte Gewicht, ein 0,3 Sekunden zurückliegender Wert hingegen nur das halbe Gewicht. Der gewichtete Mittelwert erzeugt ein ruhiges Regelverhalten, ohne jedoch die Regelung zu stark zu verzögern.
+
+Codeausschnitt: Regler Glättung
 
 \section{Einleitung eines Spurwechsels}
 \label{sec:spurwechsel}
 
 TODO: Niko
+
+Ein Spurwechsel setzt voraus, dass dem Fahrzeug die eigene Position bekannt ist. 
+Während ein Spurwechsel auf geraden Abschnitten der Strecke unproblematisch ist, kann es im Zusammenhang mit Kurven zu Problemen kommen. Wird eine Kurve auf der äußeren Spur durchfahren, so ist während der Kurvenfahrt grundsätzlich kein Wechsel auf die innere Spur möglich. Die konstruktive Begrenzung des Lenkwinkels wird durch die Kurvenfahrt schon komplett ausgenutzt, sodass kein Spielraum für ein Ausweichen mehr bleibt. Weniger problematisch ist das Ausweichen von der inneren auf die äußere Spur während einer Kurvenfahrt.
+
+\section{Implementierung verschiedener Fahrsituationen}
+\label{sec:fahrsituationen}
+
+Das Konzept sieht die Aufteilung der zu fahrenden Strecke in vier wiederkehrende Fahrsituationen vor:
+
+(Aufzählung: Geradeausfahrt, Kurvenfahrt, Übergang von Geraden- zu Kurvenfahrt, Übergang von Kurven- zu Geradenfahrt)
+
+Je nach Situation wird zwischen einem Regler für Geradeausfahrt und einem Regler für Kurvenfahrt umgeschaltet. Die Übergangszustände dienen lediglich der stufenweisen Geschwindigkeitsanpassung beim Wechsel zwischen den beiden Streckenabschnitten. Die Umschaltung zwischen den verschiedenen Reglern erfolgt in Abhängigkeit vom gewählten Fahrmodus.
+
+Im Rahmen dieses Projektseminars sind zwei Aufgaben zu erfüllen: das Absolvieren einer kompletten Runde in möglichst geringer Zeit, und die Hinderniserkennung mit Spurwechsel bei möglichst wenigen Linienübertritten. Um beide Aufgaben möglichst gut zu lösen werden zwei verschiedene Fahrmodi implementiert, die sich durch die Fahrgeschwindigkeit und die Kriterien zur Wahl der Fahrspur unterscheiden.
+
+\subsection{Fahrmodus 1: Rundenzeit}
+
+\subsection{Fahrmodus 2: Hinderniserkennung und Spurwechsel}
+
+In diesem Modus spielt die Fahrgeschwindigkeit eine untergeordnete Rolle, weshalb sie auf einen konstanten und relativ niedrigen Wert gesetzt wird. Zunächst orientiert sich das Fahrzeug am rechten oder linken Fahrbahnrand und folgt der Spur. Solange sich kein Hindernis auf der Strecke befindet, wird dieser Zustand beibehalten. Sobald ein Hindernis in das Sichtfeld der Kamera eintritt liefert die Bildverarbeitung dessen Koordinaten. Da auch die Koordinaten der beiden Fahrspuren bekannt sind, kann aus den Daten ermittelt werden, ob sich das Hindernis auf der aktuellen Fahrspur des Autos befindet. Befindet sich das Hindernis auf der eigenen Fahrspur, wird rechtzeitig ein Spurwechsel veranlasst. Andernfalls wird das Hindernis ignoriert und die Fahrt fortgesetzt.
+
+Codeausschnitt: Hinderniserkennung
+
