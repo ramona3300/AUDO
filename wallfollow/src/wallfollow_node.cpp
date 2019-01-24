@@ -318,7 +318,7 @@ int main(int argc, char** argv)
   double d_err = 0;
   double i_err = 0;
   double istwert = 0;
-  double sollwert = 1.4;
+  double sollwert = 1.8;//1.4
   int s_out = 0;
   last_t = ((double)clock()/CLOCKS_PER_SEC);
   int s_out_ar[RANGE_OF_STEERING_AVG];
@@ -335,7 +335,7 @@ int main(int argc, char** argv)
   int s_out_av = 0;
 
   // Select drive mode: 1 = Race mode , 0 = Obstacle Detection mode
-  int drive_mode = 0;
+  int drive_mode = 1;
   int switch_state_del_r2l = 0;
   int switch_state_del_l2r = 0;
 
@@ -347,7 +347,7 @@ int main(int argc, char** argv)
   {
     t = ((double)clock()/CLOCKS_PER_SEC);
     s_out = 0;
-    motor_speed = 400; // works with 300 
+    motor_speed = 600; // works with 300 
     
 
     // which line to follow
@@ -361,7 +361,7 @@ int main(int argc, char** argv)
     // #####################################################################################################
     // get drive state and obstacle state
     current_drive_state = drive_state(line_selection, curved, &actual_curve, &straight_delay, &curve_delay, drive_mode);
-    current_obstacle_state = obstacle_detection(line_selection);
+    if(drive_mode == 0) current_obstacle_state = obstacle_detection(line_selection);
 
     // ignore drive_state for some time after start
     if(startup_delay > 0){
@@ -396,23 +396,23 @@ int main(int argc, char** argv)
     switch(current_drive_state){
         // ####################### Race Mode ###############################
         case DS_CURVE: // Curve mode        1
-            motor_speed = (int) ( (double)motor_speed * 0.8 );
+            motor_speed = (int) ( (double)motor_speed * 0.65 );
             pk = (int) (3000.0 * 0.7 * ( 300.0  / (double)motor_speed ) );
-            pd = (int) (1000.0 * 0.1 * ( 300.0  / (double)motor_speed ) );
+            pd = (int) (1000.0 * 0.22 * ( 300.0  / (double)motor_speed ) );
             break;
         case DS_CURVE_AP: // Straight mode  2
-            motor_speed = (int) ( (double)motor_speed * 0.9 );
-            pk = (int) (3000.0 * 0.15 * ( 300.0  / (double)motor_speed ) );
-            pd = (int) (1000.0 * 0.05 * ( 300.0  / (double)motor_speed ) );
+            motor_speed = (int) ( (double)motor_speed * 0.65 );
+            pk = (int) (3000.0 * 0.4 * ( 300.0  / (double)motor_speed ) );
+            pd = (int) (1000.0 * 0.1 * ( 300.0  / (double)motor_speed ) );
             break;
         case DS_STRAIGHT: // Straight mode  3
             motor_speed = (int) ( (double)motor_speed * 1.2 );
-            pk = (int) (3000.0 * 0.15 * ( 300.0  / (double)motor_speed ) );
+            pk = (int) (3000.0 * 0.25 * ( 300.0  / (double)motor_speed ) );
             pd = (int) (1000.0 * 0.05 * ( 300.0 / (double)motor_speed ) );
             break;
         case DS_STRAIGHT_AP: // Curve mode  4
-            motor_speed = (int) ( (double)motor_speed * 0.9 );
-            pk = (int) (3000.0 * 0.3 * ( 300.0  / (double)motor_speed ) );
+            motor_speed = (int) ( (double)motor_speed * 1 );
+            pk = (int) (3000.0 * 0.35 * ( 300.0  / (double)motor_speed ) );
             pd = (int) (1000.0 * 0.05 * ( 300.0  / (double)motor_speed ) );
             break;
         // ####################### Obstacle Detection Mode ###############################
