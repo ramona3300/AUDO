@@ -5,9 +5,9 @@
 \label{sec:farben}
 Die Kamera der Kinect hat eine unnatürliche Farbdarstellung.
 Es sind sind starke Unterschiede zwischen Kamerabild und der Wirklichkeit zur erkennen.
-\\
-TODO: Zeige ein Bild der Kinect und ein Bild der Webcam
-\\
+
+\tod{Zeige ein Bild der Kinect und ein Bild der Webcam}
+
 Die Farben der Kinect sind übersaturiert und haben teilweise nicht einmal den richtigen Farbton.
 
 \section{Kinect - kleines Sichtfeld}
@@ -18,9 +18,9 @@ Dadurch kann der Abstand des Fahrzeuges zur Fahrbahnbegrenzung zum aktuellen Zei
 Zudem ist die Kamera in der Kinect am rechten Rand platziert.
 Dadurch ist die linke Fahrbahnbegrenzung häufig nicht im Sichtfeld.
 Dieser Effekt wird noch durch die Transformation zum Bird-Eye View verstärkt.
-\\
-TODO: Vllt Bild von Webcam und Kinect zum Vergleich der Sichtfelder
-\\
+
+\tod{Vllt Bild von Webcam und Kinect zum Vergleich der Sichtfelder}
+
 Um eine robuste Fahrbahnerkennung zu implemetieren, sind ordentliche Ausgangsdaten von großer Wichtigkeit.
 In unserem Fall benötigen wir eine natürliche Farbdarstellung, ein ausreichend großes Sichtfeld das möglichst nah am Fahrzeug beginnt und eine flüssige Bildrate. 
 Alle diese Anforderungen werden von der Webcam erfüllt.
@@ -62,13 +62,12 @@ Bei höheren Geschwindigkeiten sollte sich dieser Effekt allerdings abschwächen
 Durch diese Effekte können wir uns nicht darauf verlassen, dass nach dem Einstellen eines Lenkwinkels, dieser auch tatsächlich anliegt.
 In der Praxis fahren wir allerdings immer mindestens so schnell, dass dieser Effekt keine allzu großen Auswirkungen hat.
 \\
-Ein weiteres Problem besteht darin, dass der Lenkwert der an die UC_Bridge gesendet wird, sich nicht linear in einen Lenkwinkel umrechnen lässt.
+Ein weiteres Problem besteht darin, dass der Lenkwert der an die UC\_Bridge gesendet wird, sich nicht linear in einen Lenkwinkel umrechnen lässt.
 Die Beziehung zwischen Lenkwert und Lenkwinkel auszumessen gestaltet sich schwierig.
 Da diese Beziehung stark von der Geschwindigkeit und der Last auf die Lenkmechanik abhängt.
 Wenn der tatsächliche Lenkwinkel durch passende Sensoren regelmäßig gemessen werden würde, könnte man eine Regelung für den Lenkwinkel konzipieren.
 Wir haben uns um dieses Problem nicht weiter gekümmert und haben uns stattdessen darauf konzentriert eine möglichst robuste Regelung zur Fahrspurhaltung zu implementieren.
 Um die Lenkmechanik nicht unnötig zu belasten haben wir eine möglichst ruhige Regelung vorgenommen.
-
 
 
 
