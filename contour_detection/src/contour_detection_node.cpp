@@ -23,9 +23,14 @@
 
 
 
-static const std::string OPENCV_WINDOW = "Image window";
-static const std::string OPENCV_RAW = "Image RAAAAAWW window";
-static const std::string OPENCV_STRANGE = "Image filtered window";
+static const std::string OPENCV_WINDOW = "Line Recgnition";
+static const std::string OPENCV_RAW = "Obstacle Detection";
+//static const std::string OPENCV_STRANGE = "Webcam: Bird-Eye with Region of Interest";
+static const std::string OPENCV_STRANGE = "Webcam Image";
+static const std::string OPENCV_STRANGE2 = "Webcam: Bird-Eye with Region of Interest";
+static const std::string OPENCV_KINECT = "Kinect Image";
+static const std::string OPENCV_KINECT2 = "Kinect: Bird-Eye with Region of Interest";
+
 
 int x_now_right;
 int x_now_left;
@@ -272,6 +277,7 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg){
       ROS_ERROR("cv_bridge exception: %s", e.what());
       return;
     }
+
     // #####################################################################################################
     // #####  Transform perpective to birdeye view                                            ##############
     // #####################################################################################################
@@ -408,7 +414,7 @@ int main(int argc, char** argv)
   cv::waitKey(3);
   cv::namedWindow(OPENCV_RAW);
   cv::waitKey(3);
-  
+
   // subscribe to receive video feed
   image_transport::ImageTransport it(nh);
   image_transport::Subscriber sub = it.subscribe("cv_camera/image_raw", 1, imageCallback);

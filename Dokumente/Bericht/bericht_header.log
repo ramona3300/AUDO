@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.6960 64-bit) (preloaded format=pdflatex 2019.1.28)  28 JAN 2019 12:45
 entering extended mode
 **./bericht_header.tex
@@ -24,6 +25,31 @@ ex"))
 File: xkeyval.tex 2014/12/03 v2.7a key=value parser (HA)
 ))
 ("C:\Users\fnbur\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\ifthen.sty"
+=======
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018/Arch Linux) (preloaded format=pdflatex 2019.1.24)  28 JAN 2019 12:18
+entering extended mode
+ restricted \write18 enabled.
+ %&-line parsing enabled.
+**bericht_header.tex
+(./bericht_header.tex
+LaTeX2e <2018-04-01> patch level 5
+(/usr/share/texmf/tex/latex/tuddesign/tudreport.cls
+Document Class: tudreport 2009/11/17 1.13 Clemens von Loewenich's and Joe Werne
+r's TUD-Design package
+(/usr/share/texmf-dist/tex/latex/xkeyval/xkeyval.sty
+Package: xkeyval 2014/12/03 v2.7a package option processing (HA)
+
+(/usr/share/texmf-dist/tex/generic/xkeyval/xkeyval.tex
+(/usr/share/texmf-dist/tex/generic/xkeyval/xkvutils.tex
+\XKV@toks=\toks14
+\XKV@tempa@toks=\toks15
+
+(/usr/share/texmf-dist/tex/generic/xkeyval/keyval.tex))
+\XKV@depth=\count80
+File: xkeyval.tex 2014/12/03 v2.7a key=value parser (HA)
+))
+(/usr/share/texmf-dist/tex/latex/base/ifthen.sty
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 Package: ifthen 2014/09/29 v1.1c Standard LaTeX ifthen package (DPC)
 )
 Class tudreport Info: Option `paper=a4report' selected. on input line 142.
@@ -32,6 +58,7 @@ nput line 144.
 Class tudreport Info: Unknown option 'oneside`. Pass to KOMA-Script class. on i
 nput line 144.
 
+<<<<<<< HEAD
 ("C:\Users\fnbur\AppData\Local\Programs\MiKTeX 2.9\tex/latex/koma-script\scrrep
 rt.cls"
 Document Class: scrreprt 2018/12/30 v3.26a KOMA-Script document class (report)
@@ -55,10 +82,34 @@ ic.sty"
 Package: tocbasic 2018/12/30 v3.26a KOMA-Script package (handling toc-files)
 \scr@dte@tocline@numberwidth=\skip41
 \scr@dte@tocline@numbox=\box27
+=======
+(/usr/share/texmf-dist/tex/latex/koma-script/scrreprt.cls
+Document Class: scrreprt 2018/03/30 v3.25 KOMA-Script document class (report)
+(/usr/share/texmf-dist/tex/latex/koma-script/scrkbase.sty
+Package: scrkbase 2018/03/30 v3.25 KOMA-Script package (KOMA-Script-dependent b
+asics and keyval usage)
+
+(/usr/share/texmf-dist/tex/latex/koma-script/scrbase.sty
+Package: scrbase 2018/03/30 v3.25 KOMA-Script package (KOMA-Script-independent 
+basics and keyval usage)
+
+(/usr/share/texmf-dist/tex/latex/koma-script/scrlfile.sty
+Package: scrlfile 2018/03/30 v3.25 KOMA-Script package (loading files)
+)))
+(/usr/share/texmf-dist/tex/latex/koma-script/tocbasic.sty
+Package: tocbasic 2018/03/30 v3.25 KOMA-Script package (handling toc-files)
+\scr@dte@tocline@numberwidth=\skip41
+\scr@dte@tocline@numbox=\box26
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 )
 Package tocbasic Info: omitting babel extension for `toc'
 (tocbasic)             because of feature `nobabel' available
 (tocbasic)             for `toc' on input line 136.
+<<<<<<< HEAD
+=======
+Package tocbasic Info: defining new hook before heading of `' on input line 166
+7.
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 Class scrreprt Info: You've used standard option `oneside'.
 (scrreprt)           This is correct!
 (scrreprt)           Internally I'm using `twoside=false'.
@@ -66,6 +117,7 @@ Class scrreprt Info: You've used standard option `oneside'.
 (scrreprt)           you'd have to use `twoside=false' there
 (scrreprt)           instead of `oneside', too.
 Class scrreprt Info: File `scrsize11pt.clo' used instead of
+<<<<<<< HEAD
 (scrreprt)           file `scrsize11.clo' to setup font sizes on input line 235
 5.
 
@@ -77,6 +129,17 @@ t)
 ("C:\Users\fnbur\AppData\Local\Programs\MiKTeX 2.9\tex/latex/koma-script\typear
 ea.sty"
 Package: typearea 2018/12/30 v3.26a KOMA-Script package (type area)
+=======
+(scrreprt)           file `scrsize11.clo' to setup font sizes on input line 232
+8.
+
+(/usr/share/texmf-dist/tex/latex/koma-script/scrsize11pt.clo
+File: scrsize11pt.clo 2018/03/30 v3.25 KOMA-Script font size class option (11pt
+)
+)
+(/usr/share/texmf-dist/tex/latex/koma-script/typearea.sty
+Package: typearea 2018/03/30 v3.25 KOMA-Script package (type area)
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 \ta@bcor=\skip42
 \ta@div=\count81
 Package typearea Info: You've used standard option `oneside'.
@@ -105,7 +168,11 @@ Package typearea Info: These are the values describing the layout:
 (typearea)              \topskip        = 11.0pt
 (typearea)              \footskip       = 47.6pt
 (typearea)              \baselineskip   = 13.6pt
+<<<<<<< HEAD
 (typearea)              on input line 1714.
+=======
+(typearea)              on input line 1706.
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 )
 \c@part=\count82
 \c@chapter=\count83
@@ -114,6 +181,7 @@ Package typearea Info: These are the values describing the layout:
 \c@subsubsection=\count86
 \c@paragraph=\count87
 \c@subparagraph=\count88
+<<<<<<< HEAD
 \scr@dte@chapter@maxnumwidth=\skip47
 Class scrreprt Info: using compatibility default `afterindent=bysign'
 (scrreprt)           for `\chapter on input line 5259.
@@ -162,6 +230,32 @@ Class scrreprt Info: Redefining `\numberline' on input line 6753.
 \bibindent=\dimen102
 )
 ("C:\Users\fnbur\AppData\Local\Programs\MiKTeX 2.9\tex/latex/tools\calc.sty"
+=======
+\scr@dte@part@maxnumwidth=\skip47
+\scr@dte@chapter@maxnumwidth=\skip48
+\scr@dte@section@maxnumwidth=\skip49
+\scr@dte@subsection@maxnumwidth=\skip50
+\scr@dte@subsubsection@maxnumwidth=\skip51
+\scr@dte@paragraph@maxnumwidth=\skip52
+\scr@dte@subparagraph@maxnumwidth=\skip53
+\abovecaptionskip=\skip54
+\belowcaptionskip=\skip55
+\c@pti@nb@sid@b@x=\box27
+\scr@dte@figure@maxnumwidth=\skip56
+Package tocbasic Info: omitting babel extension for `lof'
+(tocbasic)             because of feature `nobabel' available
+(tocbasic)             for `lof' on input line 6247.
+\c@figure=\count89
+\scr@dte@table@maxnumwidth=\skip57
+Package tocbasic Info: omitting babel extension for `lot'
+(tocbasic)             because of feature `nobabel' available
+(tocbasic)             for `lot' on input line 6264.
+\c@table=\count90
+Class scrreprt Info: Redefining `\numberline' on input line 6433.
+\bibindent=\dimen102
+)
+(/usr/share/texmf-dist/tex/latex/tools/calc.sty
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 Package: calc 2017/05/25 v4.3 Infix arithmetic (KKT,FJ)
 \calc@Acount=\count91
 \calc@Bcount=\count92
@@ -174,6 +268,7 @@ LaTeX Info: Redefining \addtolength on input line 81.
 \calc@Ccount=\count93
 \calc@Cskip=\skip60
 )
+<<<<<<< HEAD
 (C:/Users/fnbur/Latex/texmf\tex/latex/tuddesign/colours\tudcolours.sty
 Package: tudcolours 2009/03/12 1.9 Clemens von Loewenich's and Joe Werner's TUD
 -Design package
@@ -183,13 +278,27 @@ Package: xcolor 2016/05/11 v2.12 LaTeX color extensions (UK)
 
 ("C:\Users\fnbur\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics-cfg\color
 .cfg"
+=======
+(/usr/share/texmf/tex/latex/tuddesign/colours/tudcolours.sty
+Package: tudcolours 2009/03/12 1.9 Clemens von Loewenich's and Joe Werner's TUD
+-Design package
+
+(/usr/share/texmf-dist/tex/latex/xcolor/xcolor.sty
+Package: xcolor 2016/05/11 v2.12 LaTeX color extensions (UK)
+
+(/usr/share/texmf-dist/tex/latex/graphics-cfg/color.cfg
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 File: color.cfg 2016/01/02 v1.6 sample color configuration
 )
 Package xcolor Info: Package option `override' ignored on input line 216.
 Package xcolor Info: Driver file: pdftex.def on input line 225.
 
+<<<<<<< HEAD
 ("C:\Users\fnbur\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics-def\pdfte
 x.def"
+=======
+(/usr/share/texmf-dist/tex/latex/graphics-def/pdftex.def
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 File: pdftex.def 2018/01/08 v1.0l Graphics/color driver for pdftex
 )
 Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1348.
@@ -201,6 +310,7 @@ Package xcolor Info: Model `tHsb' substituted by `hsb' on input line 1368.
 Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1369.
 Package xcolor Info: Model `Gray' substituted by `gray' on input line 1370.
 Package xcolor Info: Model `wave' substituted by `hsb' on input line 1371.
+<<<<<<< HEAD
 ) (C:/Users/fnbur/Latex/texmf\tex/latex/tuddesign/colours\tudcolours.cfg
 File: tudcolours.cfg 2008/12/03
 ) (C:/Users/fnbur/Latex/texmf\tex/latex/tuddesign/colours\tudcolours.def
@@ -223,6 +333,32 @@ LaTeX Font Info:    Redeclaring font encoding T1 on input line 48.
 ))
 ("C:\Users\fnbur\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\textcomp.sty"
 Package: textcomp 2018/08/11 v2.0j Standard LaTeX package
+=======
+)
+(/usr/share/texmf/tex/latex/tuddesign/colours/tudcolours.cfg
+File: tudcolours.cfg 2008/12/03
+)
+(/usr/share/texmf/tex/latex/tuddesign/colours/tudcolours.def
+File: tudcolours.def 2008/12/03
+))
+(/usr/share/texmf/tex/latex/tuddesign/report/tudreprt_fonts.sty
+Package: tudreprt_fonts 2009/00/18 1.11 Clemens von Loewenich's and Joe Werner'
+s TUD-Design package
+
+(/usr/share/texmf/tex/latex/tuddesign/base/tudfonts.sty
+Package: tudfonts 2009/09/18 1.12 Clemens von Loewenich's and Joe Werner's TUD-
+Design package
+
+(/usr/share/texmf-dist/tex/latex/base/fontenc.sty
+Package: fontenc 2017/04/05 v2.0i Standard LaTeX package
+
+(/usr/share/texmf-dist/tex/latex/base/t1enc.def
+File: t1enc.def 2017/04/05 v2.0i Standard LaTeX file
+LaTeX Font Info:    Redeclaring font encoding T1 on input line 48.
+))
+(/usr/share/texmf-dist/tex/latex/base/textcomp.sty
+Package: textcomp 2017/04/05 v2.0i Standard LaTeX package
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 Package textcomp Info: Sub-encoding information:
 (textcomp)               5 = only ISO-Adobe without \textcurrency
 (textcomp)               4 = 5 + \texteuro
@@ -236,13 +372,23 @@ Package textcomp Info: Sub-encoding information:
 (textcomp)             See the documentation for details.
 Package textcomp Info: Setting ? sub-encoding to TS1/1 on input line 79.
 Package textcomp Info: Changing ? sub-encoding to TS1/4 on input line 80.
+<<<<<<< HEAD
 ("C:\Users\fnbur\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\ts1enc.def"
+=======
+
+(/usr/share/texmf-dist/tex/latex/base/ts1enc.def
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 File: ts1enc.def 2001/06/05 v3.0e (jk/car/fm) Standard LaTeX file
 Now handling font encoding TS1 ...
 ... processing UTF-8 mapping file for font encoding TS1
 
+<<<<<<< HEAD
 ("C:\Users\fnbur\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\ts1enc.dfu"
 File: ts1enc.dfu 2018/10/05 v1.2f UTF-8 support for inputenc
+=======
+(/usr/share/texmf-dist/tex/latex/base/ts1enc.dfu
+File: ts1enc.dfu 2018/04/05 v1.2c UTF-8 support for inputenc
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
    defining Unicode char U+00A2 (decimal 162)
    defining Unicode char U+00A3 (decimal 163)
    defining Unicode char U+00A4 (decimal 164)
@@ -377,6 +523,7 @@ Package textcomp Info: Setting pplx sub-encoding to TS1/3 on input line 406.
 Package textcomp Info: Setting pplj sub-encoding to TS1/3 on input line 407.
 Package textcomp Info: Setting ptmx sub-encoding to TS1/4 on input line 408.
 Package textcomp Info: Setting ptmj sub-encoding to TS1/4 on input line 409.
+<<<<<<< HEAD
 ) ("C:\Users\fnbur\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\fix-cm.sty"
 Package: fix-cm 2015/01/14 v1.1t fixes to LaTeX
 ("C:\Users\fnbur\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\ts1enc.def"
@@ -404,6 +551,31 @@ File: mdsffont.def 2013/08/29 v2.31 (Math Design Project)
 )
 ("C:\Users\fnbur\AppData\Local\Programs\MiKTeX 2.9\tex/latex/mathdesign\mdttfon
 t.def"
+=======
+)
+(/usr/share/texmf-dist/tex/latex/base/fix-cm.sty
+Package: fix-cm 2015/01/14 v1.1t fixes to LaTeX
+
+(/usr/share/texmf-dist/tex/latex/base/ts1enc.def
+File: ts1enc.def 2001/06/05 v3.0e (jk/car/fm) Standard LaTeX file
+LaTeX Font Info:    Redeclaring font encoding TS1 on input line 47.
+))
+(/usr/share/texmf-dist/tex/latex/mathdesign/mathdesign.sty
+Package: mathdesign 2013/08/29 v2.31 Math Design Project
+
+(/usr/share/texmf-dist/tex/latex/mathdesign/mdbch/mdbch.cfg)
+(/usr/share/texmf-dist/tex/latex/mathdesign/mdbch/mdbch.sty
+Package: mdbch 2013/08/29 v2.31 bitstream bitstream charter + mdbch (Math Desig
+n Project)
+
+(/usr/share/texmf-dist/tex/latex/mathdesign/mdfont.def
+File: mdfont.def 2013/08/29 v2.31 (Math Design Project)
+)
+(/usr/share/texmf-dist/tex/latex/mathdesign/mdsffont.def
+File: mdsffont.def 2013/08/29 v2.31 (Math Design Project)
+)
+(/usr/share/texmf-dist/tex/latex/mathdesign/mdttfont.def
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 File: mdttfont.def 2013/08/29 v2.31 (Math Design Project)
 )
 \symmdcal=\mathgroup4
@@ -459,8 +631,12 @@ LaTeX Font Info:    Overwriting math alphabet `\mathcal' in version `normal'
 LaTeX Font Info:    Try loading font information for T1+mdbch on input line 186
 .
 
+<<<<<<< HEAD
 ("C:\Users\fnbur\AppData\Local\Programs\MiKTeX 2.9\tex/latex/mathdesign/mdbch\t
 1mdbch.fd"
+=======
+(/usr/share/texmf-dist/tex/latex/mathdesign/mdbch/t1mdbch.fd
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 File: t1mdbch.fd 2013/08/29 Fontinst v1.933 font definitions for T1/mdbch.
 )
 LaTeX Font Info:    Font shape `T1/mdbch/m/n' will be
@@ -482,11 +658,19 @@ LaTeX Font Info:    Redeclaring math accent \widetilde on input line 532.
 LaTeX Font Info:    Redeclaring math accent \widehat on input line 533.
 \rulethickness=\skip61
 )
+<<<<<<< HEAD
 ("C:\Users\fnbur\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\fontenc.sty"
 Package: fontenc 2018/08/11 v2.0j Standard LaTeX package
 
 ("C:\Users\fnbur\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\t1enc.def"
 File: t1enc.def 2018/08/11 v2.0j Standard LaTeX file
+=======
+(/usr/share/texmf-dist/tex/latex/base/fontenc.sty
+Package: fontenc 2017/04/05 v2.0i Standard LaTeX package
+
+(/usr/share/texmf-dist/tex/latex/base/t1enc.def
+File: t1enc.def 2017/04/05 v2.0i Standard LaTeX file
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 LaTeX Font Info:    Redeclaring font encoding T1 on input line 48.
 )))
 \symutopiasymbol=\mathgroup9
@@ -497,13 +681,18 @@ LaTeX Font Info:    Overwriting math alphabet `\mathmb' in version `bold'
 LaTeX Info: Redefining \em on input line 37.
 \fontheight=\skip62
 \fontdepth=\skip63
+<<<<<<< HEAD
 \fontstrutbox=\box29
+=======
+\fontstrutbox=\box28
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 LaTeX Info: Redefining \LaTeX on input line 108.
 )
 LaTeX Font Info:    Font shape `T1/mdbch/m/n' will be
 (Font)              scaled to size 10.56007pt on input line 239.
 )
 \TUD@headfootsep=\skip64
+<<<<<<< HEAD
  (C:/Users/fnbur/Latex/texmf\tex/latex/tuddesign/base\tudpage.sty
 Package: tudpage 2009/08/11 1.10 Clemens von Loewenich's and Joe Werner's TUD-D
 esign package
@@ -525,6 +714,27 @@ Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
 )
 ("C:\Users\fnbur\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics-cfg\graph
 ics.cfg"
+=======
+
+(/usr/share/texmf/tex/latex/tuddesign/base/tudpage.sty
+Package: tudpage 2009/08/11 1.10 Clemens von Loewenich's and Joe Werner's TUD-D
+esign package
+
+(/usr/share/texmf/tex/latex/tuddesign/base/tudpaper.sty
+Package: tudpaper 2009/01/28 1.9 Clemens von Loewenich's and Joe Werner's TUD-D
+esign package
+
+(/usr/share/texmf-dist/tex/latex/graphics/graphicx.sty
+Package: graphicx 2017/06/01 v1.1a Enhanced LaTeX Graphics (DPC,SPQR)
+
+(/usr/share/texmf-dist/tex/latex/graphics/graphics.sty
+Package: graphics 2017/06/25 v1.2c Standard LaTeX Graphics (DPC,SPQR)
+
+(/usr/share/texmf-dist/tex/latex/graphics/trig.sty
+Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
+)
+(/usr/share/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
 )
 Package graphics Info: Driver file: pdftex.def on input line 99.
@@ -532,6 +742,7 @@ Package graphics Info: Driver file: pdftex.def on input line 99.
 \Gin@req@height=\dimen105
 \Gin@req@width=\dimen106
 )
+<<<<<<< HEAD
 ("C:\Users\fnbur\AppData\Local\Programs\MiKTeX 2.9\tex/latex/eso-pic\eso-pic.st
 y"
 Package: eso-pic 2018/04/12 v2.0h eso-pic (RN)
@@ -550,6 +761,21 @@ Package: ltxcmds 2016/05/16 v1.23 LaTeX kernel commands for general use (HO)
 )
 ("C:\Users\fnbur\AppData\Local\Programs\MiKTeX 2.9\tex/generic/oberdiek\ifpdf.s
 ty"
+=======
+(/usr/share/texmf-dist/tex/latex/eso-pic/eso-pic.sty
+Package: eso-pic 2018/04/12 v2.0h eso-pic (RN)
+
+(/usr/share/texmf-dist/tex/generic/oberdiek/atbegshi.sty
+Package: atbegshi 2016/06/09 v1.18 At begin shipout hook (HO)
+
+(/usr/share/texmf-dist/tex/generic/oberdiek/infwarerr.sty
+Package: infwarerr 2016/05/16 v1.4 Providing info/warning/error messages (HO)
+)
+(/usr/share/texmf-dist/tex/generic/oberdiek/ltxcmds.sty
+Package: ltxcmds 2016/05/16 v1.23 LaTeX kernel commands for general use (HO)
+)
+(/usr/share/texmf-dist/tex/generic/oberdiek/ifpdf.sty
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 Package: ifpdf 2018/09/07 v3.3 Provides the ifpdf switch
 )))
 \TUD@logo@height=\skip65
@@ -567,7 +793,12 @@ Package: ifpdf 2018/09/07 v3.3 Provides the ifpdf switch
 \TUD@cols@width=\skip77
 \TUD@cols@sep=\skip78
 \c@TUD@cols@n=\count94
+<<<<<<< HEAD
  (C:/Users/fnbur/Latex/texmf\tex/latex/tuddesign/base\tudrules.sty
+=======
+
+(/usr/share/texmf/tex/latex/tuddesign/base/tudrules.sty
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 Package: tudrules 2008/10/09 1.6 Clemens von Loewenich's and Joe Werner's TUD-D
 esign package
 \TUD@indentbar@height=\skip79
@@ -581,6 +812,7 @@ esign package
 )
 \TUD@indentbarheight=\skip87
 
+<<<<<<< HEAD
 ("C:\Users\fnbur\AppData\Local\Programs\MiKTeX 2.9\tex/latex/geometry\geometry.
 sty"
 Package: geometry 2018/04/16 v5.8 Page Geometry
@@ -592,6 +824,16 @@ Package ifvtex Info: VTeX not detected.
 )
 ("C:\Users\fnbur\AppData\Local\Programs\MiKTeX 2.9\tex/generic/ifxetex\ifxetex.
 sty"
+=======
+(/usr/share/texmf-dist/tex/latex/geometry/geometry.sty
+Package: geometry 2018/04/16 v5.8 Page Geometry
+
+(/usr/share/texmf-dist/tex/generic/oberdiek/ifvtex.sty
+Package: ifvtex 2016/05/16 v1.6 Detect VTeX and its facilities (HO)
+Package ifvtex Info: VTeX not detected.
+)
+(/usr/share/texmf-dist/tex/generic/ifxetex/ifxetex.sty
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
 )
 \Gm@cnth=\count95
@@ -606,9 +848,13 @@ Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
 \Gm@layouthoffset=\dimen113
 \Gm@layoutvoffset=\dimen114
 \Gm@dimlist=\toks17
+<<<<<<< HEAD
 
 ("C:\Users\fnbur\AppData\Local\Programs\MiKTeX 2.9\tex/latex/geometry\geometry.
 cfg")))
+=======
+))
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 \TUD@footparindent=\skip88
 
 
@@ -625,9 +871,13 @@ Class scrreprt Warning: Usage of package `fancyhdr' together
 (scrreprt)              Nevertheless, using requested
 (scrreprt)              package `fancyhdr' on input line 47.
 
+<<<<<<< HEAD
 
 ("C:\Users\fnbur\AppData\Local\Programs\MiKTeX 2.9\tex/latex/fancyhdr\fancyhdr.
 sty"
+=======
+(/usr/share/texmf-dist/tex/latex/fancyhdr/fancyhdr.sty
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 Package: fancyhdr 2017/06/30 v3.9a Extensive control of page headers and footer
 s
 \f@nch@headwidth=\skip89
@@ -639,7 +889,12 @@ s
 \f@nch@O@erf=\skip95
 \f@nch@O@olf=\skip96
 \f@nch@O@orf=\skip97
+<<<<<<< HEAD
 )) (C:/Users/fnbur/Latex/texmf\tex/latex/tuddesign/base\tudheading.sty
+=======
+))
+(/usr/share/texmf/tex/latex/tuddesign/base/tudheading.sty
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 Package: tudheading 2009/12/31 1.17 Clemens von Loewenich's and Joe Werner's TU
 D-Design package
 
@@ -654,11 +909,17 @@ Class scrreprt Warning: Usage of package `titlesec' together
 (scrreprt)              Nevertheless, using requested
 (scrreprt)              package `titlesec' on input line 12.
 
+<<<<<<< HEAD
 
 ("C:\Users\fnbur\AppData\Local\Programs\MiKTeX 2.9\tex/latex/titlesec\titlesec.
 sty"
 Package: titlesec 2016/03/21 v2.10.2 Sectioning titles
 \ttl@box=\box30
+=======
+(/usr/share/texmf-dist/tex/latex/titlesec/titlesec.sty
+Package: titlesec 2016/03/21 v2.10.2 Sectioning titles
+\ttl@box=\box29
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 \beforetitleunit=\skip98
 \aftertitleunit=\skip99
 \ttl@plus=\dimen115
@@ -699,11 +960,19 @@ LaTeX Font Info:    Font shape `T1/mdbch/m/n' will be
 (Font)              scaled to size 22.27214pt on input line 75.
 \@TUD@above@headskip=\skip101
 \@TUD@below@headskip=\skip102
+<<<<<<< HEAD
 (C:/Users/fnbur/Latex/texmf\tex/latex/tuddesign/base\tudheading.def
 File: tudheading.def 2009/07/14
 \TUD@part@tmp@height=\skip103
 \TUD@part@tmp@depth=\skip104
 \@TUD@partbox=\box31
+=======
+(/usr/share/texmf/tex/latex/tuddesign/base/tudheading.def
+File: tudheading.def 2009/07/14
+\TUD@part@tmp@height=\skip103
+\TUD@part@tmp@depth=\skip104
+\@TUD@partbox=\box30
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 )
 \TUD@parind=\skip105
 \TUD@chapind=\skip106
@@ -711,14 +980,22 @@ File: tudheading.def 2009/07/14
 \TUD@subsecind=\skip108
 \TUD@subsubsecind=\skip109
 
+<<<<<<< HEAD
 ("C:\Users\fnbur\AppData\Local\Programs\MiKTeX 2.9\tex/latex/titlesec\block.tss
 "
 File: block.tss 2016/03/15
 )) (C:/Users/fnbur/Latex/texmf\tex/latex/tuddesign/base\tudredef.sty
+=======
+(/usr/share/texmf-dist/tex/latex/titlesec/block.tss
+File: block.tss 2016/03/15
+))
+(/usr/share/texmf/tex/latex/tuddesign/base/tudredef.sty
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 Package: tudredef 2010/04/10 1.2 Clemens von Loewenich's and Joe Werner's TUD-D
 esign package
 \TUD@abstract@count=\count99
 )
+<<<<<<< HEAD
 (C:/Users/fnbur/Latex/texmf\tex/latex/tuddesign/report\tudreprt_title.sty
 Package: tudreprt_title 2014/09/20 1.12 Clemens von Loewenich's and Joe Werner'
 s TUD-Design package
@@ -749,16 +1026,44 @@ Language: ngermanb 2018/12/08 v2.11 German support for babel (post-1996 orthogr
 aphy)
 
 ("C:\Users\fnbur\AppData\Local\Programs\MiKTeX 2.9\tex/generic/babel\babel.def"
+=======
+(/usr/share/texmf/tex/latex/tuddesign/report/tudreprt_title.sty
+Package: tudreprt_title 2014/09/20 1.12 Clemens von Loewenich's and Joe Werner'
+s TUD-Design package
+\TUD@sponsorlogo=\box31
+\TUD@titleskip=\skip110
+))
+(/usr/share/texmf-dist/tex/generic/babel/babel.sty
+Package: babel 2018/11/13 3.27 The Babel package
+
+(/usr/share/texmf-dist/tex/generic/babel/switch.def
+File: switch.def 2018/11/13 3.27 Babel switching mechanism
+)
+(/usr/share/texmf-dist/tex/generic/babel-german/ngerman.ldf
+Language: ngerman 2018/03/29 v2.10 German support for babel (post-1996 orthogra
+phy)
+
+(/usr/share/texmf-dist/tex/generic/babel-german/ngermanb.ldf
+Language: ngermanb 2018/03/29 v2.10 German support for babel (post-1996 orthogr
+aphy)
+
+(/usr/share/texmf-dist/tex/generic/babel/babel.def
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 File: babel.def 2018/11/13 3.27 Babel common definitions
 \babel@savecnt=\count100
 \U@D=\dimen120
 
+<<<<<<< HEAD
 ("C:\Users\fnbur\AppData\Local\Programs\MiKTeX 2.9\tex/generic/babel\txtbabel.d
 ef")
+=======
+(/usr/share/texmf-dist/tex/generic/babel/txtbabel.def)
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 \bbl@dirlevel=\count101
 )
 Package babel Info: Making " an active character on input line 121.
 )))
+<<<<<<< HEAD
 ("C:\Users\fnbur\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\inputenc.sty"
 Package: inputenc 2018/08/11 v1.3c Input encoding file
 \inpenc@prehook=\toks19
@@ -772,6 +1077,21 @@ LaTeX Font Info:    Redeclaring font encoding T1 on input line 48.
 ))
 ("C:\Users\fnbur\AppData\Local\Programs\MiKTeX 2.9\tex/latex/microtype\microtyp
 e.sty"
+=======
+(/usr/share/texmf-dist/tex/latex/base/inputenc.sty
+Package: inputenc 2018/04/06 v1.3b Input encoding file
+\inpenc@prehook=\toks19
+\inpenc@posthook=\toks20
+)
+(/usr/share/texmf-dist/tex/latex/base/fontenc.sty
+Package: fontenc 2017/04/05 v2.0i Standard LaTeX package
+
+(/usr/share/texmf-dist/tex/latex/base/t1enc.def
+File: t1enc.def 2017/04/05 v2.0i Standard LaTeX file
+LaTeX Font Info:    Redeclaring font encoding T1 on input line 48.
+))
+(/usr/share/texmf-dist/tex/latex/microtype/microtype.sty
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 Package: microtype 2018/01/14 v2.7a Micro-typographical refinements (RS)
 \MT@toks=\toks21
 \MT@count=\count102
@@ -780,8 +1100,12 @@ LaTeX Info: Redefining \textls on input line 793.
 LaTeX Info: Redefining \textmicrotypecontext on input line 1339.
 \MT@listname@count=\count103
 
+<<<<<<< HEAD
 ("C:\Users\fnbur\AppData\Local\Programs\MiKTeX 2.9\tex/latex/microtype\microtyp
 e-pdftex.def"
+=======
+(/usr/share/texmf-dist/tex/latex/microtype/microtype-pdftex.def
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 File: microtype-pdftex.def 2018/01/14 v2.7a Definitions specific to pdftex (RS)
 
 LaTeX Info: Redefining \lsstyle on input line 913.
@@ -790,6 +1114,7 @@ LaTeX Info: Redefining \lslig on input line 913.
 )
 Package microtype Info: Loading configuration file microtype.cfg.
 
+<<<<<<< HEAD
 ("C:\Users\fnbur\AppData\Local\Programs\MiKTeX 2.9\tex/latex/microtype\microtyp
 e.cfg"
 File: microtype.cfg 2018/01/14 v2.7a microtype main configuration file (RS)
@@ -805,6 +1130,21 @@ Package: float 2001/11/08 v1.3d Float enhancements (AL)
 ("C:\Users\fnbur\AppData\Local\Programs\MiKTeX 2.9\tex/latex/booktabs\booktabs.
 sty"
 Package: booktabs 2005/04/14 v1.61803 publication quality tables
+=======
+(/usr/share/texmf-dist/tex/latex/microtype/microtype.cfg
+File: microtype.cfg 2018/01/14 v2.7a microtype main configuration file (RS)
+))
+(/usr/share/texmf-dist/tex/latex/float/float.sty
+Package: float 2001/11/08 v1.3d Float enhancements (AL)
+\c@float@type=\count104
+\float@exts=\toks22
+\float@box=\box32
+\@float@everytoks=\toks23
+\@floatcapt=\box33
+)
+(/usr/share/texmf-dist/tex/latex/booktabs/booktabs.sty
+Package: booktabs 2016/04/27 v1.618033 publication quality tables
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 \heavyrulewidth=\dimen122
 \lightrulewidth=\dimen123
 \cmidrulewidth=\dimen124
@@ -823,27 +1163,44 @@ Package: booktabs 2005/04/14 v1.61803 publication quality tables
 \@lastruleclass=\count108
 \@thisrulewidth=\dimen134
 )
+<<<<<<< HEAD
 ("C:\Users\fnbur\AppData\Local\Programs\MiKTeX 2.9\tex/latex/multirow\multirow.
 sty"
 Package: multirow 2019/01/01 v2.4 Span multiple rows of a table
+=======
+(/usr/share/texmf-dist/tex/latex/multirow/multirow.sty
+Package: multirow 2018/08/03 v2.3 Span multiple rows of a table
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 \multirow@colwidth=\skip112
 \multirow@cntb=\count109
 \multirow@dima=\skip113
 \bigstrutjot=\dimen135
 )
+<<<<<<< HEAD
 ("C:\Users\fnbur\AppData\Local\Programs\MiKTeX 2.9\tex/latex/tools\longtable.st
 y"
 Package: longtable 2014/10/28 v4.11 Multi-page Table package (DPC)+ FMi change
+=======
+(/usr/share/texmf-dist/tex/latex/tools/longtable.sty
+Package: longtable 2014/10/28 v4.11 Multi-page Table package (DPC)
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 \LTleft=\skip114
 \LTright=\skip115
 \LTpre=\skip116
 \LTpost=\skip117
 \LTchunksize=\count110
 \LTcapwidth=\dimen136
+<<<<<<< HEAD
 \LT@head=\box35
 \LT@firsthead=\box36
 \LT@foot=\box37
 \LT@lastfoot=\box38
+=======
+\LT@head=\box34
+\LT@firsthead=\box35
+\LT@foot=\box36
+\LT@lastfoot=\box37
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 \LT@cols=\count111
 \LT@rows=\count112
 \c@LT@tables=\count113
@@ -852,6 +1209,7 @@ Package: longtable 2014/10/28 v4.11 Multi-page Table package (DPC)+ FMi change
 )
 Class scrreprt Info: longtable captions redefined on input line 32.
 
+<<<<<<< HEAD
 ("C:\Users\fnbur\AppData\Local\Programs\MiKTeX 2.9\tex/latex/tools\tabularx.sty
 "
 Package: tabularx 2016/02/03 v2.11b `tabularx' package (DPC)
@@ -859,11 +1217,24 @@ Package: tabularx 2016/02/03 v2.11b `tabularx' package (DPC)
 Package: array 2018/12/30 v2.4k Tabular extension package (FMi)
 \col@sep=\dimen137
 \ar@mcellbox=\box39
+=======
+(/usr/share/texmf-dist/tex/latex/tools/tabularx.sty
+Package: tabularx 2016/02/03 v2.11b `tabularx' package (DPC)
+
+(/usr/share/texmf-dist/tex/latex/tools/array.sty
+Package: array 2018/04/30 v2.4h Tabular extension package (FMi)
+\col@sep=\dimen137
+\ar@mcellbox=\box38
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 \extrarowheight=\dimen138
 \NC@list=\toks25
 \extratabsurround=\skip118
 \backup@length=\skip119
+<<<<<<< HEAD
 \ar@cellbox=\box40
+=======
+\ar@cellbox=\box39
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 )
 \TX@col@width=\dimen139
 \TX@old@table=\dimen140
@@ -873,16 +1244,23 @@ Package: array 2018/12/30 v2.4k Tabular extension package (FMi)
 \TX@cols=\count115
 \TX@ftn=\toks26
 )
+<<<<<<< HEAD
 ("C:\Users\fnbur\AppData\Local\Programs\MiKTeX 2.9\tex/latex/pgf/basiclayer\pgf
 .sty"
 ("C:\Users\fnbur\AppData\Local\Programs\MiKTeX 2.9\tex/latex/pgf/utilities\pgfr
 cs.sty"
 ("C:\Users\fnbur\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/utilities\pg
 futil-common.tex"
+=======
+(/usr/share/texmf-dist/tex/latex/pgf/basiclayer/pgf.sty
+(/usr/share/texmf-dist/tex/latex/pgf/utilities/pgfrcs.sty
+(/usr/share/texmf-dist/tex/generic/pgf/utilities/pgfutil-common.tex
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 \pgfutil@everybye=\toks27
 \pgfutil@tempdima=\dimen144
 \pgfutil@tempdimb=\dimen145
 
+<<<<<<< HEAD
 ("C:\Users\fnbur\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/utilities\pg
 futil-common-lists.tex"))
 ("C:\Users\fnbur\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/utilities\pg
@@ -915,6 +1293,30 @@ fkeys.code.tex"
 
 ("C:\Users\fnbur\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/utilities\pg
 fkeysfiltered.code.tex"
+=======
+(/usr/share/texmf-dist/tex/generic/pgf/utilities/pgfutil-common-lists.tex))
+(/usr/share/texmf-dist/tex/generic/pgf/utilities/pgfutil-latex.def
+\pgfutil@abb=\box40
+
+(/usr/share/texmf-dist/tex/latex/ms/everyshi.sty
+Package: everyshi 2001/05/15 v3.00 EveryShipout Package (MS)
+))
+(/usr/share/texmf-dist/tex/generic/pgf/utilities/pgfrcs.code.tex
+Package: pgfrcs 2015/08/07 v3.0.1a (rcs-revision 1.31)
+))
+Package: pgf 2015/08/07 v3.0.1a (rcs-revision 1.15)
+
+(/usr/share/texmf-dist/tex/latex/pgf/basiclayer/pgfcore.sty
+(/usr/share/texmf-dist/tex/latex/pgf/systemlayer/pgfsys.sty
+(/usr/share/texmf-dist/tex/generic/pgf/systemlayer/pgfsys.code.tex
+Package: pgfsys 2014/07/09 v3.0.1a (rcs-revision 1.48)
+
+(/usr/share/texmf-dist/tex/generic/pgf/utilities/pgfkeys.code.tex
+\pgfkeys@pathtoks=\toks28
+\pgfkeys@temptoks=\toks29
+
+(/usr/share/texmf-dist/tex/generic/pgf/utilities/pgfkeysfiltered.code.tex
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 \pgfkeys@tmptoks=\toks30
 ))
 \pgf@x=\dimen146
@@ -934,6 +1336,7 @@ fkeysfiltered.code.tex"
 \t@pgf@toka=\toks31
 \t@pgf@tokb=\toks32
 \t@pgf@tokc=\toks33
+<<<<<<< HEAD
 \pgf@sys@id@count=\count120
 
 ("C:\Users\fnbur\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/systemlayer\
@@ -975,10 +1378,43 @@ parser.code.tex"
 \pgfmath@dimen=\dimen154
 \pgfmath@count=\count123
 \pgfmath@box=\box42
+=======
+
+(/usr/share/texmf-dist/tex/generic/pgf/systemlayer/pgf.cfg
+File: pgf.cfg 2008/05/14  (rcs-revision 1.7)
+)
+Driver file for pgf: pgfsys-pdftex.def
+
+(/usr/share/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-pdftex.def
+File: pgfsys-pdftex.def 2014/10/11  (rcs-revision 1.35)
+
+(/usr/share/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-common-pdf.def
+File: pgfsys-common-pdf.def 2013/10/10  (rcs-revision 1.13)
+)))
+(/usr/share/texmf-dist/tex/generic/pgf/systemlayer/pgfsyssoftpath.code.tex
+File: pgfsyssoftpath.code.tex 2013/09/09  (rcs-revision 1.9)
+\pgfsyssoftpath@smallbuffer@items=\count120
+\pgfsyssoftpath@bigbuffer@items=\count121
+)
+(/usr/share/texmf-dist/tex/generic/pgf/systemlayer/pgfsysprotocol.code.tex
+File: pgfsysprotocol.code.tex 2006/10/16  (rcs-revision 1.4)
+))
+(/usr/share/texmf-dist/tex/generic/pgf/basiclayer/pgfcore.code.tex
+Package: pgfcore 2010/04/11 v3.0.1a (rcs-revision 1.7)
+
+(/usr/share/texmf-dist/tex/generic/pgf/math/pgfmath.code.tex
+(/usr/share/texmf-dist/tex/generic/pgf/math/pgfmathcalc.code.tex
+(/usr/share/texmf-dist/tex/generic/pgf/math/pgfmathutil.code.tex)
+(/usr/share/texmf-dist/tex/generic/pgf/math/pgfmathparser.code.tex
+\pgfmath@dimen=\dimen154
+\pgfmath@count=\count122
+\pgfmath@box=\box41
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 \pgfmath@toks=\toks34
 \pgfmath@stack@operand=\toks35
 \pgfmath@stack@operation=\toks36
 )
+<<<<<<< HEAD
 ("C:\Users\fnbur\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/math\pgfmath
 functions.code.tex"
 ("C:\Users\fnbur\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/math\pgfmath
@@ -1004,6 +1440,22 @@ float.code.tex"
 ("C:\Users\fnbur\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/basiclayer\p
 gfcorepoints.code.tex"
 File: pgfcorepoints.code.tex 2019/01/05 v3.1 (3.1)
+=======
+(/usr/share/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.code.tex
+(/usr/share/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.basic.code.tex)
+(/usr/share/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.trigonometric.code
+.tex)
+(/usr/share/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.random.code.tex)
+(/usr/share/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.comparison.code.te
+x) (/usr/share/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.base.code.tex)
+(/usr/share/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.round.code.tex)
+(/usr/share/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.misc.code.tex)
+(/usr/share/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.integerarithmetics
+.code.tex))) (/usr/share/texmf-dist/tex/generic/pgf/math/pgfmathfloat.code.tex
+\c@pgfmathroundto@lastzeros=\count123
+)) (/usr/share/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepoints.code.tex
+File: pgfcorepoints.code.tex 2013/10/07  (rcs-revision 1.27)
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 \pgf@picminx=\dimen155
 \pgf@picmaxx=\dimen156
 \pgf@picminy=\dimen157
@@ -1019,6 +1471,7 @@ File: pgfcorepoints.code.tex 2019/01/05 v3.1 (3.1)
 \pgf@zx=\dimen167
 \pgf@zy=\dimen168
 )
+<<<<<<< HEAD
 ("C:\Users\fnbur\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/basiclayer\p
 gfcorepathconstruct.code.tex"
 File: pgfcorepathconstruct.code.tex 2019/01/05 v3.1 (3.1)
@@ -1136,11 +1589,98 @@ Package: pgffor 2019/01/05 v3.1 (3.1)
 
 ("C:\Users\fnbur\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/math\pgfmath
 .code.tex")
+=======
+(/usr/share/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepathconstruct.code.tex
+File: pgfcorepathconstruct.code.tex 2013/10/07  (rcs-revision 1.29)
+\pgf@path@lastx=\dimen169
+\pgf@path@lasty=\dimen170
+) (/usr/share/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepathusage.code.tex
+File: pgfcorepathusage.code.tex 2014/11/02  (rcs-revision 1.24)
+\pgf@shorten@end@additional=\dimen171
+\pgf@shorten@start@additional=\dimen172
+)
+(/usr/share/texmf-dist/tex/generic/pgf/basiclayer/pgfcorescopes.code.tex
+File: pgfcorescopes.code.tex 2015/05/08  (rcs-revision 1.46)
+\pgfpic=\box42
+\pgf@hbox=\box43
+\pgf@layerbox@main=\box44
+\pgf@picture@serial@count=\count124
+)
+(/usr/share/texmf-dist/tex/generic/pgf/basiclayer/pgfcoregraphicstate.code.tex
+File: pgfcoregraphicstate.code.tex 2014/11/02  (rcs-revision 1.12)
+\pgflinewidth=\dimen173
+)
+(/usr/share/texmf-dist/tex/generic/pgf/basiclayer/pgfcoretransformations.code.t
+ex
+File: pgfcoretransformations.code.tex 2015/08/07  (rcs-revision 1.20)
+\pgf@pt@x=\dimen174
+\pgf@pt@y=\dimen175
+\pgf@pt@temp=\dimen176
+) (/usr/share/texmf-dist/tex/generic/pgf/basiclayer/pgfcorequick.code.tex
+File: pgfcorequick.code.tex 2008/10/09  (rcs-revision 1.3)
+)
+(/usr/share/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreobjects.code.tex
+File: pgfcoreobjects.code.tex 2006/10/11  (rcs-revision 1.2)
+)
+(/usr/share/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepathprocessing.code.te
+x
+File: pgfcorepathprocessing.code.tex 2013/09/09  (rcs-revision 1.9)
+) (/usr/share/texmf-dist/tex/generic/pgf/basiclayer/pgfcorearrows.code.tex
+File: pgfcorearrows.code.tex 2015/05/14  (rcs-revision 1.43)
+\pgfarrowsep=\dimen177
+)
+(/usr/share/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreshade.code.tex
+File: pgfcoreshade.code.tex 2013/07/15  (rcs-revision 1.15)
+\pgf@max=\dimen178
+\pgf@sys@shading@range@num=\count125
+)
+(/usr/share/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreimage.code.tex
+File: pgfcoreimage.code.tex 2013/07/15  (rcs-revision 1.18)
+
+(/usr/share/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreexternal.code.tex
+File: pgfcoreexternal.code.tex 2014/07/09  (rcs-revision 1.21)
+\pgfexternal@startupbox=\box45
+))
+(/usr/share/texmf-dist/tex/generic/pgf/basiclayer/pgfcorelayers.code.tex
+File: pgfcorelayers.code.tex 2013/07/18  (rcs-revision 1.7)
+)
+(/usr/share/texmf-dist/tex/generic/pgf/basiclayer/pgfcoretransparency.code.tex
+File: pgfcoretransparency.code.tex 2013/09/30  (rcs-revision 1.5)
+) (/usr/share/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepatterns.code.tex
+File: pgfcorepatterns.code.tex 2013/11/07  (rcs-revision 1.5)
+)))
+(/usr/share/texmf-dist/tex/generic/pgf/modules/pgfmoduleshapes.code.tex
+File: pgfmoduleshapes.code.tex 2014/03/21  (rcs-revision 1.35)
+\pgfnodeparttextbox=\box46
+)
+(/usr/share/texmf-dist/tex/generic/pgf/modules/pgfmoduleplot.code.tex
+File: pgfmoduleplot.code.tex 2015/08/03  (rcs-revision 1.13)
+)
+(/usr/share/texmf-dist/tex/latex/pgf/compatibility/pgfcomp-version-0-65.sty
+Package: pgfcomp-version-0-65 2007/07/03 v3.0.1a (rcs-revision 1.7)
+\pgf@nodesepstart=\dimen179
+\pgf@nodesepend=\dimen180
+)
+(/usr/share/texmf-dist/tex/latex/pgf/compatibility/pgfcomp-version-1-18.sty
+Package: pgfcomp-version-1-18 2007/07/23 v3.0.1a (rcs-revision 1.1)
+))
+(/usr/share/texmf-dist/tex/latex/pgf/frontendlayer/tikz.sty
+(/usr/share/texmf-dist/tex/latex/pgf/utilities/pgffor.sty
+(/usr/share/texmf-dist/tex/latex/pgf/utilities/pgfkeys.sty
+(/usr/share/texmf-dist/tex/generic/pgf/utilities/pgfkeys.code.tex))
+(/usr/share/texmf-dist/tex/latex/pgf/math/pgfmath.sty
+(/usr/share/texmf-dist/tex/generic/pgf/math/pgfmath.code.tex))
+(/usr/share/texmf-dist/tex/generic/pgf/utilities/pgffor.code.tex
+Package: pgffor 2013/12/13 v3.0.1a (rcs-revision 1.25)
+
+(/usr/share/texmf-dist/tex/generic/pgf/math/pgfmath.code.tex)
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 \pgffor@iter=\dimen181
 \pgffor@skip=\dimen182
 \pgffor@stack=\toks37
 \pgffor@toks=\toks38
 ))
+<<<<<<< HEAD
 ("C:\Users\fnbur\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pgf/frontendlaye
 r/tikz\tikz.code.tex"
 Package: tikz 2019/01/05 v3.1 (3.1)
@@ -1149,6 +1689,15 @@ Package: tikz 2019/01/05 v3.1 (3.1)
 flibraryplothandlers.code.tex"
 File: pgflibraryplothandlers.code.tex 2019/01/05 v3.1 (3.1)
 \pgf@plot@mark@count=\count127
+=======
+(/usr/share/texmf-dist/tex/generic/pgf/frontendlayer/tikz/tikz.code.tex
+Package: tikz 2015/08/07 v3.0.1a (rcs-revision 1.151)
+
+(/usr/share/texmf-dist/tex/generic/pgf/libraries/pgflibraryplothandlers.code.te
+x
+File: pgflibraryplothandlers.code.tex 2013/08/31 v3.0.1a (rcs-revision 1.20)
+\pgf@plot@mark@count=\count126
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 \pgfplotmarksize=\dimen183
 )
 \tikz@lastx=\dimen184
@@ -1157,6 +1706,7 @@ File: pgflibraryplothandlers.code.tex 2019/01/05 v3.1 (3.1)
 \tikz@lastysaved=\dimen187
 \tikzleveldistance=\dimen188
 \tikzsiblingdistance=\dimen189
+<<<<<<< HEAD
 \tikz@figbox=\box48
 \tikz@figbox@bg=\box49
 \tikz@tempbox=\box50
@@ -1233,10 +1783,83 @@ Package: amstext 2000/06/29 v2.01 AMS text
 
 ("C:\Users\fnbur\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsmath\amsgen.sty
 "
+=======
+\tikz@figbox=\box47
+\tikz@figbox@bg=\box48
+\tikz@tempbox=\box49
+\tikz@tempbox@bg=\box50
+\tikztreelevel=\count127
+\tikznumberofchildren=\count128
+\tikznumberofcurrentchild=\count129
+\tikz@fig@count=\count130
+ (/usr/share/texmf-dist/tex/generic/pgf/modules/pgfmodulematrix.code.tex
+File: pgfmodulematrix.code.tex 2013/09/17  (rcs-revision 1.8)
+\pgfmatrixcurrentrow=\count131
+\pgfmatrixcurrentcolumn=\count132
+\pgf@matrix@numberofcolumns=\count133
+)
+\tikz@expandcount=\count134
+
+(/usr/share/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrary
+topaths.code.tex
+File: tikzlibrarytopaths.code.tex 2008/06/17 v3.0.1a (rcs-revision 1.2)
+)))
+(/usr/share/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrary
+arrows.code.tex
+File: tikzlibraryarrows.code.tex 2008/01/09 v3.0.1a (rcs-revision 1.1)
+
+(/usr/share/texmf-dist/tex/generic/pgf/libraries/pgflibraryarrows.code.tex
+File: pgflibraryarrows.code.tex 2013/09/23 v3.0.1a (rcs-revision 1.16)
+\arrowsize=\dimen190
+))
+(/usr/share/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrary
+automata.code.tex
+File: tikzlibraryautomata.code.tex 2008/07/14 v3.0.1a (rcs-revision 1.3)
+
+(/usr/share/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrary
+shapes.multipart.code.tex
+File: tikzlibraryshapes.multipart.code.tex 2008/01/09 v3.0.1a (rcs-revision 1.1
+)
+
+(/usr/share/texmf-dist/tex/generic/pgf/libraries/shapes/pgflibraryshapes.multip
+art.code.tex
+File: pgflibraryshapes.multipart.code.tex 2010/01/07 v3.0.1a (rcs-revision 1.2)
+
+\pgfnodepartlowerbox=\box51
+\pgfnodeparttwobox=\box52
+\pgfnodepartthreebox=\box53
+\pgfnodepartfourbox=\box54
+\pgfnodeparttwentybox=\box55
+\pgfnodepartnineteenbox=\box56
+\pgfnodeparteighteenbox=\box57
+\pgfnodepartseventeenbox=\box58
+\pgfnodepartsixteenbox=\box59
+\pgfnodepartfifteenbox=\box60
+\pgfnodepartfourteenbox=\box61
+\pgfnodepartthirteenbox=\box62
+\pgfnodeparttwelvebox=\box63
+\pgfnodepartelevenbox=\box64
+\pgfnodeparttenbox=\box65
+\pgfnodepartninebox=\box66
+\pgfnodeparteightbox=\box67
+\pgfnodepartsevenbox=\box68
+\pgfnodepartsixbox=\box69
+\pgfnodepartfivebox=\box70
+))) (/usr/share/texmf-dist/tex/latex/amsmath/amsmath.sty
+Package: amsmath 2017/09/02 v2.17a AMS math features
+\@mathmargin=\skip120
+
+For additional information on amsmath, use the `?' option.
+(/usr/share/texmf-dist/tex/latex/amsmath/amstext.sty
+Package: amstext 2000/06/29 v2.01 AMS text
+
+(/usr/share/texmf-dist/tex/latex/amsmath/amsgen.sty
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 File: amsgen.sty 1999/11/30 v2.0 generic functions
 \@emptytoks=\toks39
 \ex@=\dimen191
 ))
+<<<<<<< HEAD
 ("C:\Users\fnbur\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsmath\amsbsy.sty
 "
 Package: amsbsy 1999/11/29 v1.2d Bold Symbols
@@ -1270,6 +1893,39 @@ LaTeX Font Info:    Redeclaring font encoding OMS on input line 730.
 \row@=\count145
 \column@=\count146
 \maxfields@=\count147
+=======
+(/usr/share/texmf-dist/tex/latex/amsmath/amsbsy.sty
+Package: amsbsy 1999/11/29 v1.2d Bold Symbols
+\pmbraise@=\dimen192
+)
+(/usr/share/texmf-dist/tex/latex/amsmath/amsopn.sty
+Package: amsopn 2016/03/08 v2.02 operator names
+)
+\inf@bad=\count135
+LaTeX Info: Redefining \frac on input line 213.
+\uproot@=\count136
+\leftroot@=\count137
+LaTeX Info: Redefining \overline on input line 375.
+\classnum@=\count138
+\DOTSCASE@=\count139
+LaTeX Info: Redefining \ldots on input line 472.
+LaTeX Info: Redefining \dots on input line 475.
+LaTeX Info: Redefining \cdots on input line 596.
+\Mathstrutbox@=\box71
+\strutbox@=\box72
+\big@size=\dimen193
+LaTeX Font Info:    Redeclaring font encoding OML on input line 712.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 713.
+\macc@depth=\count140
+\c@MaxMatrixCols=\count141
+\dotsspace@=\muskip10
+\c@parentequation=\count142
+\dspbrk@lvl=\count143
+\tag@help=\toks40
+\row@=\count144
+\column@=\count145
+\maxfields@=\count146
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 \andhelp@=\toks41
 \eqnshift@=\dimen194
 \alignsep@=\dimen195
@@ -1281,20 +1937,35 @@ LaTeX Font Info:    Redeclaring font encoding OMS on input line 730.
 \multlinegap=\skip121
 \multlinetaggap=\skip122
 \mathdisplay@stack=\toks43
+<<<<<<< HEAD
 LaTeX Info: Redefining \[ on input line 2844.
 LaTeX Info: Redefining \] on input line 2845.
 )
 ("C:\Users\fnbur\AppData\Local\Programs\MiKTeX 2.9\tex/latex/units\nicefrac.sty
 "
+=======
+LaTeX Info: Redefining \[ on input line 2817.
+LaTeX Info: Redefining \] on input line 2818.
+)
+(/usr/share/texmf-dist/tex/latex/units/nicefrac.sty
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 Package: nicefrac 1998/08/04 v0.9b Nice fractions
 \L@UnitsRaiseDisplaystyle=\skip123
 \L@UnitsRaiseTextstyle=\skip124
 \L@UnitsRaiseScriptstyle=\skip125
+<<<<<<< HEAD
 ) ("C:\Users\fnbur\AppData\Local\Programs\MiKTeX 2.9\tex/latex/was\icomma.sty"
 Package: icomma 2002/03/10 v2.0 (WaS)
 )
 ("C:\Users\fnbur\AppData\Local\Programs\MiKTeX 2.9\tex/latex/paralist\paralist.
 sty"
+=======
+)
+(/usr/share/texmf-dist/tex/latex/was/icomma.sty
+Package: icomma 2002/03/10 v2.0 (WaS)
+)
+(/usr/share/texmf-dist/tex/latex/paralist/paralist.sty
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 Package: paralist 2017/01/22 v2.7 Extended list environments
 \pltopsep=\skip126
 \plpartopsep=\skip127
@@ -1314,15 +1985,20 @@ Class scrreprt Warning: Usage of package `tocbibind' together
 (scrreprt)              Nevertheless, using requested
 (scrreprt)              package `tocbibind' on input line 48.
 
+<<<<<<< HEAD
 
 ("C:\Users\fnbur\AppData\Local\Programs\MiKTeX 2.9\tex/latex/tocbibind\tocbibin
 d.sty"
+=======
+(/usr/share/texmf-dist/tex/latex/tocbibind/tocbibind.sty
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 Package: tocbibind 2010/10/13 v1.5k extra ToC listings
 Package tocbibind Info: The document has chapter divisions on input line 50.
 
 
 Package tocbibind Note: Using chapter style headings, unless overridden.
 
+<<<<<<< HEAD
 )
 ("C:\Users\fnbur\AppData\Local\Programs\MiKTeX 2.9\tex/latex/hyperref\hyperref.
 sty"
@@ -1335,6 +2011,16 @@ Package: hobsub-hyperref 2016/05/16 v1.14 Bundle oberdiek, subset hyperref (HO)
 
 ("C:\Users\fnbur\AppData\Local\Programs\MiKTeX 2.9\tex/generic/oberdiek\hobsub-
 generic.sty"
+=======
+) (/usr/share/texmf-dist/tex/latex/hyperref/hyperref.sty
+Package: hyperref 2018/09/30 v6.88a Hypertext links for LaTeX
+
+(/usr/share/texmf-dist/tex/generic/oberdiek/hobsub-hyperref.sty
+Package: hobsub-hyperref 2016/05/16 v1.14 Bundle oberdiek, subset hyperref (HO)
+
+
+(/usr/share/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 Package: hobsub-generic 2016/05/16 v1.14 Bundle oberdiek, subset generic (HO)
 Package: hobsub 2016/05/16 v1.14 Construct package bundles (HO)
 Package hobsub Info: Skipping package `infwarerr' (already loaded).
@@ -1345,6 +2031,13 @@ Package hobsub Info: Skipping package `ifvtex' (already loaded).
 Package: intcalc 2016/05/16 v1.2 Expandable calculations with integers (HO)
 Package hobsub Info: Skipping package `ifpdf' (already loaded).
 Package: etexcmds 2016/05/16 v1.6 Avoid name clashes with e-TeX commands (HO)
+<<<<<<< HEAD
+=======
+Package etexcmds Info: Could not find \expanded.
+(etexcmds)             That can mean that you are not using pdfTeX 1.50 or
+(etexcmds)             that some package has redefined \expanded.
+(etexcmds)             In the latter case, load this package earlier.
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 Package: kvsetkeys 2016/05/16 v1.17 Key value parser (HO)
 Package: kvdefinekeys 2016/05/16 v1.4 Define keys (HO)
 Package: pdftexcmds 2018/09/10 v0.29 Utility functions of pdfTeX for LuaTeX (HO
@@ -1369,6 +2062,7 @@ Package hobsub Info: Skipping package `atbegshi' (already loaded).
 Package: refcount 2016/05/16 v3.5 Data extraction from label references (HO)
 Package: hycolor 2016/05/16 v1.8 Color options for hyperref/bookmark (HO)
 )
+<<<<<<< HEAD
 ("C:\Users\fnbur\AppData\Local\Programs\MiKTeX 2.9\tex/latex/oberdiek\auxhook.s
 ty"
 Package: auxhook 2016/05/16 v1.4 Hooks for auxiliary files (HO)
@@ -1434,12 +2128,75 @@ File: hpdftex.def 2018/11/30 v6.88e Hyperref driver for pdfTeX
 
 ("C:\Users\fnbur\AppData\Local\Programs\MiKTeX 2.9\tex/latex/oberdiek\rerunfile
 check.sty"
+=======
+(/usr/share/texmf-dist/tex/latex/oberdiek/auxhook.sty
+Package: auxhook 2016/05/16 v1.4 Hooks for auxiliary files (HO)
+)
+(/usr/share/texmf-dist/tex/latex/oberdiek/kvoptions.sty
+Package: kvoptions 2016/05/16 v3.12 Key value format for package options (HO)
+)
+\@linkdim=\dimen256
+\Hy@linkcounter=\count147
+\Hy@pagecounter=\count148
+
+(/usr/share/texmf-dist/tex/latex/hyperref/pd1enc.def
+File: pd1enc.def 2018/09/30 v6.88a Hyperref: PDFDocEncoding definition (HO)
+Now handling font encoding PD1 ...
+... no UTF-8 mapping file for font encoding PD1
+)
+\Hy@SavedSpaceFactor=\count149
+
+(/usr/share/texmf-dist/tex/latex/latexconfig/hyperref.cfg
+File: hyperref.cfg 2002/06/06 v1.2 hyperref configuration of TeXLive
+)
+Package hyperref Info: Option `colorlinks' set `false' on input line 4409.
+Package hyperref Info: Hyper figures OFF on input line 4535.
+Package hyperref Info: Link nesting OFF on input line 4540.
+Package hyperref Info: Hyper index ON on input line 4543.
+Package hyperref Info: Plain pages OFF on input line 4550.
+Package hyperref Info: Backreferencing OFF on input line 4555.
+Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
+Package hyperref Info: Bookmarks ON on input line 4788.
+\c@Hy@tempcnt=\count150
+
+(/usr/share/texmf-dist/tex/latex/url/url.sty
+\Urlmuskip=\muskip11
+Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
+)
+LaTeX Info: Redefining \url on input line 5141.
+\XeTeXLinkMargin=\dimen257
+\Fld@menulength=\count151
+\Field@Width=\dimen258
+\Fld@charsize=\dimen259
+Package hyperref Info: Hyper figures OFF on input line 6396.
+Package hyperref Info: Link nesting OFF on input line 6401.
+Package hyperref Info: Hyper index ON on input line 6404.
+Package hyperref Info: backreferencing OFF on input line 6411.
+Package hyperref Info: Link coloring OFF on input line 6416.
+Package hyperref Info: Link coloring with OCG OFF on input line 6421.
+Package hyperref Info: PDF/A mode OFF on input line 6426.
+LaTeX Info: Redefining \ref on input line 6466.
+LaTeX Info: Redefining \pageref on input line 6470.
+\Hy@abspage=\count152
+\c@Item=\count153
+\c@Hfootnote=\count154
+)
+Package hyperref Info: Driver (autodetected): hpdftex.
+
+(/usr/share/texmf-dist/tex/latex/hyperref/hpdftex.def
+File: hpdftex.def 2018/09/30 v6.88a Hyperref driver for pdfTeX
+\Fld@listcount=\count155
+\c@bookmark@seq@number=\count156
+
+(/usr/share/texmf-dist/tex/latex/oberdiek/rerunfilecheck.sty
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 Package: rerunfilecheck 2016/05/16 v1.8 Rerun checks for auxiliary files (HO)
 Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
 82.
 )
 \Hy@SectionHShift=\skip130
 )
+<<<<<<< HEAD
 ("C:\Users\fnbur\AppData\Local\Programs\MiKTeX 2.9\tex/latex/tools\enumerate.st
 y"
 Package: enumerate 2015/07/23 v3.00 enumerate extensions (DPC)
@@ -1509,6 +2266,100 @@ LaTeX Font Info:    Try loading font information for T1+5ch on input line 64.
 File: t15ch.fd 2008/06/23 Fontinst v1.927 font definitions for T1/5ch.
 )
 Package tocbasic Info: usage of `tocbibind' detected on input line 64.
+=======
+(/usr/share/texmf-dist/tex/latex/tools/enumerate.sty
+Package: enumerate 2015/07/23 v3.00 enumerate extensions (DPC)
+\@enLab=\toks45
+)
+(/usr/share/texmf-dist/tex/latex/todonotes/todonotes.sty
+Package: todonotes 2018/11/22 v1.1.1 Todonotes source and documentation.
+Package: todonotes 2018/11/22
+
+(/usr/share/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrary
+positioning.code.tex
+File: tikzlibrarypositioning.code.tex 2008/10/06 v3.0.1a (rcs-revision 1.7)
+)
+(/usr/share/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrary
+shadows.code.tex
+File: tikzlibraryshadows.code.tex 2008/01/13 v3.0.1a (rcs-revision 1.3)
+
+(/usr/share/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrary
+fadings.code.tex
+File: tikzlibraryfadings.code.tex 2009/11/15 v3.0.1a (rcs-revision 1.2)
+
+(/usr/share/texmf-dist/tex/generic/pgf/libraries/pgflibraryfadings.code.tex
+File: pgflibraryfadings.code.tex 2008/02/07 v3.0.1a (rcs-revision 1.3)
+)))
+\c@@todonotes@numberoftodonotes=\count157
+) (/usr/share/texmf-dist/tex/latex/caption/caption.sty
+Package: caption 2018/10/06 v3.3-154 Customizing captions (AR)
+
+(/usr/share/texmf-dist/tex/latex/caption/caption3.sty
+Package: caption3 2018/09/12 v1.8c caption3 kernel (AR)
+Package caption3 Info: TeX engine: e-TeX on input line 64.
+\captionmargin=\dimen260
+\captionmargin@=\dimen261
+\captionwidth=\dimen262
+\caption@tempdima=\dimen263
+\caption@indent=\dimen264
+\caption@parindent=\dimen265
+\caption@hangindent=\dimen266
+)
+Package caption Info: KOMA-Script document class.
+\c@caption@flags=\count158
+\c@ContinuedFloat=\count159
+Package caption Info: float package is loaded.
+Package caption Info: hyperref package is loaded.
+Package caption Info: longtable package is loaded.
+
+(/usr/share/texmf-dist/tex/latex/caption/ltcaption.sty
+Package: ltcaption 2018/08/26 v1.4-95 longtable captions (AR)
+))
+(/usr/share/texmf-dist/tex/latex/caption/subcaption.sty
+Package: subcaption 2018/05/01 v1.1-162 Sub-captions (AR)
+\c@subfigure=\count160
+\c@subtable=\count161
+) (./bericht_header.aux
+(./EinleitungGrundlagen.aux) (./Organisation.aux) (./Implementierung.aux)
+(./Probleme.aux))
+\openout1 = `bericht_header.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 67.
+LaTeX Font Info:    ... okay on input line 67.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 67.
+LaTeX Font Info:    ... okay on input line 67.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 67.
+LaTeX Font Info:    ... okay on input line 67.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 67.
+LaTeX Font Info:    ... okay on input line 67.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 67.
+LaTeX Font Info:    ... okay on input line 67.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 67.
+LaTeX Font Info:    ... okay on input line 67.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 67.
+LaTeX Font Info:    ... okay on input line 67.
+LaTeX Font Info:    Checking defaults for MDA/cmr/m/n on input line 67.
+LaTeX Font Info:    Try loading font information for MDA+cmr on input line 67.
+ (/usr/share/texmf-dist/tex/latex/mathdesign/mdacmr.fd
+File: mdacmr.fd 
+)
+LaTeX Font Info:    ... okay on input line 67.
+LaTeX Font Info:    Checking defaults for MDB/cmr/m/n on input line 67.
+LaTeX Font Info:    Try loading font information for MDB+cmr on input line 67.
+
+(/usr/share/texmf-dist/tex/latex/mathdesign/mdbcmr.fd
+File: mdbcmr.fd 
+)
+LaTeX Font Info:    ... okay on input line 67.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 67.
+LaTeX Font Info:    ... okay on input line 67.
+LaTeX Font Info:    Try loading font information for T1+5ch on input line 67.
+
+(/usr/share/texmf/tex/latex/tex-tudfonts/softmake/charter/t15ch.fd
+File: t15ch.fd 2008/06/23 Fontinst v1.927 font definitions for T1/5ch.
+)
+Package tocbasic Info: usage of `tocbibind' detected on input line 67.
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 
 
 Package tocbasic Warning: `tocbibind' redefinition of `\listoffigures'
@@ -1522,6 +2373,7 @@ Package tocbasic Warning: `tocbibind' redefinition of `\listoftables'
 (tocbasic)                Note: Loading `tocbibind' without option `notlot'
 (tocbasic)                can break several features of `tocbasic'.
 
+<<<<<<< HEAD
 
 ("C:\Users\fnbur\AppData\Local\Programs\MiKTeX 2.9\tex/context/base\supp-pdf.mk
 ii"
@@ -1544,6 +2396,25 @@ Package: epstopdf-base 2016/05/15 v2.6 Base part for package epstopdf
 
 ("C:\Users\fnbur\AppData\Local\Programs\MiKTeX 2.9\tex/latex/oberdiek\grfext.st
 y"
+=======
+(/usr/share/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count162
+\scratchdimen=\dimen267
+\scratchbox=\box73
+\nofMPsegments=\count163
+\nofMParguments=\count164
+\everyMPshowfont=\toks46
+\MPscratchCnt=\count165
+\MPscratchDim=\dimen268
+\MPnumerator=\count166
+\makeMPintoPDFobject=\count167
+\everyMPtoPDFconversion=\toks47
+) (/usr/share/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
+Package: epstopdf-base 2016/05/15 v2.6 Base part for package epstopdf
+
+(/usr/share/texmf-dist/tex/latex/oberdiek/grfext.sty
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 Package: grfext 2016/05/16 v1.2 Manage graphics extensions (HO)
 )
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
@@ -1552,8 +2423,17 @@ Package grfext Info: Graphics extension search list:
 (grfext)             [.pdf,.png,.jpg,.mps,.jpeg,.jbig2,.jb2,.PDF,.PNG,.JPG,.JPE
 G,.JBIG2,.JB2,.eps]
 (grfext)             \AppendGraphicsExtensions on input line 456.
+<<<<<<< HEAD
 )
 \AtBeginShipoutBox=\box75
+=======
+
+(/usr/share/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
+e
+))
+\AtBeginShipoutBox=\box74
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 
 *geometry* detected driver: dvips
 *geometry* verbose mode - [ preamble ] result:
@@ -1589,7 +2469,11 @@ G,.JBIG2,.JB2,.eps]
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
 \TUD@part@topskip=\skip131
+<<<<<<< HEAD
 LaTeX Info: Redefining \microtypecontext on input line 64.
+=======
+LaTeX Info: Redefining \microtypecontext on input line 67.
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 Package microtype Info: Generating PDF output.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using default protrusion set `alltext'.
@@ -1604,6 +2488,7 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
 ABD: EveryShipout initializing macros
+<<<<<<< HEAD
 Package hyperref Info: Link coloring OFF on input line 64.
 
 ("C:\Users\fnbur\AppData\Local\Programs\MiKTeX 2.9\tex/latex/hyperref\nameref.s
@@ -1643,12 +2528,40 @@ Package auxhook Info: \AddLineBeginMainAux comes a little late,
 e 164.
 \BKM@id=\count166
 ))
+=======
+Package hyperref Info: Link coloring OFF on input line 67.
+
+(/usr/share/texmf-dist/tex/latex/hyperref/nameref.sty
+Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
+
+(/usr/share/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
+Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
+)
+\c@section@level=\count168
+)
+LaTeX Info: Redefining \ref on input line 67.
+LaTeX Info: Redefining \pageref on input line 67.
+LaTeX Info: Redefining \nameref on input line 67.
+
+(./bericht_header.out) (./bericht_header.out)
+\@outlinefile=\write4
+\openout4 = `bericht_header.out'.
+
+
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 
 Package todonotes Warning: The length marginparwidth is less than 2cm and will 
 most likely cause issues with the appearance of inserted todonotes. The issue c
 an be solved by adding a line like \setlength {\marginparwidth }{2cm} prior to 
+<<<<<<< HEAD
 loading the todonotes package. on input line 64.
 
+=======
+loading the todonotes package. on input line 67.
+
+Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: End \AtBeginDocument code.
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 \@TUD@tmp@baselineskip=\skip132
 \@TUD@tmp@parwidth=\skip133
 \TUD@titleboxheight=\skip134
@@ -1665,6 +2578,7 @@ loading the todonotes package. on input line 64.
 \TUD@instlogoheight=\skip145
 \TUD@instlogowidth=\skip146
 \TUD@sponsorheight=\skip147
+<<<<<<< HEAD
 \TUD@titlebox=\box76
 \TUD@subtitlebox=\box77
 \TUD@logobox=\box78
@@ -1674,6 +2588,17 @@ loading the todonotes package. on input line 64.
 \TUD@tmp@depth=\skip149
 LaTeX Font Info:    Try loading font information for T1+5fp on input line 68.
 (C:/Users/fnbur/Latex/texmf\tex/latex/tex-tudfonts/softmake/frontpage\t15fp.fd
+=======
+\TUD@titlebox=\box75
+\TUD@subtitlebox=\box76
+\TUD@logobox=\box77
+\TUD@instbox=\box78
+\TUD@sponsorbox=\box79
+\TUD@tmp@height=\skip148
+\TUD@tmp@depth=\skip149
+LaTeX Font Info:    Try loading font information for T1+5fp on input line 71.
+(/usr/share/texmf/tex/latex/tex-tudfonts/softmake/frontpage/t15fp.fd
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 File: t15fp.fd 2009/08/06 Fontinst v1.927 font definitions for T1/5fp.
 )
 Package microtype Info: Loading generic protrusion settings for font family
@@ -1681,6 +2606,7 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
 LaTeX Font Info:    Font shape `T1/5fp/b/n' in size <36> not available
+<<<<<<< HEAD
 (Font)              Font shape `T1/5fp/mb/n' tried instead on input line 68.
 LaTeX Font Info:    Try loading font information for OT1+mdbch on input line 68
 .
@@ -1694,10 +2620,24 @@ LaTeX Font Info:    Font shape `OT1/mdbch/m/n' will be
 
 ("C:\Users\fnbur\AppData\Local\Programs\MiKTeX 2.9\tex/latex/microtype\mt-bch.c
 fg"
+=======
+(Font)              Font shape `T1/5fp/mb/n' tried instead on input line 71.
+LaTeX Font Info:    Try loading font information for OT1+mdbch on input line 71
+.
+
+(/usr/share/texmf-dist/tex/latex/mathdesign/mdbch/ot1mdbch.fd
+File: ot1mdbch.fd 2013/08/29 Fontinst v1.933 font definitions for OT1/mdbch.
+)
+LaTeX Font Info:    Font shape `OT1/mdbch/m/n' will be
+(Font)              scaled to size 11.04007pt on input line 71.
+
+(/usr/share/texmf-dist/tex/latex/microtype/mt-bch.cfg
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 File: mt-bch.cfg 2007/03/03 v1.5 microtype config. file: Bitstream Charter (RS)
 
 )
 LaTeX Font Info:    Font shape `OT1/mdbch/m/n' will be
+<<<<<<< HEAD
 (Font)              scaled to size 7.68005pt on input line 68.
 LaTeX Font Info:    Font shape `OT1/mdbch/m/n' will be
 (Font)              scaled to size 6.62404pt on input line 68.
@@ -1793,27 +2733,134 @@ Package pdftex.def Info: tud_logo.pdf  used on input line 68.
 (pdftex.def)             Requested size: 134.92238pt x 62.59605pt.
 
 Overfull \hbox (11.0pt too wide) in paragraph at lines 68--68
+=======
+(Font)              scaled to size 7.68005pt on input line 71.
+LaTeX Font Info:    Font shape `OT1/mdbch/m/n' will be
+(Font)              scaled to size 6.62404pt on input line 71.
+LaTeX Font Info:    Try loading font information for OML+mdbch on input line 71
+.
+
+(/usr/share/texmf-dist/tex/latex/mathdesign/mdbch/omlmdbch.fd
+File: omlmdbch.fd 2013/08/29 Fontinst v1.933 font definitions for OML/mdbch.
+)
+LaTeX Font Info:    Font shape `OML/mdbch/m/it' will be
+(Font)              scaled to size 11.04007pt on input line 71.
+LaTeX Font Info:    Font shape `OML/mdbch/m/it' will be
+(Font)              scaled to size 7.68005pt on input line 71.
+LaTeX Font Info:    Font shape `OML/mdbch/m/it' will be
+(Font)              scaled to size 6.62404pt on input line 71.
+LaTeX Font Info:    Try loading font information for OMS+mdbch on input line 71
+.
+
+(/usr/share/texmf-dist/tex/latex/mathdesign/mdbch/omsmdbch.fd
+File: omsmdbch.fd 2013/08/29 Fontinst v1.933 font definitions for OMS/mdbch.
+)
+LaTeX Font Info:    Font shape `OMS/mdbch/m/n' will be
+(Font)              scaled to size 11.04007pt on input line 71.
+LaTeX Font Info:    Font shape `OMS/mdbch/m/n' will be
+(Font)              scaled to size 7.68005pt on input line 71.
+LaTeX Font Info:    Font shape `OMS/mdbch/m/n' will be
+(Font)              scaled to size 6.62404pt on input line 71.
+LaTeX Font Info:    Try loading font information for OMX+mdbch on input line 71
+.
+
+(/usr/share/texmf-dist/tex/latex/mathdesign/mdbch/omxmdbch.fd
+File: omxmdbch.fd 2013/08/29 Fontinst v1.933 font definitions for OMX/mdbch.
+)
+LaTeX Font Info:    Font shape `OMX/mdbch/m/n' will be
+(Font)              scaled to size 11.04007pt on input line 71.
+LaTeX Font Info:    Font shape `OMX/mdbch/m/n' will be
+(Font)              scaled to size 7.68005pt on input line 71.
+LaTeX Font Info:    Font shape `OMX/mdbch/m/n' will be
+(Font)              scaled to size 6.62404pt on input line 71.
+LaTeX Font Info:    Font shape `OML/mdbch/m/n' will be
+(Font)              scaled to size 11.04007pt on input line 71.
+LaTeX Font Info:    Font shape `OML/mdbch/m/n' will be
+(Font)              scaled to size 7.68005pt on input line 71.
+LaTeX Font Info:    Font shape `OML/mdbch/m/n' will be
+(Font)              scaled to size 6.62404pt on input line 71.
+LaTeX Font Info:    Try loading font information for MDA+mdbch on input line 71
+.
+
+(/usr/share/texmf-dist/tex/latex/mathdesign/mdbch/mdamdbch.fd
+File: mdamdbch.fd 2013/08/29 Fontinst v1.933 font definitions for MDA/mdbch.
+)
+LaTeX Font Info:    Font shape `MDA/mdbch/m/n' will be
+(Font)              scaled to size 11.04007pt on input line 71.
+LaTeX Font Info:    Font shape `MDA/mdbch/m/n' will be
+(Font)              scaled to size 7.68005pt on input line 71.
+LaTeX Font Info:    Font shape `MDA/mdbch/m/n' will be
+(Font)              scaled to size 6.62404pt on input line 71.
+LaTeX Font Info:    Try loading font information for MDB+mdbch on input line 71
+.
+
+(/usr/share/texmf-dist/tex/latex/mathdesign/mdbch/mdbmdbch.fd
+File: mdbmdbch.fd 2013/08/29 Fontinst v1.933 font definitions for MDB/mdbch.
+)
+LaTeX Font Info:    Font shape `MDB/mdbch/m/n' will be
+(Font)              scaled to size 11.04007pt on input line 71.
+LaTeX Font Info:    Font shape `MDB/mdbch/m/n' will be
+(Font)              scaled to size 7.68005pt on input line 71.
+LaTeX Font Info:    Font shape `MDB/mdbch/m/n' will be
+(Font)              scaled to size 6.62404pt on input line 71.
+LaTeX Font Info:    Try loading font information for OML+mdput on input line 71
+.
+
+(/usr/share/texmf-dist/tex/latex/mathdesign/mdput/omlmdput.fd
+File: omlmdput.fd 2013/08/29 Fontinst v1.933 font definitions for OML/mdput.
+)
+LaTeX Font Info:    Font shape `OML/mdput/m/it' will be
+(Font)              scaled to size 10.81003pt on input line 71.
+LaTeX Font Info:    Font shape `OML/mdput/m/it' will be
+(Font)              scaled to size 7.52002pt on input line 71.
+LaTeX Font Info:    Font shape `OML/mdput/m/it' will be
+(Font)              scaled to size 6.48601pt on input line 71.
+\@TUD@titlelines=\count169
+<tud_logo.pdf, id=139, 157.58875pt x 63.23625pt>
+File: tud_logo.pdf Graphic file (type pdf)
+<use tud_logo.pdf>
+Package pdftex.def Info: tud_logo.pdf  used on input line 71.
+(pdftex.def)             Requested size: 134.92238pt x 62.59605pt.
+
+Overfull \hbox (11.0pt too wide) in paragraph at lines 71--71
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 [][]  
  []
 
 
+<<<<<<< HEAD
 Overfull \hbox (11.0pt too wide) in paragraph at lines 68--68
+=======
+Overfull \hbox (11.0pt too wide) in paragraph at lines 71--71
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 [][][]  
  []
 
 
+<<<<<<< HEAD
 Overfull \hbox (11.0pt too wide) in paragraph at lines 68--68
+=======
+Overfull \hbox (11.0pt too wide) in paragraph at lines 71--71
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 [][]  
  []
 
 
+<<<<<<< HEAD
 Overfull \hbox (11.0pt too wide) in paragraph at lines 68--68
+=======
+Overfull \hbox (11.0pt too wide) in paragraph at lines 71--71
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 [][][]  
  []
 
 File: tud_logo.pdf Graphic file (type pdf)
 <use tud_logo.pdf>
+<<<<<<< HEAD
 Package pdftex.def Info: tud_logo.pdf  used on input line 68.
+=======
+Package pdftex.def Info: tud_logo.pdf  used on input line 71.
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 (pdftex.def)             Requested size: 134.92238pt x 62.59605pt.
 [0
 Non-PDF special ignored!
@@ -1821,6 +2868,7 @@ Non-PDF special ignored!
 
 Non-PDF special ignored!
 <special> papersize=597.50787pt,845.04684pt
+<<<<<<< HEAD
 {C:/Users/fnbur/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map} <C:/Users/fn
 bur/Latex/texmf/tex/latex/tuddesign/logo/tud_logo.pdf>]
 Package tocbasic Info: character protrusion at toc deactivated on input line 78
@@ -1836,6 +2884,22 @@ Package tocbasic Info: character protrusion at toc deactivated on input line 78
 
 
 ] (bericht_header.tdo)
+=======
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map} </usr/share/texmf/tex/latex
+/tuddesign/logo/tud_logo.pdf>]
+Package tocbasic Info: character protrusion at toc deactivated on input line 81
+.
+ (./bericht_header.toc)
+\tf@toc=\write5
+\openout5 = `bericht_header.toc'.
+
+ [1
+
+
+
+
+] (./bericht_header.tdo)
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 \tf@tdo=\write6
 \openout6 = `bericht_header.tdo'.
 
@@ -1844,7 +2908,11 @@ Package tocbasic Info: character protrusion at toc deactivated on input line 78
 ]
 \openout2 = `EinleitungGrundlagen.aux'.
 
+<<<<<<< HEAD
  (EinleitungGrundlagen.tex
+=======
+ (./EinleitungGrundlagen.tex
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 chapter 1.
 
 Class scrreprt Warning: \float@addtolists detected!
@@ -1874,7 +2942,11 @@ Overfull \hbox (10.49997pt too wide) in paragraph at lines 4--4
 ]
 chapter 2.
 LaTeX Font Info:    Try loading font information for T1+txtt on input line 17.
+<<<<<<< HEAD
 ("C:\Users\fnbur\AppData\Local\Programs\MiKTeX 2.9\tex/latex/txfonts\t1txtt.fd"
+=======
+(/usr/share/texmf-dist/tex/latex/txfonts/t1txtt.fd
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 File: t1txtt.fd 2000/12/15 v3.1
 )
 Package microtype Info: Loading generic protrusion settings for font family
@@ -1886,7 +2958,11 @@ Package microtype Info: Loading generic protrusion settings for font family
 ]
 \openout2 = `Organisation.aux'.
 
+<<<<<<< HEAD
  (Organisation.tex
+=======
+ (./Organisation.tex
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 chapter 3.
 ) [5
 
@@ -1895,19 +2971,31 @@ chapter 3.
 ]
 \openout2 = `Implementierung.aux'.
 
+<<<<<<< HEAD
  (Implementierung.tex
 chapter 4.
 
 Overfull \hbox (10.49997pt too wide) in paragraph at lines 12--12
+=======
+ (./Implementierung.tex
+chapter 4.
+
+Overfull \hbox (10.49997pt too wide) in paragraph at lines 6--6
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 [] 
  []
 
 
+<<<<<<< HEAD
 Overfull \hbox (10.49997pt too wide) in paragraph at lines 17--17
+=======
+Overfull \hbox (10.49997pt too wide) in paragraph at lines 11--11
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 [] 
  []
 
 
+<<<<<<< HEAD
 Overfull \hbox (10.49997pt too wide) in paragraph at lines 22--22
 [] 
  []
@@ -1918,20 +3006,42 @@ Overfull \hbox (10.49997pt too wide) in paragraph at lines 22--22
 
 ]
 Overfull \hbox (10.49997pt too wide) in paragraph at lines 33--33
+=======
+Overfull \hbox (10.49997pt too wide) in paragraph at lines 16--16
 [] 
  []
 
 
+Overfull \hbox (10.49997pt too wide) in paragraph at lines 27--27
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
+[] 
+ []
+
+
+<<<<<<< HEAD
 Overfull \hbox (10.49997pt too wide) in paragraph at lines 34--34
 [] 
  []
 
 
 Overfull \hbox (10.49997pt too wide) in paragraph at lines 49--49
+=======
+Overfull \hbox (10.49997pt too wide) in paragraph at lines 28--28
+[] 
+ []
+
+[6
+
+
+
+]
+Overfull \hbox (10.49997pt too wide) in paragraph at lines 43--43
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 [] 
  []
 
 
+<<<<<<< HEAD
 Overfull \hbox (10.49997pt too wide) in paragraph at lines 55--55
 [] 
  []
@@ -1943,6 +3053,19 @@ Overfull \hbox (10.49997pt too wide) in paragraph at lines 62--62
 
 LaTeX Font Info:    Try loading font information for T1+5sf on input line 66.
 (C:/Users/fnbur/Latex/texmf\tex/latex/tex-tudfonts/softmake/stafford\t15sf.fd
+=======
+Overfull \hbox (10.49997pt too wide) in paragraph at lines 49--49
+[] 
+ []
+
+
+Overfull \hbox (10.49997pt too wide) in paragraph at lines 56--56
+[] 
+ []
+
+LaTeX Font Info:    Try loading font information for T1+5sf on input line 60.
+(/usr/share/texmf/tex/latex/tex-tudfonts/softmake/stafford/t15sf.fd
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 File: t15sf.fd 2008/06/23 Fontinst v1.927 font definitions for T1/5sf.
 )
 Package microtype Info: Loading generic protrusion settings for font family
@@ -1950,46 +3073,83 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
 
+<<<<<<< HEAD
 Overfull \hbox (25.99878pt too wide) in paragraph at lines 66--66
 [][][]\T1/5sf/m/n/11 (.....)[]  
  []
 
 
 Overfull \hbox (6.13266pt too wide) in paragraph at lines 66--66
+=======
+Overfull \hbox (25.99878pt too wide) in paragraph at lines 60--60
+[][][][]\T1/5sf/m/n/11 (.....)  
+ []
+
+
+Overfull \hbox (6.13266pt too wide) in paragraph at lines 60--60
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 [][][] 
  []
 
 
+<<<<<<< HEAD
 Overfull \hbox (25.99878pt too wide) in paragraph at lines 66--66
 [][][]\T1/5sf/m/n/11 (.....)[]  
  []
 
 
 Overfull \hbox (6.13266pt too wide) in paragraph at lines 66--66
+=======
+Overfull \hbox (25.99878pt too wide) in paragraph at lines 60--60
+[][][][]\T1/5sf/m/n/11 (.....)  
+ []
+
+
+Overfull \hbox (6.13266pt too wide) in paragraph at lines 60--60
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 [][][] 
  []
 
 
+<<<<<<< HEAD
 Overfull \hbox (25.99878pt too wide) in paragraph at lines 66--66
 [][][]\T1/5sf/m/n/11 (.....)[]  
  []
 
 
 Overfull \hbox (6.13266pt too wide) in paragraph at lines 66--66
+=======
+Overfull \hbox (25.99878pt too wide) in paragraph at lines 60--60
+[][][][]\T1/5sf/m/n/11 (.....)  
+ []
+
+
+Overfull \hbox (6.13266pt too wide) in paragraph at lines 60--60
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 [][][] 
  []
 
 
+<<<<<<< HEAD
 Overfull \hbox (25.99878pt too wide) in paragraph at lines 66--66
 [][][]\T1/5sf/m/n/11 (.....)[]  
  []
 
 
 Overfull \hbox (6.13266pt too wide) in paragraph at lines 66--66
+=======
+Overfull \hbox (25.99878pt too wide) in paragraph at lines 60--60
+[][][][]\T1/5sf/m/n/11 (.....)  
+ []
+
+
+Overfull \hbox (6.13266pt too wide) in paragraph at lines 60--60
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 [][][] 
  []
 
 
+<<<<<<< HEAD
 LaTeX Warning: Marginpar on page 8 moved.
 
 
@@ -1999,27 +3159,52 @@ Overfull \hbox (23.63379pt too wide) in paragraph at lines 74--74
 
 
 Overfull \hbox (6.13266pt too wide) in paragraph at lines 74--74
+=======
+LaTeX Warning: Marginpar on page 7 moved.
+
+[7]
+Overfull \hbox (23.63379pt too wide) in paragraph at lines 68--68
+[][][][]\T1/5sf/m/n/11 (....)  
+ []
+
+
+Overfull \hbox (6.13266pt too wide) in paragraph at lines 68--68
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 [][][] 
  []
 
 
+<<<<<<< HEAD
 Overfull \hbox (23.63379pt too wide) in paragraph at lines 74--74
 [][][]\T1/5sf/m/n/11 (....)[]  
  []
 
 
 Overfull \hbox (6.13266pt too wide) in paragraph at lines 74--74
+=======
+Overfull \hbox (23.63379pt too wide) in paragraph at lines 68--68
+[][][][]\T1/5sf/m/n/11 (....)  
+ []
+
+
+Overfull \hbox (6.13266pt too wide) in paragraph at lines 68--68
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 [][][] 
  []
 
 [8]
+<<<<<<< HEAD
 Overfull \hbox (10.49997pt too wide) in paragraph at lines 98--98
+=======
+Overfull \hbox (10.49997pt too wide) in paragraph at lines 92--92
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 [] 
  []
 
 ) [9]
 \openout2 = `Probleme.aux'.
 
+<<<<<<< HEAD
  (Probleme.tex
 chapter 5.
 
@@ -2031,18 +3216,103 @@ Overfull \hbox (10.49997pt too wide) in paragraph at lines 9--9
 Overfull \hbox (10.49997pt too wide) in paragraph at lines 22--22
 [] 
  []
+=======
+ (./Probleme.tex
+chapter 5.
+<images/Webcam_RAW.png, id=259, 644.4075pt x 508.90125pt>
+File: images/Webcam_RAW.png Graphic file (type png)
+<use images/Webcam_RAW.png>
+Package pdftex.def Info: images/Webcam_RAW.png  used on input line 13.
+(pdftex.def)             Requested size: 204.76918pt x 160.59981pt.
+
+Package caption Warning: Cannot determine current font size.
+(caption)                Try setting it with `size=' explicitly on input line 1
+4.
+See the caption package documentation for explanation.
+
+
+Package caption Warning: Cannot determine current font size.
+(caption)                Try setting it with `size=' explicitly on input line 1
+4.
+See the caption package documentation for explanation.
+
+<images/Kinect_qHD_RAW.png, id=260, 965.6075pt x 569.12625pt>
+File: images/Kinect_qHD_RAW.png Graphic file (type png)
+<use images/Kinect_qHD_RAW.png>
+Package pdftex.def Info: images/Kinect_qHD_RAW.png  used on input line 18.
+(pdftex.def)             Requested size: 275.02419pt x 160.60478pt.
+
+Overfull \hbox (4.0107pt too wide) in paragraph at lines 18--19
+ [][] 
+ []
+
+
+Package caption Warning: Cannot determine current font size.
+(caption)                Try setting it with `size=' explicitly on input line 1
+9.
+See the caption package documentation for explanation.
+
+
+Package caption Warning: Cannot determine current font size.
+(caption)                Try setting it with `size=' explicitly on input line 1
+9.
+See the caption package documentation for explanation.
+
+<images/Webcam_BirdEye_ROI.png, id=261, 242.9075pt x 268.00125pt>
+File: images/Webcam_BirdEye_ROI.png Graphic file (type png)
+<use images/Webcam_BirdEye_ROI.png>
+Package pdftex.def Info: images/Webcam_BirdEye_ROI.png  used on input line 39.
+(pdftex.def)             Requested size: 242.90689pt x 268.00058pt.
+
+Package caption Warning: Cannot determine current font size.
+(caption)                Try setting it with `size=' explicitly on input line 4
+0.
+See the caption package documentation for explanation.
+
+
+Package caption Warning: Cannot determine current font size.
+(caption)                Try setting it with `size=' explicitly on input line 4
+0.
+See the caption package documentation for explanation.
+
+<images/Kinect_BirdEye_ROI.png, id=262, 363.3575pt x 418.56375pt>
+File: images/Kinect_BirdEye_ROI.png Graphic file (type png)
+<use images/Kinect_BirdEye_ROI.png>
+Package pdftex.def Info: images/Kinect_BirdEye_ROI.png  used on input line 44.
+(pdftex.def)             Requested size: 232.8751pt x 268.00122pt.
+
+Package caption Warning: Cannot determine current font size.
+(caption)                Try setting it with `size=' explicitly on input line 4
+5.
+See the caption package documentation for explanation.
+
+
+Package caption Warning: Cannot determine current font size.
+(caption)                Try setting it with `size=' explicitly on input line 4
+5.
+See the caption package documentation for explanation.
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 
 [10
 
 
 
+<<<<<<< HEAD
 ]) [11] (bericht_header.bbl
 chapter 6.
 ) [12
+=======
+ <./images/Webcam_RAW.png> <./images/Kinect_qHD_RAW.png>] [11 <./images/Webcam_
+BirdEye_ROI.png> <./images/Kinect_BirdEye_ROI.png>]) [12]
+(./bericht_header.bbl
+chapter 6.
+) [13
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 
 
 
 ]
+<<<<<<< HEAD
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 94.
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 94.
  (bericht_header.aux (EinleitungGrundlagen.aux) (Organisation.aux)
@@ -2072,4 +3342,38 @@ PDF statistics:
  307 PDF objects out of 1000 (max. 8388607)
  61 named destinations out of 1000 (max. 500000)
  15702 words of extra memory for PDF output out of 17280 (max. 10000000)
+=======
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 97.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 97.
+ (./bericht_header.aux (./EinleitungGrundlagen.aux) (./Organisation.aux)
+(./Implementierung.aux) (./Probleme.aux))
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 97.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 97.
+Package rerunfilecheck Info: File `bericht_header.out' has not changed.
+(rerunfilecheck)             Checksum: 894512B6E6EFB7A5534E1E79CEEA944C;1836.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 97.
+ ) 
+Here is how much of TeX's memory you used:
+ 27262 strings out of 492639
+ 513278 string characters out of 6135497
+ 731716 words of memory out of 5000000
+ 30342 multiletter control sequences out of 15000+600000
+ 130681 words of font info for 151 fonts, out of 8000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 59i,12n,100p,9094b,890s stack positions out of 5000i,500n,10000p,200000b,80000s
+pdfTeX warning (dest): name{section*.21} has been referenced but does not exi
+st, replaced by a fixed one
+
+{/usr/share/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texmf/fonts/type
+1/softmake/charter/5chr8a.pfb></usr/share/texmf/fonts/type1/softmake/frontpage/
+5fpm8a.pfb></usr/share/texmf/fonts/type1/softmake/frontpage/5fpr8a.pfb></usr/sh
+are/texmf/fonts/type1/softmake/stafford/5sfr8a.pfb></usr/share/texmf-dist/fonts
+/type1/public/txfonts/t1xtt.pfb>
+Output written on bericht_header.pdf (14 pages, 2030651 bytes).
+PDF statistics:
+ 318 PDF objects out of 1000 (max. 8388607)
+ 271 compressed objects within 3 object streams
+ 63 named destinations out of 1000 (max. 500000)
+ 20330 words of extra memory for PDF output out of 20736 (max. 10000000)
+>>>>>>> 1662e95e258e843770b3ade26e4394c763f58c20
 
