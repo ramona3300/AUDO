@@ -1,8 +1,8 @@
-.aux
+*.aux
 .git
-.bbl
-.blg
-.log
-.out
-.synctex.gz
-.toc
+*.bbl
+*.blg
+*.log
+*.out
+*.synctex.gz
+*.toc
