@@ -1,0 +1,28 @@
+\babel@toc {ngerman}{}
+\contentsline {chapter}{\numberline {1}Einleitung}{3}{chapter.1}
+\contentsline {chapter}{\numberline {2}Grundlagen}{4}{chapter.2}
+\contentsline {section}{\numberline {2.1}Modellauto}{4}{section.2.1}
+\contentsline {section}{\numberline {2.2}OpenCV}{4}{section.2.2}
+\contentsline {section}{\numberline {2.3}ROS - Robot Operating System}{4}{section.2.3}
+\contentsline {section}{\numberline {2.4}PSES Packages}{4}{section.2.4}
+\contentsline {chapter}{\numberline {3}Organisation}{5}{chapter.3}
+\contentsline {section}{\numberline {3.1}Aufgabenverwaltung}{5}{section.3.1}
+\contentsline {section}{\numberline {3.2}Versionsverwaltung}{5}{section.3.2}
+\contentsline {chapter}{\numberline {4}Implementierung}{6}{chapter.4}
+\contentsline {section}{\numberline {4.1}Bildverarbeitung und Erkennung von Fahrspuren}{6}{section.4.1}
+\contentsline {section}{\numberline {4.2}Erkennung von Kurven und Geraden}{6}{section.4.2}
+\contentsline {section}{\numberline {4.3}Erkennung von Hindernissen}{6}{section.4.3}
+\contentsline {section}{\numberline {4.4}Kollisionsvermeidung}{6}{section.4.4}
+\contentsline {section}{\numberline {4.5}Regelungskonzept und Spurhaltung}{6}{section.4.5}
+\contentsline {section}{\numberline {4.6}Implementierung des PD-Reglers}{7}{section.4.6}
+\contentsline {section}{\numberline {4.7}Implementierung verschiedener Fahrsituationen}{7}{section.4.7}
+\contentsline {section}{\numberline {4.8}Einleitung eines Spurwechsels}{8}{section.4.8}
+\contentsline {section}{\numberline {4.9}Fahrmodi und Wettbewerb}{8}{section.4.9}
+\contentsline {subsection}{\numberline {4.9.1}Fahrmodus 1: Rundenzeit}{8}{subsection.4.9.1}
+\contentsline {subsection}{\numberline {4.9.2}Fahrmodus 2: Hinderniserkennung und Spurwechsel}{8}{subsection.4.9.2}
+\contentsline {chapter}{\numberline {5}Probleme}{10}{chapter.5}
+\contentsline {section}{\numberline {5.1}Kinect - unnat\IeC {\"u}rliche Farben}{10}{section.5.1}
+\contentsline {section}{\numberline {5.2}Kinect - kleines Sichtfeld}{10}{section.5.2}
+\contentsline {section}{\numberline {5.3}Webcam ver\IeC {\"a}ndert Belichtung zur Laufzeit}{11}{section.5.3}
+\contentsline {section}{\numberline {5.4}Fahrwerk}{11}{section.5.4}
+\contentsline {chapter}{\numberline {6}Literaturverzeichnis}{13}{chapter.6}

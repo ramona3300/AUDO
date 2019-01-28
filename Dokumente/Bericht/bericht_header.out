@@ -1,0 +1,27 @@
+\BOOKMARK [0][-]{chapter.1}{Einleitung}{}% 1
+\BOOKMARK [0][-]{chapter.2}{Grundlagen}{}% 2
+\BOOKMARK [1][-]{section.2.1}{Modellauto}{chapter.2}% 3
+\BOOKMARK [1][-]{section.2.2}{OpenCV}{chapter.2}% 4
+\BOOKMARK [1][-]{section.2.3}{ROS - Robot Operating System}{chapter.2}% 5
+\BOOKMARK [1][-]{section.2.4}{PSES Packages}{chapter.2}% 6
+\BOOKMARK [0][-]{chapter.3}{Organisation}{}% 7
+\BOOKMARK [1][-]{section.3.1}{Aufgabenverwaltung}{chapter.3}% 8
+\BOOKMARK [1][-]{section.3.2}{Versionsverwaltung}{chapter.3}% 9
+\BOOKMARK [0][-]{chapter.4}{Implementierung}{}% 10
+\BOOKMARK [1][-]{section.4.1}{Bildverarbeitung und Erkennung von Fahrspuren}{chapter.4}% 11
+\BOOKMARK [1][-]{section.4.2}{Erkennung von Kurven und Geraden}{chapter.4}% 12
+\BOOKMARK [1][-]{section.4.3}{Erkennung von Hindernissen}{chapter.4}% 13
+\BOOKMARK [1][-]{section.4.4}{Kollisionsvermeidung}{chapter.4}% 14
+\BOOKMARK [1][-]{section.4.5}{Regelungskonzept und Spurhaltung}{chapter.4}% 15
+\BOOKMARK [1][-]{section.4.6}{Implementierung des PD-Reglers}{chapter.4}% 16
+\BOOKMARK [1][-]{section.4.7}{Implementierung verschiedener Fahrsituationen}{chapter.4}% 17
+\BOOKMARK [1][-]{section.4.8}{Einleitung eines Spurwechsels}{chapter.4}% 18
+\BOOKMARK [1][-]{section.4.9}{Fahrmodi und Wettbewerb}{chapter.4}% 19
+\BOOKMARK [2][-]{subsection.4.9.1}{Fahrmodus 1: Rundenzeit}{section.4.9}% 20
+\BOOKMARK [2][-]{subsection.4.9.2}{Fahrmodus 2: Hinderniserkennung und Spurwechsel}{section.4.9}% 21
+\BOOKMARK [0][-]{chapter.5}{Probleme}{}% 22
+\BOOKMARK [1][-]{section.5.1}{Kinect - unnat\374rliche Farben}{chapter.5}% 23
+\BOOKMARK [1][-]{section.5.2}{Kinect - kleines Sichtfeld}{chapter.5}% 24
+\BOOKMARK [1][-]{section.5.3}{Webcam ver\344ndert Belichtung zur Laufzeit}{chapter.5}% 25
+\BOOKMARK [1][-]{section.5.4}{Fahrwerk}{chapter.5}% 26
+\BOOKMARK [0][-]{chapter.6}{Literaturverzeichnis}{}% 27
