@@ -214,7 +214,7 @@ void obstacle_detection(cv::Mat blur, int height, int index, int* obstacle){
     int x_right_od = NO_OBSTACLE;
     int x_left_od = NO_OBSTACLE;
     // find white stripe
-    for( int y = 130; y > height; y-- ) {
+    for( int y = 150; y > height; y-- ) {
         state = OD_FIND_RIGHT_LINE;
         for( int x = blur.cols - 20; x > 20; x-- ) {
           switch (state)
