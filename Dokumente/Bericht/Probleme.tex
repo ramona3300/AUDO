@@ -6,7 +6,20 @@
 Die Kamera der Kinect hat eine unnatürliche Farbdarstellung.
 Es sind sind starke Unterschiede zwischen Kamerabild und der Wirklichkeit zur erkennen.
 
-\tod{Zeige ein Bild der Kinect und ein Bild der Webcam}
+\begin{figure}[ht]
+	\centering
+	\begin{subfigure}{0.45\textwidth}
+		\centering
+		\includegraphics[width=0.9\textwidth]{images/Webcam_RAW.png}
+		\caption{Webcam Original}
+	\end{subfigure}
+	\begin{subfigure}{0.45\textwidth}
+		\centering
+		\includegraphics[width=0.9\textwidth]{images/Kinect_qHD_RAW.png}
+		\caption{Kinect Original}
+	\end{subfigure}
+	\caption{Farbdarstellung von Webcam und Kinect}
+\end{figure}
 
 Die Farben der Kinect sind übersaturiert und haben teilweise nicht einmal den richtigen Farbton.
 
@@ -19,7 +32,20 @@ Zudem ist die Kamera in der Kinect am rechten Rand platziert.
 Dadurch ist die linke Fahrbahnbegrenzung häufig nicht im Sichtfeld.
 Dieser Effekt wird noch durch die Transformation zum Bird-Eye View verstärkt.
 
-\tod{Vllt Bild von Webcam und Kinect zum Vergleich der Sichtfelder}
+\begin{figure}[ht]
+	\centering
+	\begin{subfigure}{0.45\textwidth}
+		\centering
+		\includegraphics[width=0.9\textwidth]{images/Webcam_BirdEye_ROI.png}
+		\caption{Webcam Bird-Eye View und Bildausschnitt}
+	\end{subfigure}
+	\begin{subfigure}{0.45\textwidth}
+		\centering
+		\includegraphics[width=0.9\textwidth]{images/Kinect_BirdEye_ROI.png}
+		\caption{Kinect Bird-Eye View und Bildausschnitt}
+	\end{subfigure}
+	\caption{Sichtfeld von Webcam und Kinect}
+\end{figure}
 
 Um eine robuste Fahrbahnerkennung zu implemetieren, sind ordentliche Ausgangsdaten von großer Wichtigkeit.
 In unserem Fall benötigen wir eine natürliche Farbdarstellung, ein ausreichend großes Sichtfeld das möglichst nah am Fahrzeug beginnt und eine flüssige Bildrate. 
