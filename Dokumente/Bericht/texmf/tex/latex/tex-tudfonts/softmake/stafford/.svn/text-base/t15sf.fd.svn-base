@@ -1,0 +1,26 @@
+%Filename: t15sf.fd
+%Created by: tex 5sf-drv
+%Created using fontinst v1.927
+
+%THIS FILE SHOULD BE PUT IN A TEX INPUTS DIRECTORY
+
+\ProvidesFile{t15sf.fd}
+   [2008/06/23 Fontinst v1.927 font definitions for T1/5sf.]
+
+\DeclareFontFamily{T1}{5sf}{}
+
+\DeclareFontShape{T1}{5sf}{m}{n}{
+   <-> 5sfr8t
+}{}
+
+\DeclareFontShape{T1}{5sf}{m}{sc}{
+   <-> 5sfrc8t
+}{}
+
+\DeclareFontShape{T1}{5sf}{m}{sl}{
+   <-> 5sfro8t
+}{}
+
+\DeclareFontShape{T1}{5sf}{m}{it}{<->ssub * 5sf/m/sl}{}
+
+\endinput

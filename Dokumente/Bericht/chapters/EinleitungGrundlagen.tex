@@ -1,0 +1,20 @@
+\section{Einleitung}
+\label{cha:einleitung}
+Im Gegensatz zu den vergangenen Jahren war es die Aufgabe dieses Projektseminars Echtzeitsysteme eine Steuerung zu entwickeln, die ein Modellauto innerhalb gegebener Spuren fahren lässt. Durch eine Kamera und verschiedene Sensoren wird die Umgebung erkannt und mittels Filterungen und Regelungen in Steuerbefehle für das Fahrzeug umgewandelt.
+\tod{Weiter schreiben}
+
+
+\section{Grundlagen}
+\label{cha:grundlagen}
+\subsection{Modellauto}
+\label{sec:modellauto}
+evtl. Hardwaregrundlagen
+\subsection{OpenCV}
+\label{sec:openCV}
+\subsection{ROS - Robot Operating System}
+\label{sec:ros}
+ROS ist ein Metabetriebssystem für Roboter, welches auf Linux basiert und in vielen Unternehmen für Steuerung von Robotern genutzt wird. Es stellt mehrere Pakete zur Verfügung, die einige nützliche Funktionen ermöglichen. Dazu gehört die Verteilung auf mehrere Systeme im Netzwerk, Paketverarbeitung und die Kommunikation zwischen den Nodes \cite{einfuehrungROS}.
+Die Kommunikation findet durch ein Publish-Subscribe-System statt. Die einzelnen Nodes publishen zu  bestimmten Themen Nachrichten, deren Inhalt sich auf das Thema bezieht. So erhält man zum Thema \code{/uc\_bridge/usr} über eine Subscription Nachrichten über die Werte des rechten Abstandssensors. Auch die Steuerung des Motors und des Lenkwinkels geschieht über das puplishen von Nachrichten. 
+
+\subsection{PSES Packages}
+\label{sec:psespackages}

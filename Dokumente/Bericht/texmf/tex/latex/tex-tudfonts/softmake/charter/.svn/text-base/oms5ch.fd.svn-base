@@ -1,0 +1,34 @@
+%Filename: oms5ch.fd
+%Created by: tex 5ch-drv
+%Created using fontinst v1.927
+
+%THIS FILE SHOULD BE PUT IN A TEX INPUTS DIRECTORY
+
+\ProvidesFile{oms5ch.fd}
+   [2008/06/23 Fontinst v1.927 font definitions for OMS/5ch.]
+
+\DeclareFontFamily{OMS}{5ch}{}
+
+\DeclareFontShape{OMS}{5ch}{m}{n}{
+   <-> 5chr7y
+}{}
+
+\DeclareFontShape{OMS}{5ch}{m}{sl}{
+   <-> 5chro7y
+}{}
+
+\DeclareFontShape{OMS}{5ch}{b}{n}{
+   <-> 5chb7y
+}{}
+
+\DeclareFontShape{OMS}{5ch}{b}{sl}{
+   <-> 5chbo7y
+}{}
+
+\DeclareFontShape{OMS}{5ch}{m}{it}{<->ssub * 5ch/m/sl}{}
+\DeclareFontShape{OMS}{5ch}{bx}{n}{<->ssub * 5ch/b/n}{}
+\DeclareFontShape{OMS}{5ch}{bx}{sl}{<->ssub * 5ch/b/sl}{}
+\DeclareFontShape{OMS}{5ch}{b}{it}{<->ssub * 5ch/b/sl}{}
+\DeclareFontShape{OMS}{5ch}{bx}{it}{<->ssub * 5ch/b/it}{}
+
+\endinput

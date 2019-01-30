@@ -1,0 +1,37 @@
+%Filename: ts15fp.fd
+%Created by: tex 5fp-drv
+%Created using fontinst v1.927
+
+%THIS FILE SHOULD BE PUT IN A TEX INPUTS DIRECTORY
+
+\ProvidesFile{ts15fp.fd}
+   [2009/08/06 Fontinst v1.927 font definitions for TS1/5fp.]
+
+\DeclareFontFamily{TS1}{5fp}{}
+
+\DeclareFontShape{TS1}{5fp}{m}{n}{
+   <-> 5fpr8c
+}{}
+
+\DeclareFontShape{TS1}{5fp}{m}{sl}{
+   <-> 5fpro8c
+}{}
+
+\DeclareFontShape{TS1}{5fp}{mb}{n}{
+   <-> 5fpm8c
+}{}
+
+\DeclareFontShape{TS1}{5fp}{mb}{sl}{
+   <-> 5fpmo8c
+}{}
+
+\DeclareFontShape{TS1}{5fp}{m}{it}{<->ssub * 5fp/m/sl}{}
+\DeclareFontShape{TS1}{5fp}{b}{n}{<->ssub * 5fp/mb/n}{}
+\DeclareFontShape{TS1}{5fp}{bx}{n}{<->ssub * 5fp/b/n}{}
+\DeclareFontShape{TS1}{5fp}{b}{sl}{<->ssub * 5fp/mb/sl}{}
+\DeclareFontShape{TS1}{5fp}{bx}{sl}{<->ssub * 5fp/b/sl}{}
+\DeclareFontShape{TS1}{5fp}{mb}{it}{<->ssub * 5fp/mb/sl}{}
+\DeclareFontShape{TS1}{5fp}{b}{it}{<->ssub * 5fp/mb/it}{}
+\DeclareFontShape{TS1}{5fp}{bx}{it}{<->ssub * 5fp/b/it}{}
+
+\endinput

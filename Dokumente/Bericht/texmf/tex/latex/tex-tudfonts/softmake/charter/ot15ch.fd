@@ -1,0 +1,46 @@
+%Filename: ot15ch.fd
+%Created by: tex 5ch-drv
+%Created using fontinst v1.927
+
+%THIS FILE SHOULD BE PUT IN A TEX INPUTS DIRECTORY
+
+\ProvidesFile{ot15ch.fd}
+   [2008/06/23 Fontinst v1.927 font definitions for OT1/5ch.]
+
+\DeclareFontFamily{OT1}{5ch}{}
+
+\DeclareFontShape{OT1}{5ch}{m}{n}{
+   <-> 5chr7t
+}{}
+
+\DeclareFontShape{OT1}{5ch}{m}{sc}{
+   <-> 5chrc7t
+}{}
+
+\DeclareFontShape{OT1}{5ch}{m}{sl}{
+   <-> 5chro7t
+}{}
+
+\DeclareFontShape{OT1}{5ch}{m}{it}{
+   <-> 5chri7t
+}{}
+
+\DeclareFontShape{OT1}{5ch}{b}{n}{
+   <-> 5chb7t
+}{}
+
+\DeclareFontShape{OT1}{5ch}{b}{sc}{
+   <-> 5chbc7t
+}{}
+
+\DeclareFontShape{OT1}{5ch}{b}{sl}{
+   <-> 5chbo7t
+}{}
+
+\DeclareFontShape{OT1}{5ch}{bx}{n}{<->ssub * 5ch/b/n}{}
+\DeclareFontShape{OT1}{5ch}{bx}{sc}{<->ssub * 5ch/b/sc}{}
+\DeclareFontShape{OT1}{5ch}{bx}{sl}{<->ssub * 5ch/b/sl}{}
+\DeclareFontShape{OT1}{5ch}{b}{it}{<->ssub * 5ch/b/sl}{}
+\DeclareFontShape{OT1}{5ch}{bx}{it}{<->ssub * 5ch/b/it}{}
+
+\endinput

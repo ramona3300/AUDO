@@ -1,0 +1,111 @@
+\documentclass[12pt,
+article,
+type=sta, %sta, diplom, bsc, pp, msc, dr, drfinal, sem, prosem
+colorbacktitle,
+instlogo,
+accentcolor=tud1c,
+oneside
+]{tudthesis}
+
+\usepackage[ngerman]{babel}
+%\usepackage[english]{babel}
+
+\usepackage[utf8]{inputenc}
+%\usepackage[latin1]{inputenc}
+%\usepackage[applemac]{inputenc}
+
+% linebreak for urls in bitex
+\usepackage{url}
+\urlstyle{rm}
+
+%listings
+\usepackage{listings}
+
+\newcommand{\getmydate}{%
+\iflanguage{ngerman}{%
+  \ifcase\month%
+    \or Januar\or Februar\or M\"arz%
+    \or April\or Mai\or Juni\or Juli%
+    \or August\or September\or Oktober%
+    \or November\or Dezember%
+  \fi\ \number\year%
+}%
+\iflanguage{english}{%
+  \ifcase\month%
+    \or January\or February\or March%
+    \or April\or May\or June\or July%
+    \or August\or September\or October%
+    \or November\or December%
+  \fi\ \number\year%
+}
+}
+% changed counter for section wise counting
+\usepackage{chngcntr}
+\counterwithin{figure}{section} 
+\counterwithin{table}{section} 
+
+%user packages
+\usepackage{todonotes}
+\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\tod}[1]{\todo[inline]{#1}}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+ 
+\setinstitutionlogo[height]{logo/ESlogo.png}
+
+\begin{document}
+\counterwithin{lstlisting}{section}
+  \thesistitle{Projektseminar Echtzeitsysteme\linebreak[1]AUDO - Autonomous Unmanned Driving Unit}%
+    {}
+  \author{Nikolas Ziegelmayer, Nils Wittig, Fabian Burger, Ramona Volz und Maike Latsch}
+  %do not add your student id!
+  %\studentidx{1145456}
+\thesisnumber{}
+  \referee{}{Institut f\"ur Datentechnik\textbar Fachgebiet Echtzeitsysteme}
+	
+  \iflanguage{english}{
+		\department{	\mbox{Department of Electrical Engineering}\\ and Information Technology (FB18)\\\\Adjunct Member Department of\\ Computer Science (FB20)\\\\Prof. Dr. rer. nat. A. Schürr\\\ Merckstraße 25\\64283 Darmstadt\\\\www.es.tu-darmstadt.de}
+		\group{Real-Time Systems Lab}
+	}{
+		\department{Elektrotechnik und \\Informationstechnik (FB18)\\\\Zweitmitglied Informatik (FB20)\\\\Prof. Dr. rer. nat. A. Schürr\\\ Merckstraße 25\\64283 Darmstadt\\\\www.es.tu-darmstadt.de}
+		\group{Fachgebiet Echtzeitsysteme}
+	}
+  
+  \dateofsubmit{\today}
+  \makethesistitle
+  \affidavit{N. Ziegelmayer, N. Wittig, F. Burger, R. Volz, M. Latsch}
+	
+%	\cleardoublepage
+%	\begin {abstract}
+%	...
+%	\end{abstract} 
+	
+
+	\pagenumbering{roman}
+	\addtocontents{Anhang}{}
+	\tableofcontents
+	\clearpage
+	\listoffigures
+	\listoftables
+	\clearpage
+	
+	\pagenumbering{arabic}
+	\input{chapters/EinleitungGrundlagen}
+	\clearpage
+	\input{chapters/Organisation}
+	\clearpage
+	\input{chapters/Implementierung}
+	\clearpage
+	\input{chapters/Probleme}
+	\clearpage
+  
+	\bibliographystyle{alphadin}
+	\bibliography{literature}
+	
+	\begin{appendix}
+	\section{Erster Anhang}
+	\end{appendix}
+
+\end{document}

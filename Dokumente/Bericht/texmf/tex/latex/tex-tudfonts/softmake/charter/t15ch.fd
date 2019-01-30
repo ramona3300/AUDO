@@ -1,0 +1,46 @@
+%Filename: t15ch.fd
+%Created by: tex 5ch-drv
+%Created using fontinst v1.927
+
+%THIS FILE SHOULD BE PUT IN A TEX INPUTS DIRECTORY
+
+\ProvidesFile{t15ch.fd}
+   [2008/06/23 Fontinst v1.927 font definitions for T1/5ch.]
+
+\DeclareFontFamily{T1}{5ch}{}
+
+\DeclareFontShape{T1}{5ch}{m}{n}{
+   <-> 5chr8t
+}{}
+
+\DeclareFontShape{T1}{5ch}{m}{sc}{
+   <-> 5chrc8t
+}{}
+
+\DeclareFontShape{T1}{5ch}{m}{sl}{
+   <-> 5chro8t
+}{}
+
+\DeclareFontShape{T1}{5ch}{m}{it}{
+   <-> 5chri8t
+}{}
+
+\DeclareFontShape{T1}{5ch}{b}{n}{
+   <-> 5chb8t
+}{}
+
+\DeclareFontShape{T1}{5ch}{b}{sc}{
+   <-> 5chbc8t
+}{}
+
+\DeclareFontShape{T1}{5ch}{b}{sl}{
+   <-> 5chbo8t
+}{}
+
+\DeclareFontShape{T1}{5ch}{bx}{n}{<->ssub * 5ch/b/n}{}
+\DeclareFontShape{T1}{5ch}{bx}{sc}{<->ssub * 5ch/b/sc}{}
+\DeclareFontShape{T1}{5ch}{bx}{sl}{<->ssub * 5ch/b/sl}{}
+\DeclareFontShape{T1}{5ch}{b}{it}{<->ssub * 5ch/b/sl}{}
+\DeclareFontShape{T1}{5ch}{bx}{it}{<->ssub * 5ch/b/it}{}
+
+\endinput

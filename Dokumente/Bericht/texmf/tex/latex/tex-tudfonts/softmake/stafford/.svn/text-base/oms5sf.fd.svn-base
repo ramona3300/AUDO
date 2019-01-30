@@ -1,0 +1,22 @@
+%Filename: oms5sf.fd
+%Created by: tex 5sf-drv
+%Created using fontinst v1.927
+
+%THIS FILE SHOULD BE PUT IN A TEX INPUTS DIRECTORY
+
+\ProvidesFile{oms5sf.fd}
+   [2008/06/23 Fontinst v1.927 font definitions for OMS/5sf.]
+
+\DeclareFontFamily{OMS}{5sf}{}
+
+\DeclareFontShape{OMS}{5sf}{m}{n}{
+   <-> 5sfr7y
+}{}
+
+\DeclareFontShape{OMS}{5sf}{m}{sl}{
+   <-> 5sfro7y
+}{}
+
+\DeclareFontShape{OMS}{5sf}{m}{it}{<->ssub * 5sf/m/sl}{}
+
+\endinput

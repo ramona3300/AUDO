@@ -1,0 +1,26 @@
+%Filename: ot15sf.fd
+%Created by: tex 5sf-drv
+%Created using fontinst v1.927
+
+%THIS FILE SHOULD BE PUT IN A TEX INPUTS DIRECTORY
+
+\ProvidesFile{ot15sf.fd}
+   [2008/06/23 Fontinst v1.927 font definitions for OT1/5sf.]
+
+\DeclareFontFamily{OT1}{5sf}{}
+
+\DeclareFontShape{OT1}{5sf}{m}{n}{
+   <-> 5sfr7t
+}{}
+
+\DeclareFontShape{OT1}{5sf}{m}{sc}{
+   <-> 5sfrc7t
+}{}
+
+\DeclareFontShape{OT1}{5sf}{m}{sl}{
+   <-> 5sfro7t
+}{}
+
+\DeclareFontShape{OT1}{5sf}{m}{it}{<->ssub * 5sf/m/sl}{}
+
+\endinput

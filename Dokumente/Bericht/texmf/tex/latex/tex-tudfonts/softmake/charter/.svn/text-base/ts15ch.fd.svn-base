@@ -1,0 +1,37 @@
+%Filename: ts15ch.fd
+%Created by: tex 5ch-drv
+%Created using fontinst v1.927
+
+%THIS FILE SHOULD BE PUT IN A TEX INPUTS DIRECTORY
+
+\ProvidesFile{ts15ch.fd}
+   [2008/06/23 Fontinst v1.927 font definitions for TS1/5ch.]
+
+\DeclareFontFamily{TS1}{5ch}{}
+
+\DeclareFontShape{TS1}{5ch}{m}{n}{
+   <-> 5chr8c
+}{}
+
+\DeclareFontShape{TS1}{5ch}{m}{sl}{
+   <-> 5chro8c
+}{}
+
+\DeclareFontShape{TS1}{5ch}{m}{it}{
+   <-> 5chri8c
+}{}
+
+\DeclareFontShape{TS1}{5ch}{b}{n}{
+   <-> 5chb8c
+}{}
+
+\DeclareFontShape{TS1}{5ch}{b}{sl}{
+   <-> 5chbo8c
+}{}
+
+\DeclareFontShape{TS1}{5ch}{bx}{n}{<->ssub * 5ch/b/n}{}
+\DeclareFontShape{TS1}{5ch}{bx}{sl}{<->ssub * 5ch/b/sl}{}
+\DeclareFontShape{TS1}{5ch}{b}{it}{<->ssub * 5ch/b/sl}{}
+\DeclareFontShape{TS1}{5ch}{bx}{it}{<->ssub * 5ch/b/it}{}
+
+\endinput

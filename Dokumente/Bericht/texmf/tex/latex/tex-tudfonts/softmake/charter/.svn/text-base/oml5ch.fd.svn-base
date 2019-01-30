@@ -1,0 +1,18 @@
+%Filename: oml5ch.fd
+%Created by: tex 5ch-drv
+%Created using fontinst v1.927
+
+%THIS FILE SHOULD BE PUT IN A TEX INPUTS DIRECTORY
+
+\ProvidesFile{oml5ch.fd}
+   [2008/06/23 Fontinst v1.927 font definitions for OML/5ch.]
+
+\DeclareFontFamily{OML}{5ch}{}
+
+\DeclareFontShape{OML}{5ch}{m}{it}{
+   <-> 5chri7y
+}{}
+
+\DeclareFontShape{OML}{5ch}{m}{sl}{<->ssub * 5ch/m/it}{}
+
+\endinput

@@ -1,0 +1,37 @@
+%Filename: 8r5fp.fd
+%Created by: tex 5fp-drv
+%Created using fontinst v1.927
+
+%THIS FILE SHOULD BE PUT IN A TEX INPUTS DIRECTORY
+
+\ProvidesFile{8r5fp.fd}
+   [2009/08/06 Fontinst v1.927 font definitions for 8r/5fp.]
+
+\DeclareFontFamily{8r}{5fp}{}
+
+\DeclareFontShape{8r}{5fp}{m}{n}{
+   <-> 5fpr8r
+}{}
+
+\DeclareFontShape{8r}{5fp}{m}{sl}{
+   <-> 5fpro8r
+}{}
+
+\DeclareFontShape{8r}{5fp}{mb}{n}{
+   <-> 5fpm8r
+}{}
+
+\DeclareFontShape{8r}{5fp}{mb}{sl}{
+   <-> 5fpmo8r
+}{}
+
+\DeclareFontShape{8r}{5fp}{m}{it}{<->ssub * 5fp/m/sl}{}
+\DeclareFontShape{8r}{5fp}{b}{n}{<->ssub * 5fp/mb/n}{}
+\DeclareFontShape{8r}{5fp}{bx}{n}{<->ssub * 5fp/b/n}{}
+\DeclareFontShape{8r}{5fp}{b}{sl}{<->ssub * 5fp/mb/sl}{}
+\DeclareFontShape{8r}{5fp}{bx}{sl}{<->ssub * 5fp/b/sl}{}
+\DeclareFontShape{8r}{5fp}{mb}{it}{<->ssub * 5fp/mb/sl}{}
+\DeclareFontShape{8r}{5fp}{b}{it}{<->ssub * 5fp/mb/it}{}
+\DeclareFontShape{8r}{5fp}{bx}{it}{<->ssub * 5fp/b/it}{}
+
+\endinput

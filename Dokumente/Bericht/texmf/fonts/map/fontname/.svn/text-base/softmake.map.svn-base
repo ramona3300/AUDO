@@ -1,0 +1,16 @@
+@c @mapfile{
+@c   email = "clemens.von.loewenich@physik.tu-darmstadt.de",
+@c   version = "0.1",
+@c   date = "2 November 2007",
+@c   supported = "yes",
+@c   docstring = "Softmaker PostScript fonts."
+@c }
+@c
+@c fonts for corporate design (Technisch Universität Darmstadt)
+@c
+5chb8a    CharterBT-Bold       BT   001    Charter-Bold
+5chri8a   CharterBT-Italic     BT   002    Charter-Italic
+5chr8a    CharterBT-Roman      BT   003    Charter-Regular
+5fpm8a    FrontPageMedium      SM   004    FrontPage-Medium
+5fpr8a    FrontPage            SM   005    FrontPage-Regular
+5sfr8a    Stafford             SM   006    Stafford-Regular

@@ -1,0 +1,37 @@
+%Filename: oms5fp.fd
+%Created by: tex 5fp-drv
+%Created using fontinst v1.927
+
+%THIS FILE SHOULD BE PUT IN A TEX INPUTS DIRECTORY
+
+\ProvidesFile{oms5fp.fd}
+   [2009/08/06 Fontinst v1.927 font definitions for OMS/5fp.]
+
+\DeclareFontFamily{OMS}{5fp}{}
+
+\DeclareFontShape{OMS}{5fp}{m}{n}{
+   <-> 5fpr7y
+}{}
+
+\DeclareFontShape{OMS}{5fp}{m}{sl}{
+   <-> 5fpro7y
+}{}
+
+\DeclareFontShape{OMS}{5fp}{mb}{n}{
+   <-> 5fpm7y
+}{}
+
+\DeclareFontShape{OMS}{5fp}{mb}{sl}{
+   <-> 5fpmo7y
+}{}
+
+\DeclareFontShape{OMS}{5fp}{m}{it}{<->ssub * 5fp/m/sl}{}
+\DeclareFontShape{OMS}{5fp}{b}{n}{<->ssub * 5fp/mb/n}{}
+\DeclareFontShape{OMS}{5fp}{bx}{n}{<->ssub * 5fp/b/n}{}
+\DeclareFontShape{OMS}{5fp}{b}{sl}{<->ssub * 5fp/mb/sl}{}
+\DeclareFontShape{OMS}{5fp}{bx}{sl}{<->ssub * 5fp/b/sl}{}
+\DeclareFontShape{OMS}{5fp}{mb}{it}{<->ssub * 5fp/mb/sl}{}
+\DeclareFontShape{OMS}{5fp}{b}{it}{<->ssub * 5fp/mb/it}{}
+\DeclareFontShape{OMS}{5fp}{bx}{it}{<->ssub * 5fp/b/it}{}
+
+\endinput

@@ -1,0 +1,47 @@
+%Filename: ot15fp.fd
+%Created by: tex 5fp-drv
+%Created using fontinst v1.927
+
+%THIS FILE SHOULD BE PUT IN A TEX INPUTS DIRECTORY
+
+\ProvidesFile{ot15fp.fd}
+   [2009/08/06 Fontinst v1.927 font definitions for OT1/5fp.]
+
+\DeclareFontFamily{OT1}{5fp}{}
+
+\DeclareFontShape{OT1}{5fp}{m}{n}{
+   <-> 5fpr7t
+}{}
+
+\DeclareFontShape{OT1}{5fp}{m}{sc}{
+   <-> 5fprc7t
+}{}
+
+\DeclareFontShape{OT1}{5fp}{m}{sl}{
+   <-> 5fpro7t
+}{}
+
+\DeclareFontShape{OT1}{5fp}{mb}{n}{
+   <-> 5fpm7t
+}{}
+
+\DeclareFontShape{OT1}{5fp}{mb}{sc}{
+   <-> 5fpmc7t
+}{}
+
+\DeclareFontShape{OT1}{5fp}{mb}{sl}{
+   <-> 5fpmo7t
+}{}
+
+\DeclareFontShape{OT1}{5fp}{m}{it}{<->ssub * 5fp/m/sl}{}
+\DeclareFontShape{OT1}{5fp}{b}{n}{<->ssub * 5fp/mb/n}{}
+\DeclareFontShape{OT1}{5fp}{bx}{n}{<->ssub * 5fp/b/n}{}
+\DeclareFontShape{OT1}{5fp}{b}{sc}{<->ssub * 5fp/mb/sc}{}
+\DeclareFontShape{OT1}{5fp}{bx}{sc}{<->ssub * 5fp/b/sc}{}
+\DeclareFontShape{OT1}{5fp}{b}{sl}{<->ssub * 5fp/mb/sl}{}
+\DeclareFontShape{OT1}{5fp}{bx}{sl}{<->ssub * 5fp/b/sl}{}
+\DeclareFontShape{OT1}{5fp}{mb}{it}{<->ssub * 5fp/mb/sl}{}
+\DeclareFontShape{OT1}{5fp}{b}{it}{<->ssub * 5fp/mb/it}{}
+\DeclareFontShape{OT1}{5fp}{bx}{it}{<->ssub * 5fp/b/it}{}
+
+\endinput

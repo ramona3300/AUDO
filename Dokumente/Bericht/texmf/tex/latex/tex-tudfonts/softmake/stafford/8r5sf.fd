@@ -1,0 +1,22 @@
+%Filename: 8r5sf.fd
+%Created by: tex 5sf-drv
+%Created using fontinst v1.927
+
+%THIS FILE SHOULD BE PUT IN A TEX INPUTS DIRECTORY
+
+\ProvidesFile{8r5sf.fd}
+   [2008/06/23 Fontinst v1.927 font definitions for 8r/5sf.]
+
+\DeclareFontFamily{8r}{5sf}{}
+
+\DeclareFontShape{8r}{5sf}{m}{n}{
+   <-> 5sfr8r
+}{}
+
+\DeclareFontShape{8r}{5sf}{m}{sl}{
+   <-> 5sfro8r
+}{}
+
+\DeclareFontShape{8r}{5sf}{m}{it}{<->ssub * 5sf/m/sl}{}
+
+\endinput
