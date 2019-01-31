@@ -75,7 +75,7 @@ int lines_recognized(int line_selection){
 int obstacle_detection(int line_selection){ 
     // driving on left lane
     if(line_selection){
-        if( x_left_2 < x_obstacle_r && x_left_2 + 80 > x_obstacle_l){
+        if( x_left_2 < x_obstacle_r && x_left_2 + 60 > x_obstacle_l){
             return OBSTACLE_ON_BOTH_LANES;
         }
         else if(    x_left_2 < x_obstacle_r 
@@ -86,7 +86,7 @@ int obstacle_detection(int line_selection){
     // driving on right lane
     if(!line_selection){
         if(    x_right_2 > x_obstacle_l 
-            && x_right_2 - 80 < x_obstacle_r)
+            && x_right_2 - 60 < x_obstacle_r)
             {
                 return OBSTACLE_ON_BOTH_LANES;
             }
@@ -402,8 +402,7 @@ int main(int argc, char** argv)
     // get drive state and obstacle state
 	if( 	current_drive_state != DS_SWITCH_R2L
 		&&  current_drive_state != DS_SWITCH_L2R
-		&&  current_drive_state != DS_SWITCH_HARD
-        &&  current_drive_state != STOP){
+		&&  current_drive_state != DS_SWITCH_HARD){
     current_drive_state = drive_state(line_selection, curved, &actual_curve, &straight_delay, &curve_delay, drive_mode);
 	}
     if(drive_mode == 0) current_obstacle_state = obstacle_detection(line_selection);
@@ -515,12 +514,12 @@ int main(int argc, char** argv)
             break;
         case DS_SWITCH_R2L: // switch from right lane to left lane 11
             motor_speed = 260;
-	    break;
+	        break;
         case DS_SWITCH_L2R: //switch from left lane to right lane 10
             motor_speed = 260;
             break;
 		case DS_SWITCH_HARD: // high p-value after lane switching  12
-	    motor_speed = 270;
+	        motor_speed = 270;
             pk = (int) (3000.0 * 1.0 * ( 300.0  / (double)motor_speed ) );
             pd = (int) (1000.0 * 0.1 * ( 300.0  / (double)motor_speed ) );
             break;
