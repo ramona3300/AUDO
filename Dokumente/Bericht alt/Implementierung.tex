@@ -3,18 +3,23 @@
 \section{Bildverarbeitung und Erkennung von Fahrspuren}
 \label{sec:spurerkennung}
 
+\tod{Fabian}
+
 Zur Bilderzeugung konnte zwischen zwei Kamerasystemen wählen werden: Einer Kinect Kamera sowie einer Weitwinkel Webcam. Die Entscheidung fiel auf die Weitwinkel Webcam, da sich diese aufgrund ihrer Weitwinkel- und Farbdarstellungseigenschaft und den in Kapitel \ref{cha:Probleme} genannten Problemen der Kinect Kamera sich als besser geeignet herausstellte.
 
 Die mittels OpenCV eingelesenen Kamerabilder werden durch die Natur der Kamera in Zentralperspektive aufgezeichnet. Diese Art der Projektion eignet sich aufgrund des vorhandenen Fluchtpunktes nicht für die benötigte Bildverarbeitung, weshalb eine Transformation in Vogelperspektive durchgeführt wird, welche die Problematik des Fluchtpunktes beseitigt.
 
 Zur Erkennung der Fahrspuren wurden die Farbwerte der grünen äußeren Fahrbahnmarkierungen ermittelt. Mithilfe dieser Farbwerte kann ein Graustufenbild erzeugt werden, welches die Übereinstimmung mit dem vorgegebenen Farbwert repräsentiert. Um im Folgenden auf die rechte und linke Fahrspur jeweils drei Marker zu setzen wird auf drei verschiedenen Höhen zeilenweise eine Liniendickenevaluierung durchgeführt.
- 
+
 \tod{Bild von Fahrspur mit roten und grünen Punkten}
 
 \section{Erkennung von Kurven und Geraden}
 \label{sec:kurvenerkennung}
+Um das Fahrverhalten besser anpassen zu können, fiel die Entscheidung darauf Fahrmodi zu erstellen welche unterschiedliche Reglerparameter besitzen. Um diese Fahrzustände korrekt erkennen zu können ist es von Nöten zwischen Geraden, Kurven, Kurvenein- und Kurvenausfahrten zu unterscheiden.
 
-\tod{Fabian}
+Um eine Kurve zu erkennen werden die drei gesetzten Marker betrachtet. Da sich diese in gleichem vertikalen Abstand zu einander befinden wird lediglich der horizontale Abstand betrachtet. Zuerst wird hierfür der vertikale Abstand zwischen dem Unteren sowie dem Mittleren Marker ermittelt. Dieses Verfahren wird mit dem Oberen und dem Mittleren wiederholt. Übersteigt die Differenz der beiden ermittelten Abstandswerte einen Schwellwert, so liegt eine Kurve vor
+
+Um nun auch Kurvenein- und Kurvenausfahrten erkennen zu können wurde ein Puffer implementiert, welches aus vorherigem und aktuellem Kurvenerkennungswert ermitteln kann in welcher Umgebungssituation sich das Fahrzeug befindet. Desweiteren dient der Puffer als eine Hysterese welche ein Flackern der Fahrzustände vermeidet.
 
 \section{Erkennung von Hindernissen}
 \label{sec:hinderniserkennung}
