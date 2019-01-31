@@ -20,7 +20,7 @@
 #define OD_FIND_RIGHT_LINE 1
 #define OD_FIND_LEFT_LINE 2
 #define OD_FIND_VOID 3
-
+#define OD_FIND_NEXT_VOID 4
 
 
 static const std::string OPENCV_WINDOW = "Line Recgnition";
@@ -41,6 +41,9 @@ int x_right_line_3;
 int x_left_line_3;
 
 int x_obstacle[2];
+int x_obstacle_sec[2];
+int od_both;
+
 
 
 bool x_last_flag_right = true;
@@ -48,8 +51,8 @@ bool x_last_flag_left = true;
 
 int y_greenline = 30;
 
-int y_coords_left[4];
-int y_coords_right[4];
+int y_coords_left[5];
+int y_coords_right[5];
 
 int x_greenlines_right[RANGE_OF_AVERAGE];
 int x_greenlines_left[RANGE_OF_AVERAGE];
@@ -208,7 +211,7 @@ int average_left(int x_left_line){
     return x / RANGE_OF_AVERAGE;
 }
 
-void obstacle_detection(cv::Mat blur, int height, int index, int* obstacle){
+int obstacle_detection(cv::Mat blur, int height, int index, int* obstacle, int x_offset){
   // find the highest x-point of the line
     int state = OD_FIND_RIGHT_LINE;
     int x_right_od = NO_OBSTACLE;
@@ -216,12 +219,16 @@ void obstacle_detection(cv::Mat blur, int height, int index, int* obstacle){
     // find white stripe
     for( int y = 150; y > height; y-- ) {
         state = OD_FIND_RIGHT_LINE;
-        for( int x = blur.cols - 20; x > 20; x-- ) {
+        int s1 = 0;
+        int s2 = 0;
+        int s3 = 0;
+        int s4 = 0;
+        for( int x = x_offset; x > 10; x-- ) {
           switch (state)
           {
             case OD_FIND_RIGHT_LINE:
               //4 folgende Pixel, die zusammen heller als 80 sind
-              if(  80 < ( blur.at<uchar>(y,x)
+              if(  60 < ( blur.at<uchar>(y,x)
                 + blur.at<uchar>(y,x + 1)
                 + blur.at<uchar>(y,x + 2)
                 + blur.at<uchar>(y,x + 3)
@@ -229,22 +236,24 @@ void obstacle_detection(cv::Mat blur, int height, int index, int* obstacle){
                 x_right_od = x - 5;
                 y_coords_right[index] = y;
                 state = OD_FIND_VOID;
+                s1 = 1;
             }
               break;
             case OD_FIND_VOID:
               //5 folgende Pixel, die zusammen dunkler als 20 sind
-              if(  20 > ( blur.at<uchar>(y,x)
+              if(  30 > ( blur.at<uchar>(y,x)
                 + blur.at<uchar>(y,x + 1)
                 + blur.at<uchar>(y,x + 2)
                 + blur.at<uchar>(y,x + 3)
-                + blur.at<uchar>(y,x + 4)
               )){
                 state = OD_FIND_LEFT_LINE;
+                s2 = 1;
               }
               break;
             case OD_FIND_LEFT_LINE:
               //4 folgende Pixel, die zusammen heller als 80 sind
-              if(  80 < ( blur.at<uchar>(y,x)
+              //ROS_INFO("value: %d", blur.at<uchar>(y,x) + blur.at<uchar>(y,x + 1) + blur.at<uchar>(y,x + 2) + blur.at<uchar>(y,x + 3));
+              if(  60 < ( blur.at<uchar>(y,x)
                 + blur.at<uchar>(y,x + 1)
                 + blur.at<uchar>(y,x + 2)
                 + blur.at<uchar>(y,x + 3)
@@ -252,15 +261,29 @@ void obstacle_detection(cv::Mat blur, int height, int index, int* obstacle){
                 x_left_od = x - 5;
                 obstacle[0] = x_right_od;
                 obstacle[1] = x_left_od;
-                return;
+                state = OD_FIND_NEXT_VOID;
+                s3 = 1;
+              }
+              break;
+            case OD_FIND_NEXT_VOID:
+              //5 folgende Pixel, die zusammen dunkler als 20 sind
+              if(  20 > ( blur.at<uchar>(y,x)
+                + blur.at<uchar>(y,x + 1)
+                + blur.at<uchar>(y,x + 2)
+                + blur.at<uchar>(y,x + 3)
+                + blur.at<uchar>(y,x + 4)
+              )){
+                  s4 = 1;
+                  return x - 10;
               }
               break;
           }
         }
+        //ROS_INFO("s1: %d, s2: %d, s3: %d, s4: %d",s1,s2,s3,s4);
     }
     obstacle[0] = NO_OBSTACLE; // default value, no obstacle detected
     obstacle[1] = NO_OBSTACLE;
-    return;
+    return -1;
 }
 
 // receive and process images
@@ -366,7 +389,19 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg){
     // #####  Obstacle detection                                                             ##############
     // #####################################################################################################
     
-    obstacle_detection(hsv_filtered_or, 90, 3, x_obstacle);
+    int obstacle_end = obstacle_detection(hsv_filtered_or, 50, 3, x_obstacle,hsv_filtered_or.cols);
+    // find a second obstacle if there is one x_obstacle_sec
+    int second_obstacle = -1;
+    if(obstacle_end != -1){
+      second_obstacle = obstacle_detection(hsv_filtered_or, 50, 4, x_obstacle_sec,obstacle_end);
+    }
+    if(second_obstacle != -1){
+      //second obstacle detected
+      od_both = 1;
+    }else{
+      od_both = 0;
+    }
+
 
     // #####################################################################################################
     // #####  Visualize for debug                                                             ##############
@@ -381,6 +416,8 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg){
     cv::Scalar red = cv::Scalar( 0, 0, 255 );
     cv::Scalar green = cv::Scalar( 0, 255, 0 );
     cv::Scalar orange = cv::Scalar( 0, 165, 254 );
+    cv::Scalar blue = cv::Scalar( 255, 0, 0 );
+    
     // display the points
     cv::rectangle( bgr, cv::Point(x_right_line,y_coords_right[0]), cv::Point(x_right_line,y_coords_right[0]) + cv::Point( 2,2 ), green, 2 );
     cv::rectangle( bgr, cv::Point(x_left_line,y_coords_left[0]), cv::Point(x_left_line,y_coords_left[0]) + cv::Point( 2,2 ), red, 2 );
@@ -392,6 +429,13 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg){
     cv::rectangle( bgr, cv::Point(x_obstacle[1],y_coords_right[3]), cv::Point(x_obstacle[1],y_coords_right[3]) + cv::Point( 2,2 ), orange, 2 );
     cv::rectangle( bgr_or, cv::Point(x_obstacle[0],y_coords_right[3]), cv::Point(x_obstacle[0],y_coords_right[3]) + cv::Point( 2,2 ), orange, 2 );
     cv::rectangle( bgr_or, cv::Point(x_obstacle[1],y_coords_right[3]), cv::Point(x_obstacle[1],y_coords_right[3]) + cv::Point( 2,2 ), orange, 2 );
+
+    if(second_obstacle != -1){
+      cv::rectangle( bgr, cv::Point(x_obstacle_sec[0],y_coords_right[4]), cv::Point(x_obstacle_sec[0],y_coords_right[4]) + cv::Point( 2,2 ), blue, 2 );
+      cv::rectangle( bgr, cv::Point(x_obstacle_sec[1],y_coords_right[4]), cv::Point(x_obstacle_sec[1],y_coords_right[4]) + cv::Point( 2,2 ), blue, 2 );
+      cv::rectangle( bgr_or, cv::Point(x_obstacle_sec[0],y_coords_right[4]), cv::Point(x_obstacle_sec[0],y_coords_right[4]) + cv::Point( 2,2 ), blue, 2 );
+      cv::rectangle( bgr_or, cv::Point(x_obstacle_sec[1],y_coords_right[4]), cv::Point(x_obstacle_sec[1],y_coords_right[4]) + cv::Point( 2,2 ), blue, 2 );
+    }
     
     // show images
     cv::imshow(OPENCV_WINDOW, bgr);
@@ -427,6 +471,7 @@ int main(int argc, char** argv)
   ros::Publisher left_pub_3 = nh.advertise<std_msgs::Int32>("/line_recoqnition/left_3", 1);
   ros::Publisher obstacle_pub_right = nh.advertise<std_msgs::Int32>("/line_recoqnition/obstacle/right", 1);
   ros::Publisher obstacle_pub_left = nh.advertise<std_msgs::Int32>("/line_recoqnition/obstacle/left", 1);
+  ros::Publisher obstacle_pub_both = nh.advertise<std_msgs::Int32>("/line_recoqnition/obstacle/both", 1);
   // Loop starts here:
   ROS_INFO("Contour Detection Start");
   // loop rate value is set in Hz
@@ -446,6 +491,7 @@ int main(int argc, char** argv)
         std_msgs::Int32 x_left_3;
         std_msgs::Int32 obstacle_right;
         std_msgs::Int32 obstacle_left;
+        std_msgs::Int32 od_both_msg;
         
         x_right.data = x_now_right;
         x_left.data = x_now_left;
@@ -455,6 +501,7 @@ int main(int argc, char** argv)
         x_left_3.data = x_left_line_3;
         obstacle_right.data = x_obstacle[0];
         obstacle_left.data = x_obstacle[1];
+        od_both_msg.data = od_both;
         
         // publish the points
         right_pub.publish( x_right );
@@ -465,7 +512,7 @@ int main(int argc, char** argv)
         left_pub_3.publish( x_left_3 );
         obstacle_pub_right.publish( obstacle_right );
         obstacle_pub_left.publish( obstacle_left );
-        
+        obstacle_pub_both.publish( od_both_msg );
       }
     }
     // clear input/output buffers

@@ -25,6 +25,7 @@
 #define DS_SWITCH_L2R 10 // lane switch from left to right
 #define DS_SWITCH_R2L 11 // lane switch from right to left
 #define DS_SWITCH_HARD 12 // high p-value after lane switching 
+#define DS_STOP 13 // Stop
 
 #define OBSTACLE_ON_RIGHT_LANE 20
 #define OBSTACLE_ON_LEFT_LANE 21
@@ -43,6 +44,7 @@ double x_right_3;
 double x_left_3;
 int x_obstacle_r = NO_OBSTACLE;
 int x_obstacle_l = NO_OBSTACLE;
+int x_obstacle_both = 0;
 
 
 double usf_history[RANGE_OF_AVERAGE];
@@ -71,6 +73,12 @@ int lines_recognized(int line_selection){
 }
 
 int obstacle_detection(int line_selection){
+    /*
+    if(x_obstacle_both){
+        // obstacles on both lanes - Stop
+        return DS_STOP;
+    }
+    */
     // driving on left lane
     if(line_selection){
         if(    x_left_2 < x_obstacle_r 
@@ -251,6 +259,11 @@ void obstacle_Callback_left(std_msgs::Int32::ConstPtr msg, int* data)
 {
   *data = (int) msg->data;
 }
+// Second obstacle?
+void obstacle_Callback_both(std_msgs::Int32::ConstPtr msg, int* data)
+{
+  *data = (int) msg->data;
+}
 
 // gets called whenever a new message is availible in the input puffer
 void uslCallback(sensor_msgs::Range::ConstPtr uslMsg, sensor_msgs::Range* usl)
@@ -310,6 +323,8 @@ int main(int argc, char** argv)
       "/line_recoqnition/obstacle/right", 1, boost::bind(obstacle_Callback_right, _1, &x_obstacle_r));
   ros::Subscriber obstacle_sub_left = nh.subscribe<std_msgs::Int32>(
       "/line_recoqnition/obstacle/left", 1, boost::bind(obstacle_Callback_left, _1, &x_obstacle_l));
+  ros::Subscriber obstacle_sub_both = nh.subscribe<std_msgs::Int32>(
+      "/line_recoqnition/obstacle/both", 1, boost::bind(obstacle_Callback_both, _1, &x_obstacle_both));
 
   // switch the lane?
   int lane_switch = 0;
@@ -326,6 +341,7 @@ int main(int argc, char** argv)
   // variables for controlling
   // 0 = right; 1 = left
   int line_selection = 0;
+  int line_selection_last = 0;
   int motor_speed = 0;
   // PID values
   int pk = 3000.0 * 0.7;
@@ -363,6 +379,12 @@ int main(int argc, char** argv)
   int switch_state_del_l2r = 0;
   int switch_ar[10];
   int switch_duration = 30;
+
+  // count frames since last lane switch
+  // when there are to many switches in a short time - Stop
+  int frames_since_last_switch = -1;
+  int frames_between_switch = -1;
+  int stop_delay = 0;
   
   if(drive_mode){// Race mode
 	sollwert = sollwert_race;
@@ -403,7 +425,17 @@ int main(int argc, char** argv)
         current_drive_state = DS_STARTUP;
         startup_delay--;
     }
+    int recognized = lines_recognized(line_selection);
 
+    if(frames_between_switch < 100 && frames_between_switch != -1){
+        current_obstacle_state = DS_STOP;
+    }
+
+    if(current_obstacle_state == DS_STOP){
+        current_drive_state = DS_STOP;
+        stop_delay = 500;
+        ROS_INFO("Obstacles on both Lanes - Stop!");
+    }
     //ignore drive_state if obstacle is detected
     if (current_obstacle_state == OBSTACLE_ON_RIGHT_LANE && !line_selection){
         // car and obstacle are on right lane
@@ -416,7 +448,7 @@ int main(int argc, char** argv)
         //line_selection = 0;
     }
     // delay -- the lane switch takes some time
-	int recognized = lines_recognized(line_selection);	
+		
     if(switch_state_del_r2l > 0){
 		switch_state_del_r2l--;
 		if( 2 == recognized || switch_state_del_r2l > switch_duration - 7){
@@ -453,6 +485,19 @@ int main(int argc, char** argv)
 		}
         switch_state_del_r2l = 0;
     }
+    // keep calm
+    if(stop_delay > 0){
+        stop_delay--;
+        current_drive_state = DS_STOP;
+    }
+    // have we switched the lane?
+    if(line_selection_last != line_selection){
+        frames_between_switch = frames_since_last_switch;
+        frames_since_last_switch = 0;
+    }else{
+        frames_since_last_switch++;
+    }
+    line_selection_last = line_selection;
 
     
     switch(current_drive_state){
@@ -514,6 +559,9 @@ int main(int argc, char** argv)
             motor_speed = 300;
             pk = (int) (3000.0 * 0.15 * ( 300.0  / (double)motor_speed ) );
             pd = (int) (1000.0 * 0.05 * ( 300.0  / (double)motor_speed ) );
+            break;
+        case DS_STOP: // Stop driving 13
+            motor_speed = 0;
             break;
     }
     
