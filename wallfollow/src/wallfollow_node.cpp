@@ -29,6 +29,7 @@
 
 #define OBSTACLE_ON_RIGHT_LANE 20
 #define OBSTACLE_ON_LEFT_LANE 21
+#define OBSTACLE_ON_BOTH_LANES 22
 #define NO_OBSTACLE 9999
 
 #define RANGE_OF_STEERING_AVG 20 // for s_out lowpassfilter
@@ -71,23 +72,30 @@ int lines_recognized(int line_selection){
 	return 1;
 }
 
-int obstacle_detection(int line_selection){
+int obstacle_detection(int line_selection){ 
     // driving on left lane
     if(line_selection){
-        if(    x_left_2 < x_obstacle_r 
-            && x_left_2 + 20 > x_obstacle_l)
-            {
+        if( x_left_2 < x_obstacle_r && x_left_2 + 80 > x_obstacle_l){
+            return OBSTACLE_ON_BOTH_LANES;
+        }
+        else if(    x_left_2 < x_obstacle_r 
+            && x_left_2 + 20 > x_obstacle_l){
                 return OBSTACLE_ON_LEFT_LANE;
             }
     } 
     // driving on right lane
     if(!line_selection){
         if(    x_right_2 > x_obstacle_l 
+            && x_right_2 - 80 < x_obstacle_r)
+            {
+                return OBSTACLE_ON_BOTH_LANES;
+            }
+        else if(    x_right_2 > x_obstacle_l 
             && x_right_2 - 20 < x_obstacle_r)
             {
                 return OBSTACLE_ON_RIGHT_LANE;
             }
-    } 
+    }
     else return NO_OBSTACLE;
     //ROS_INFO("x_obst = %d",x_obstacle);
 }
@@ -395,7 +403,7 @@ int main(int argc, char** argv)
 	if( 	current_drive_state != DS_SWITCH_R2L
 		&&  current_drive_state != DS_SWITCH_L2R
 		&&  current_drive_state != DS_SWITCH_HARD
-        && current_drive_state != STOP){
+        &&  current_drive_state != STOP){
     current_drive_state = drive_state(line_selection, curved, &actual_curve, &straight_delay, &curve_delay, drive_mode);
 	}
     if(drive_mode == 0) current_obstacle_state = obstacle_detection(line_selection);
@@ -405,12 +413,12 @@ int main(int argc, char** argv)
         current_drive_state = DS_STARTUP;
         startup_delay--;
     }
-
-    // if(current_obstacle_state == OBSTACLE_ON_RIGHT_LANE && current_obstacle_state == OBSTACLE_ON_LEFT_LANE){
-    //     current_drive_state = STOP;
-    //     ROS_INFO("both lines obstacle");
-    // }
-
+	int recognized = lines_recognized(line_selection);
+    if(current_obstacle_state == OBSTACLE_ON_BOTH_LANES){
+        current_drive_state = STOP;
+        ROS_INFO("both lines obstacle");
+    }
+    else{
     //ignore drive_state if obstacle is detected
     if (current_obstacle_state == OBSTACLE_ON_RIGHT_LANE && !line_selection ){
         // car and obstacle are on right lane
@@ -423,7 +431,7 @@ int main(int argc, char** argv)
         //line_selection = 0;
     }
     // delay -- the lane switch takes some time
-	int recognized = lines_recognized(line_selection);	
+	
     if(switch_state_del_r2l > 0){
 		switch_state_del_r2l--;
 		if( 2 == recognized || switch_state_del_r2l > switch_duration - 7){
@@ -460,7 +468,7 @@ int main(int argc, char** argv)
 		}
         switch_state_del_r2l = 0;
     }
-
+    }
     
     switch(current_drive_state){
         // ####################### Race Mode ###############################
