@@ -1,0 +1,28 @@
+\babel@toc {ngerman}{}
+\contentsline {section}{\numberline {1}Einleitung}{1}{section.1}
+\contentsline {section}{\numberline {2}Grundlagen}{1}{section.2}
+\contentsline {subsection}{\numberline {2.1}Modellauto}{1}{subsection.2.1}
+\contentsline {subsection}{\numberline {2.2}OpenCV}{1}{subsection.2.2}
+\contentsline {subsection}{\numberline {2.3}ROS - Robot Operating System}{1}{subsection.2.3}
+\contentsline {subsection}{\numberline {2.4}PSES Packages}{1}{subsection.2.4}
+\contentsline {section}{\numberline {3}Organisation}{2}{section.3}
+\contentsline {subsection}{\numberline {3.1}Aufgabenverwaltung}{2}{subsection.3.1}
+\contentsline {subsection}{\numberline {3.2}Versionsverwaltung}{2}{subsection.3.2}
+\contentsline {section}{\numberline {4}Implementierung}{3}{section.4}
+\contentsline {subsection}{\numberline {4.1}Bildverarbeitung und Erkennung von Fahrspuren}{3}{subsection.4.1}
+\contentsline {subsection}{\numberline {4.2}Erkennung von Kurven und Geraden}{3}{subsection.4.2}
+\contentsline {subsection}{\numberline {4.3}Erkennung von Hindernissen}{3}{subsection.4.3}
+\contentsline {subsection}{\numberline {4.4}Kollisionsvermeidung}{3}{subsection.4.4}
+\contentsline {subsection}{\numberline {4.5}Regelungskonzept und Spurhaltung}{4}{subsection.4.5}
+\contentsline {subsection}{\numberline {4.6}Implementierung des PD-Reglers}{4}{subsection.4.6}
+\contentsline {subsection}{\numberline {4.7}Implementierung verschiedener Fahrsituationen}{5}{subsection.4.7}
+\contentsline {subsection}{\numberline {4.8}Einleitung eines Spurwechsels}{5}{subsection.4.8}
+\contentsline {subsection}{\numberline {4.9}Fahrmodi und Wettbewerb}{5}{subsection.4.9}
+\contentsline {subsubsection}{\numberline {4.9.1}Fahrmodus 1: Rundenzeit}{5}{subsubsection.4.9.1}
+\contentsline {subsubsection}{\numberline {4.9.2}Fahrmodus 2: Hinderniserkennung und Spurwechsel}{6}{subsubsection.4.9.2}
+\contentsline {section}{\numberline {5}Probleme}{7}{section.5}
+\contentsline {subsection}{\numberline {5.1}Kinect - unnat\IeC {\"u}rliche Farben}{7}{subsection.5.1}
+\contentsline {subsection}{\numberline {5.2}Kinect - kleines Sichtfeld}{7}{subsection.5.2}
+\contentsline {subsection}{\numberline {5.3}Webcam ver\IeC {\"a}ndert Belichtung zur Laufzeit}{8}{subsection.5.3}
+\contentsline {subsection}{\numberline {5.4}Fahrwerk}{8}{subsection.5.4}
+\contentsline {section}{\numberline {A}Erster Anhang}{10}{appendix.A}
