@@ -1,20 +1,30 @@
 \section{Einleitung}
 \label{cha:einleitung}
-Im Gegensatz zu den vergangenen Jahren war es die Aufgabe dieses Projektseminars Echtzeitsysteme eine Steuerung zu entwickeln, die ein Modellauto innerhalb gegebener Spuren fahren lässt. Durch eine Kamera und verschiedene Sensoren wird die Umgebung erkannt und mittels Filterungen und Regelungen in Steuerbefehle für das Fahrzeug umgewandelt.
-\tod{Weiter schreiben}
+Im Gegensatz zu den vergangenen Jahren war es die Aufgabe dieses Projektseminars Echtzeitsysteme eine Steuerung zu entwickeln, welche einen vorgegebenen Rundkurs durch eine Kamera erkennt und diesen absolvieren kann. In den vergangenen Jahren wurden Sensoren und die Abstände zu Wänden dafür genutzt. Durch eine Kamera und verschiedene Sensoren wird die Umgebung analysiert und durch Filterung und Regelung umgewandelt, um das Fahrzeug zu steuern. 
+Die finale Implementation lässt das Fahrzeug autonom den Rundkurs bewältigen ohne dabei über die markierten Linien zu fahren. Als zweite Aufgabe wurde Hinderniserkennung mit Spurwechsel gewählt, hier erkennt das Fahrzeug ein Hindernis und wechselt die Spur, um diesem auszuweichen. Sollte die Strecke komplett blockiert sein, wird auch dies erkannt und das Fahrzeug hält an. \\
+In den folgenden Kapiteln werden die Grundlage der Hardware und Software, die Organisation des Teams, die Implementierung der Aufgaben und die Probleme beschrieben.
+\todo{Weiter schreiben?}
 
-
+\clearpage
 \section{Grundlagen}
 \label{cha:grundlagen}
-\subsection{Modellauto}
+\subsection{Hardware}
+\label{sec:hardware}
+\subsubsection{Modellauto}
 \label{sec:modellauto}
 evtl. Hardwaregrundlagen
-\subsection{OpenCV}
+\subsubsection{Kameras}
+\label{sec:kameras}
+\subsection{Software}
+\label{sec:software}
+\subsubsection{OpenCV}
 \label{sec:openCV}
-\subsection{ROS - Robot Operating System}
+\subsubsection{ROS - Robot Operating System}
 \label{sec:ros}
 ROS ist ein Metabetriebssystem für Roboter, welches auf Linux basiert und in vielen Unternehmen für Steuerung von Robotern genutzt wird. Es stellt mehrere Pakete zur Verfügung, die einige nützliche Funktionen ermöglichen. Dazu gehört die Verteilung auf mehrere Systeme im Netzwerk, Paketverarbeitung und die Kommunikation zwischen den Nodes \cite{einfuehrungROS}.
 Die Kommunikation findet durch ein Publish-Subscribe-System statt. Die einzelnen Nodes publishen zu  bestimmten Themen Nachrichten, deren Inhalt sich auf das Thema bezieht. So erhält man zum Thema \code{/uc\_bridge/usr} über eine Subscription Nachrichten über die Werte des rechten Abstandssensors. Auch die Steuerung des Motors und des Lenkwinkels geschieht über das puplishen von Nachrichten. 
 
-\subsection{PSES Packages}
+\subsubsection{PSES Packages}
 \label{sec:psespackages}
+\subsection{Rundkurs}
+\label{sec:rundkurs}
