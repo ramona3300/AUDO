@@ -50,13 +50,13 @@ int x_obstacle_both = 0;
 double usf_history[RANGE_OF_AVERAGE];
 bool usf_flag = true;
 
-/**
+/*
 	lines_recognized
 	Checks which lines have been successfully recognized
 	return	1	Both
 			2	Only Right 
 			3 	Only Left	
-**/
+*/
 int lines_recognized(int line_selection){
 
 	if(	x_left > x_right - 5 ||
@@ -73,12 +73,6 @@ int lines_recognized(int line_selection){
 }
 
 int obstacle_detection(int line_selection){
-    /*
-    if(x_obstacle_both){
-        // obstacles on both lanes - Stop
-        return DS_STOP;
-    }
-    */
     // driving on left lane
     if(line_selection){
         if(    x_left_2 < x_obstacle_r 
