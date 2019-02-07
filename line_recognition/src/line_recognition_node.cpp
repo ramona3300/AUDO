@@ -232,7 +232,7 @@ int find_secondary_left_point(cv::Mat image, int height, int index)
 
 /*
   average
-  Averages the last couple of integer, given an array of the last integers
+  Averages the last couple of integers, given an array of the last integers
   and a range to average over.
   It also can initialize the array if needed.
 
@@ -486,6 +486,16 @@ int main(int argc, char** argv)
   ros::Publisher obstacle_pub_left = nh.advertise<std_msgs::Int32>("/line_recognition/obstacle/left", 1);
   // Loop starts here:
   ROS_INFO("Line Recognition Start");
+  /*
+  ROS_INFO("\n
+         /\\        ||     ||   ||==\\\\     //===\\\\          \n
+        //\\\\       ||     ||   ||   \\\\   //     \\\\         \n
+       //  \\\\      ||     ||   ||   ||   ||     ||             \n
+      //==  \\\\     ||     ||   ||   ||   ||     ||          \n
+     //      \\\\    \\\\     //   ||   //   \\\\    //            \n
+    //        \\\\    \\\\===//    ||==//     \\\\==//                 \n");
+  */
+  ROS_INFO("\n       /\\        ||     ||   ||==\\\\     //===\\\\          \n      //\\\\       ||     ||   ||   \\\\   //     \\\\         \n     //  \\\\      ||     ||   ||   ||   ||     ||             \n    //==  \\\\     ||     ||   ||   ||   ||     ||          \n   //      \\\\    \\\\     //   ||   //   \\\\    //            \n  //        \\\\    \\\\===//    ||==//     \\\\==//                 \n");
   // loop rate value is set in Hz
   ros::Rate loop_rate(30);
   while (ros::ok())
