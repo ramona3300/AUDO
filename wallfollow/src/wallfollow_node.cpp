@@ -302,23 +302,23 @@ int main(int argc, char** argv)
   
   // subscribe to the line_recoqnition
   ros::Subscriber right_sub = nh.subscribe<std_msgs::Int32>(
-      "/line_recoqnition/right", 1, boost::bind(right_Callback, _1, &x_right));
+      "/line_recognition/right", 1, boost::bind(right_Callback, _1, &x_right));
   ros::Subscriber left_sub = nh.subscribe<std_msgs::Int32>(
-      "/line_recoqnition/left", 1, boost::bind(left_Callback, _1, &x_left));
+      "/line_recognition/left", 1, boost::bind(left_Callback, _1, &x_left));
   ros::Subscriber right_sub_2 = nh.subscribe<std_msgs::Int32>(
-      "/line_recoqnition/right_2", 1, boost::bind(right_Callback_2, _1, &x_right_2));
+      "/line_recognition/right_2", 1, boost::bind(right_Callback_2, _1, &x_right_2));
   ros::Subscriber left_sub_2 = nh.subscribe<std_msgs::Int32>(
-      "/line_recoqnition/left_2", 1, boost::bind(left_Callback_2, _1, &x_left_2));
+      "/line_recognition/left_2", 1, boost::bind(left_Callback_2, _1, &x_left_2));
   ros::Subscriber right_sub_3 = nh.subscribe<std_msgs::Int32>(
-      "/line_recoqnition/right_3", 1, boost::bind(right_Callback_3, _1, &x_right_3));
+      "/line_recognition/right_3", 1, boost::bind(right_Callback_3, _1, &x_right_3));
   ros::Subscriber left_sub_3 = nh.subscribe<std_msgs::Int32>(
-      "/line_recoqnition/left_3", 1, boost::bind(left_Callback_3, _1, &x_left_3));
+      "/line_recognition/left_3", 1, boost::bind(left_Callback_3, _1, &x_left_3));
   ros::Subscriber obstacle_sub_right = nh.subscribe<std_msgs::Int32>(
-      "/line_recoqnition/obstacle/right", 1, boost::bind(obstacle_Callback_right, _1, &x_obstacle_r));
+      "/line_recognition/obstacle/right", 1, boost::bind(obstacle_Callback_right, _1, &x_obstacle_r));
   ros::Subscriber obstacle_sub_left = nh.subscribe<std_msgs::Int32>(
-      "/line_recoqnition/obstacle/left", 1, boost::bind(obstacle_Callback_left, _1, &x_obstacle_l));
+      "/line_recognition/obstacle/left", 1, boost::bind(obstacle_Callback_left, _1, &x_obstacle_l));
   ros::Subscriber obstacle_sub_both = nh.subscribe<std_msgs::Int32>(
-      "/line_recoqnition/obstacle/both", 1, boost::bind(obstacle_Callback_both, _1, &x_obstacle_both));
+      "/line_recognition/obstacle/both", 1, boost::bind(obstacle_Callback_both, _1, &x_obstacle_both));
 
   // switch the lane?
   int lane_switch = 0;
