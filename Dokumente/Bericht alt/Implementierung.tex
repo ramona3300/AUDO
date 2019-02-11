@@ -3,31 +3,59 @@
 \section{Bildverarbeitung und Erkennung von Fahrspuren}
 \label{sec:spurerkennung}
 
-\tod{Fabian}
-
 Zur Bilderzeugung konnte zwischen zwei Kamerasystemen wählen werden: Einer Kinect Kamera sowie einer Weitwinkel Webcam. Die Entscheidung fiel auf die Weitwinkel Webcam, da sich diese aufgrund ihrer Weitwinkel- und Farbdarstellungseigenschaft und den in Kapitel \ref{cha:Probleme} genannten Problemen der Kinect Kamera sich als besser geeignet herausstellte. 
 
 Die mittels OpenCV eingelesenen Kamerabilder werden durch die Natur der Kameraposition in Zentralperspektive aufgezeichnet. Diese Art der Projektion eignet sich aufgrund des vorhandenen Fluchtpunktes nicht für die benötigte Bildverarbeitung, weshalb eine Transformation in Vogelperspektive durchgeführt wird, welche die Problematik des Fluchtpunktes beseitigt.
 
 Zur Erkennung der Fahrspuren wurden die Farbwerte der grünen äußeren Fahrbahnmarkierungen ermittelt. Mithilfe dieser Farbwerte kann ein Graustufenbild erzeugt werden, welches die Übereinstimmung mit dem vorgegebenen Farbwert repräsentiert. Je mehr der Farbpixel des Originalbildes mit dem verglichenen Farbwert übereinstimmt, desto heller erscheint der Pixel an seiner Stelle im Graustufenbild. Um die Orientierung in diesem sicherzustellen werden drei Marker in äquidistanter Höhe auf die rechte und linke Linie gesetzt (siehe Abb. \ref{bild von Fahrspuren}). Der Algorithmus zur Positionierung der Marker sucht dabei zeilenweise im Bild nach aufeinanderfolgende helle Pixel und addiert die Helligkeit dieser Pixel auf. Übersteigt diese Summe einen Schwellwert, so wird diese Stelle mit einem Marker versehen.
 
-\tod{Bild von Fahrspur mit roten und grünen Punkten}
-\label{bild von Fahrspuren}
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.35\textwidth]{images/isnt_straight_original.png}
+	\caption{Fahrspur mit Markern}
+\end{figure}
+\label{Bild von Fahrspuren}
+
 \section{Erkennung von Kurven und Geraden}
 \label{sec:kurvenerkennung}
 Um das Fahrverhalten besser anpassen zu können, fiel die Entscheidung darauf Fahrmodi zu erstellen, welche unterschiedliche Reglerparameter besitzen. Um diese Fahrzustände korrekt erkennen zu können ist es von Nöten zwischen Geraden, Kurven, Kurvenein- und Kurvenausfahrten zu unterscheiden.
 
-Um eine Kurve zu erkennen werden die drei gesetzten Marker jener Seite betrachtet, an welcher sich das Fahrzeug gerade orientiert. Da sich diese in gleichem vertikalen Abstand zu einander befinden wird lediglich der horizontale Abstand betrachtet. Zuerst wird hierfür der vertikale Abstand zwischen dem Unteren sowie dem Mittleren Marker ermittelt. Dieses Verfahren wird mit dem Oberen und dem Mittleren wiederholt. Übersteigt die Differenz der beiden ermittelten Abstandswerte einen Schwellwert, so liegt eine Kurve vor.
+Um eine Kurve zu erkennen werden die drei gesetzten Marker jener Seite betrachtet, an welcher sich das Fahrzeug gerade orientiert. Da sich diese in gleichem vertikalen Abstand zu einander befinden wird lediglich der horizontale Abstand betrachtet. Zuerst wird hierfür der vertikale Abstand zwischen dem Unteren sowie dem Mittleren Marker ermittelt. Dieses Verfahren wird mit dem Oberen und dem Mittleren wiederholt. Übersteigt die Differenz der beiden ermittelten Abstandswerte einen Schwellwert, so liegt eine Kurve vor. Abb. \ref{Bild von Kurve} zeigt eine solche Situation.
 
 Um nun auch Kurvenein- und Kurvenausfahrten erkennen zu können wurde ein Puffer implementiert, welches aus vorherigem und aktuellem Kurvenerkennungswert ermitteln kann in welcher Umgebungssituation sich das Fahrzeug befindet. Des weiteren dient der Puffer als eine Hysterese welche ein Flackern der Fahrzustände vermeidet.
 
-\tod{Bild von Kurve aus AUDO Sicht}
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.35\textwidth]{images/curve_bw.png}
+	\caption{Kurveneinfahrt mit Makern}
+\end{figure}
+\label{Bild von Kurve}
 
 \section{Erkennung von Hindernissen}
 \label{sec:hinderniserkennung}
 
-Wie auch die Fahrspurerkennung basiert die Hinderniserkennung auf der Filterung der Kamerabilder auf eine spezielle Farbe. Aus diesem Grund wurden die Hinderniswürfel, um sie vom Rest der Kulisse unterscheiden zu können mit orangenem Klebeband versehen. Um sicher zu gehen, dass nicht fälschlicherweise ein Hindernis erkannt wird, ein ähnlicher Algorithmus angewandt er zuvor in Kapitel \ref{sec:spurerkennung} beschrieben wurde. Des weiteren wird ein Hindernis nur als solches erkannt, wenn zwei vertikale Linien nebeneinander erkannt werden, wie es bei den Hinderniswürfeln der Fall ist. Prinzipiell wäre es somit auch möglich andere Gegenstände in die Fahrspur zu stellen, solange diese zwei vertikale orangene Streifen besitzen.
-\tod{Fabian}
+Wie auch die Fahrspurerkennung basiert die Hinderniserkennung auf der Filterung der Kamerabilder auf eine spezielle Farbe. Aus diesem Grund wurden die Hinderniswürfel, um sie vom Rest der Kulisse unterscheiden zu können mit orangenem Klebeband versehen. Um sicher zu gehen, dass nicht fälschlicherweise ein Hindernis erkannt wird, ein ähnlicher Algorithmus angewandt er zuvor in Kapitel \ref{sec:spurerkennung} beschrieben wurde. Des weiteren wird ein Hindernis nur als solches erkannt, wenn zwei vertikale Linien nebeneinander erkannt werden, wie es bei den Hinderniswürfeln der Fall ist. Prinzipiell wäre es somit auch möglich andere Gegenstände in die Fahrspur zu stellen, solange diese zwei vertikale orangene Streifen besitzen. Abb. \ref{Bild von Hindernis} zeigt die verschiedenen Phasen der Hinderniserkennung.
+
+\begin{figure}
+	\centering
+	\begin{subfigure}{0.45\textwidth}
+		\centering
+		\includegraphics[width=0.9\textwidth]{images/obstacle_original.png}
+		\caption{Transformiertes Farbbild}
+	\end{subfigure}
+	\begin{subfigure}{0.45\textwidth}
+		\centering
+		\includegraphics[width=0.9\textwidth]{images/obstacle_alone_bw.png}
+		\caption{Hindernis nach Filterung}
+	\end{subfigure}
+	\begin{subfigure}{0.45\textwidth}
+		\centering
+		\includegraphics[width=0.9\textwidth]{images/obstacle_bw.png}
+		\caption{Markiertes Hindernis}
+	\end{subfigure}
+	\caption{Fahrspur mit Hindernis}
+\end{figure}
+\label{Bild von Hindernis}
 
 \section{Kollisionsvermeidung}
 \label{sec:kollision}
