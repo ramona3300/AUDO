@@ -44,7 +44,6 @@ double x_right_3;
 double x_left_3;
 int x_obstacle_r = NO_OBSTACLE;
 int x_obstacle_l = NO_OBSTACLE;
-int x_obstacle_both = 0;
 
 
 double usf_history[RANGE_OF_AVERAGE];
@@ -81,16 +80,16 @@ int weighted_average(int newest, int *old_values, int *init, int range)
   }
   old_values[0] = newest;
   // average over the array of old values
-  int sum = 0;
+  double sum = 0;
   double weight_sum = 0;
   double weight = 0;
   for(int i = 0; i < range; i++)
   {
-    weight = 0.1 * range - 1;
+    weight = 0.1 * ( range - i );
     weight_sum += weight;
-    sum += old_values[i] * weight;
+    sum += ( (double) old_values[i] ) * weight;
   }
-  return sum / weight;
+  return (int) ( sum  / weight_sum );
 }
 
 /*
@@ -318,22 +317,11 @@ void INT32_Callback_as_int(std_msgs::Int32::ConstPtr msg, int* data)
 }
 
 // gets called whenever a new message is availible in the input puffer
-void uslCallback(sensor_msgs::Range::ConstPtr uslMsg, sensor_msgs::Range* usl)
-{
-  *usl = *uslMsg;
-}
-
-// gets called whenever a new message is availible in the input puffer
 void usfCallback(sensor_msgs::Range::ConstPtr usfMsg, sensor_msgs::Range* usf)
 {
   *usf = *usfMsg;
 }
 
-// gets called whenever a new message is availible in the input puffer
-void usrCallback(sensor_msgs::Range::ConstPtr usrMsg, sensor_msgs::Range* usr)
-{
-  *usr = *usrMsg;
-}
 void mySiginthandler(int sig){
     stop = true;
 }
@@ -341,7 +329,7 @@ void mySiginthandler(int sig){
 int main(int argc, char** argv)
 {
   // init this node
-  ros::init(argc, argv, "wallfollow_node", ros::init_options::NoSigintHandler);
+  ros::init(argc, argv, "drive_node", ros::init_options::NoSigintHandler);
   // get ros node handle
   ros::NodeHandle nh;
   signal(SIGINT, mySiginthandler);
@@ -349,10 +337,6 @@ int main(int argc, char** argv)
   std_msgs::Int16 motor, steering;
   sensor_msgs::Range usr, usf, usl;
   // subscribe to ultra sonic
-  ros::Subscriber usrSub = nh.subscribe<sensor_msgs::Range>(
-      "/uc_bridge/usr", 10, boost::bind(usrCallback, _1, &usr));
-  ros::Subscriber uslSub = nh.subscribe<sensor_msgs::Range>(
-      "/uc_bridge/usl", 10, boost::bind(uslCallback, _1, &usl));
   ros::Subscriber usfSub = nh.subscribe<sensor_msgs::Range>(
       "/uc_bridge/usf", 10, boost::bind(usfCallback, _1, &usf));
   // subscribe to the line_recoqnition
@@ -373,8 +357,6 @@ int main(int argc, char** argv)
       "/line_recognition/obstacle/right", 1, boost::bind(INT32_Callback_as_int, _1, &x_obstacle_r));
   ros::Subscriber obstacle_sub_left = nh.subscribe<std_msgs::Int32>(
       "/line_recognition/obstacle/left", 1, boost::bind(INT32_Callback_as_int, _1, &x_obstacle_l));
-  ros::Subscriber obstacle_sub_both = nh.subscribe<std_msgs::Int32>(
-      "/line_recognition/obstacle/both", 1, boost::bind(INT32_Callback_as_int, _1, &x_obstacle_both));
   // generate control message publisher
   ros::Publisher motorCtrl =
       nh.advertise<std_msgs::Int16>("/uc_bridge/set_motor_level_msg", 1);
@@ -420,7 +402,7 @@ int main(int argc, char** argv)
   int s_out_av = 0;
 
   // Select drive mode: 1 = Race mode , 0 = Obstacle Detection mode
-  int drive_mode = 0;
+  int drive_mode = 1;
   int switch_state_del_r2l = 0;
   int switch_state_del_l2r = 0;
   int switch_ar[10];
@@ -450,7 +432,7 @@ int main(int argc, char** argv)
   {
     t = ((double)clock()/CLOCKS_PER_SEC);
     s_out = 0;
-    motor_speed = 600; // works with 300 
+    motor_speed = 700; // works with 300 
     
     // which line to follow
     if(line_selection)
@@ -580,17 +562,17 @@ int main(int argc, char** argv)
         break;
       case DS_CURVE_AP: //                                                ### Straight    ###  2 ###
         motor_speed = (int) ( (double)motor_speed * 0.65 );
-        pk = (int) (3000.0 * 0.4 * ( 300.0  / (double)motor_speed ) );
+        pk = (int) (3000.0 * 0.3 * ( 300.0  / (double)motor_speed ) );
         pd = (int) (1000.0 * 0.1 * ( 300.0  / (double)motor_speed ) );
         break;
       case DS_STRAIGHT: //                                                ### Straight    ###  3 ###
         motor_speed = (int) ( (double)motor_speed * 1.2 );
-        pk = (int) (3000.0 * 0.25 * ( 300.0  / (double)motor_speed ) );
+        pk = (int) (3000.0 * 0.15 * ( 300.0  / (double)motor_speed ) );
         pd = (int) (1000.0 * 0.05 * ( 300.0 / (double)motor_speed ) );
         break;
       case DS_STRAIGHT_AP: //                                             ### Curve       ###  4 ###
         motor_speed = (int) ( (double)motor_speed * 1 );
-        pk = (int) (3000.0 * 0.35 * ( 300.0  / (double)motor_speed ) );
+        pk = (int) (3000.0 * 0.25 * ( 300.0  / (double)motor_speed ) );
         pd = (int) (1000.0 * 0.05 * ( 300.0  / (double)motor_speed ) );
         break;
       // ####################### Obstacle Detection Mode #################### Mode Detail ### No ###
