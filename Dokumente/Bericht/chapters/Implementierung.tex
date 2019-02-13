@@ -3,11 +3,11 @@
 \subsection{Bildverarbeitung und Erkennung von Fahrspuren}
 \label{sec:spurerkennung}
 
-Zur Bilderzeugung konnte zwischen zwei Kamerasystemen wählen werden: Einer Kinect Kamera sowie einer Weitwinkel Webcam. Die Entscheidung fiel auf die Weitwinkel Webcam, da sich diese aufgrund ihrer Weitwinkel- und Farbdarstellungseigenschaft und den in Kapitel \ref{cha:Probleme} genannten Problemen der Kinect Kamera sich als besser geeignet herausstellte. 
+Zur Bilderzeugung konnte zwischen zwei Kamerasystemen wählen werden: Einer Kinect Kamera sowie einer Weitwinkel Webcam. Die Entscheidung fiel auf die Weitwinkel Webcam, da sich diese aufgrund ihrer Weitwinkel- und Farbdarstellungseigenschaft und den in \autoref{cha:Probleme} genannten Problemen der Kinect Kamera sich als besser geeignet herausstellte. 
 
 Die mittels OpenCV eingelesenen Kamerabilder werden durch die Natur der Kameraposition in Zentralperspektive aufgezeichnet. Diese Art der Projektion eignet sich aufgrund des vorhandenen Fluchtpunktes nicht für die benötigte Bildverarbeitung, weshalb eine Transformation in Vogelperspektive durchgeführt wird, welche die Problematik des Fluchtpunktes beseitigt.
 
-Zur Erkennung der Fahrspuren wurden die Farbwerte der grünen äußeren Fahrbahnmarkierungen ermittelt. Mithilfe dieser Farbwerte kann ein Graustufenbild erzeugt werden, welches die Übereinstimmung mit dem vorgegebenen Farbwert repräsentiert. Je mehr der Farbpixel des Originalbildes mit dem verglichenen Farbwert übereinstimmt, desto heller erscheint der Pixel an seiner Stelle im Graustufenbild. Um die Orientierung in diesem sicherzustellen werden drei Marker in äquidistanter Höhe auf die rechte und linke Linie gesetzt (siehe Abb. \ref{bild von Fahrspuren}). Der Algorithmus zur Positionierung der Marker sucht dabei zeilenweise im Bild nach aufeinanderfolgende helle Pixel und addiert die Helligkeit dieser Pixel auf. Übersteigt diese Summe einen Schwellwert, so wird diese Stelle mit einem Marker versehen.
+Zur Erkennung der Fahrspuren wurden die Farbwerte der grünen äußeren Fahrbahnmarkierungen ermittelt. Mithilfe dieser Farbwerte kann ein Graustufenbild erzeugt werden, welches die Übereinstimmung mit dem vorgegebenen Farbwert repräsentiert. Je mehr der Farbpixel des Originalbildes mit dem verglichenen Farbwert übereinstimmt, desto heller erscheint der Pixel an seiner Stelle im Graustufenbild. Um die Orientierung in diesem sicherzustellen werden drei Marker in äquidistanter Höhe auf die rechte und linke Linie gesetzt (siehe \autoref{Bild von Fahrspuren}). Der Algorithmus zur Positionierung der Marker sucht dabei zeilenweise im Bild nach aufeinanderfolgende helle Pixel und addiert die Helligkeit dieser Pixel auf. Übersteigt diese Summe einen Schwellwert, so wird diese Stelle mit einem Marker versehen.
 
 \begin{figure}[ht]
 	\centering
@@ -34,7 +34,7 @@ Um nun auch Kurvenein- und Kurvenausfahrten erkennen zu können wurde ein Puffer
 \subsection{Erkennung von Hindernissen}
 \label{sec:hinderniserkennung}
 
-Wie auch die Fahrspurerkennung basiert die Hinderniserkennung auf der Filterung der Kamerabilder auf eine spezielle Farbe. Aus diesem Grund wurden die Hinderniswürfel, um sie vom Rest der Kulisse unterscheiden zu können mit orangenem Klebeband versehen. Um sicher zu gehen, dass nicht fälschlicherweise ein Hindernis erkannt wird, ein ähnlicher Algorithmus angewandt er zuvor in Kapitel \ref{sec:spurerkennung} beschrieben wurde. Des weiteren wird ein Hindernis nur als solches erkannt, wenn zwei vertikale Linien nebeneinander erkannt werden, wie es bei den Hinderniswürfeln der Fall ist. Prinzipiell wäre es somit auch möglich andere Gegenstände in die Fahrspur zu stellen, solange diese zwei vertikale orangene Streifen besitzen. Abb. \ref{Bild von Hindernis} zeigt die verschiedenen Phasen der Hinderniserkennung.
+Wie auch die Fahrspurerkennung basiert die Hinderniserkennung auf der Filterung der Kamerabilder auf eine spezielle Farbe. Aus diesem Grund wurden die Hinderniswürfel, um sie vom Rest der Kulisse unterscheiden zu können mit orangefarbenen Klebeband versehen. Um sicher zu gehen, dass nicht fälschlicherweise ein Hindernis erkannt wird, ein ähnlicher Algorithmus angewandt er zuvor in \autoref{sec:spurerkennung} beschrieben wurde. Des weiteren wird ein Hindernis nur als solches erkannt, wenn zwei vertikale Linien nebeneinander erkannt werden, wie es bei den Hinderniswürfeln der Fall ist. Prinzipiell wäre es somit auch möglich andere Gegenstände in die Fahrspur zu stellen, solange diese zwei vertikale orangefarbene Streifen besitzen. \autoref{Bild von Hindernis} zeigt die verschiedenen Phasen der Hinderniserkennung.
 
 \begin{figure}
 	\centering
@@ -54,8 +54,9 @@ Wie auch die Fahrspurerkennung basiert die Hinderniserkennung auf der Filterung 
 		\caption{Markiertes Hindernis}
 	\end{subfigure}
 	\caption{Fahrspur mit Hindernis}
+	\label{Bild von Hindernis}
 \end{figure}
-\label{Bild von Hindernis}
+
 
 \subsubsection{Kollisionsvermeidung}
 \label{sec:kollision}
@@ -74,7 +75,7 @@ Ein besonderes Problem ergibt sich aus der Tatsache, dass die Werte des Sensors 
 
 Nach umfangreichen Tests zu Beginn des Projekts wurde ein strukturvariabler Regelungsansatz mit PD-Reglern gewählt. Eine strukturvariable Regelung lässt sich vor Allem dann sinnvoll einsetzen, wenn zwischen wenigen bekannten Arbeitspunkten umgeschaltet werden muss. Die Rennstrecke des Projektseminars Echtzeitsysteme lässt sich Kurven- und Geradenabschnitte aufteilen. Aufgrund der hohen Nichtlinearität der Lenkungsmechanik (insbesondere Lose, Haftreibung, Gleitreibung) lässt sich mit einem einzigen PD-Regler kein zufriedenstellendes Regelverhalten in allen Fahrsituationen erzielen. Eine stationäre Genauigkeit ist in diesem Fall zur Spurhaltung im Übrigen nicht erforderlich, solange die bleibende Regelabweichung in der Praxis so klein ist, dass alle Fahrsituationen der Rennstrecke ohne Linienüberschreitung gefahren werden können. Mit mehreren gut eingestellten PD-Reglern lässt sich diese Anforderung erfüllen.
 
-Die Bildverarbeitung liefert die Positionsdaten aller Markierungslinien, die im Bildausschnitt der Kamera erfasst werden. Da die Position der Kamera auf dem Fahrzeug sich nicht ändert, kann ein fester Sollwert für den Abstand zu diesen Linien vorgegeben werden. Es muss zur Berechnung der Regelabweichung lediglich bekannt sein, ob das Fahrzeug sich an der rechten oder an der linken Fahrbahnbegrenzung orientieren soll. Näheres hierzu in Abschnitt \ref{sec:fahrsituationen}.
+Die Bildverarbeitung liefert die Positionsdaten aller Markierungslinien, die im Bildausschnitt der Kamera erfasst werden. Da die Position der Kamera auf dem Fahrzeug sich nicht ändert, kann ein fester Sollwert für den Abstand zu diesen Linien vorgegeben werden. Es muss zur Berechnung der Regelabweichung lediglich bekannt sein, ob das Fahrzeug sich an der rechten oder an der linken Fahrbahnbegrenzung orientieren soll. Näheres hierzu in \autoref{sec:fahrsituationen}.
 
 
 \subsubsection{Implementierung des PD-Reglers}
@@ -102,7 +103,7 @@ Das Konzept sieht die Aufteilung der zu fahrenden Strecke in vier wiederkehrende
 	\item Übergang von Kurven- zu Geradenfahrt
 \end{itemize}
 
-Je nach Situation wird zwischen einem Regler für Geradeausfahrt und einem Regler für Kurvenfahrt umgeschaltet. Die Übergangszustände dienen lediglich der stufenweisen Geschwindigkeitsanpassung beim Wechsel zwischen den beiden Streckenabschnitten. Die Umschaltung zwischen den verschiedenen Reglern erfolgt in Abhängigkeit vom gewählten Fahrmodus (siehe Abschnitt \ref{sec:fahrmodi}).
+Je nach Situation wird zwischen einem Regler für Geradeausfahrt und einem Regler für Kurvenfahrt umgeschaltet. Die Übergangszustände dienen lediglich der stufenweisen Geschwindigkeitsanpassung beim Wechsel zwischen den beiden Streckenabschnitten. Die Umschaltung zwischen den verschiedenen Reglern erfolgt in Abhängigkeit vom gewählten Fahrmodus (siehe \autoref{sec:fahrmodi}).
 
 Der Regler für die Geradeausfahrt zeichnet sich durch \todo{(.....)} aus, während der Regler für die Kurvenabschnitte \todo{(.....)}.
 
@@ -134,7 +135,7 @@ Ein Spurwechsel setzt voraus, dass dem Fahrzeug die eigene Position auf der Fahr
 
 Sobald ein Hindernis in das Sichtfeld der Kamera eintritt liefert die Bildverarbeitung dessen Koordinaten. Da auch die Koordinaten der beiden Fahrspuren bekannt sind, kann aus den Daten ermittelt werden, ob sich das Hindernis auf der aktuellen Fahrspur des Autos befindet. Befindet sich das Hindernis auf der eigenen Fahrspur, wird rechtzeitig ein Spurwechsel veranlasst. Andernfalls wird das Hindernis ignoriert und die Fahrt fortgesetzt.
 
-Der Spurwechsel wird durch die Erkennung eines Hindernisses eingeleitet. Die Bildverarbeitung liefert dabei die Positionen des rechten und linken Randes eines Hindernisses, sodass neben der Position auch dessen Breite bekannt ist (siehe \ref{sec:hinderniserkennung}). Für den Spurwechsel entscheidend ist die Frage, ob sich das erkannte Hindernis überhaupt auf der gleichen Fahrspur wie das Fahrzeug befindet. Ist das nicht der Fall, stellt es kein Hindernis dar und kann ignoriert werden.
+Der Spurwechsel wird durch die Erkennung eines Hindernisses eingeleitet. Die Bildverarbeitung liefert dabei die Positionen des rechten und linken Randes eines Hindernisses, sodass neben der Position auch dessen Breite bekannt ist (siehe \autoref{sec:hinderniserkennung}). Für den Spurwechsel entscheidend ist die Frage, ob sich das erkannte Hindernis überhaupt auf der gleichen Fahrspur wie das Fahrzeug befindet. Ist das nicht der Fall, stellt es kein Hindernis dar und kann ignoriert werden.
 
 \tod{Codeausschnitt: Hinderniserkennung}
 
