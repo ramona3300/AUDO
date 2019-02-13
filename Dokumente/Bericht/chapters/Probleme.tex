@@ -47,18 +47,38 @@ Dieser Effekt wird noch durch die Transformation zum Bird-Eye View verstärkt.
 	\caption{Sichtfeld von Webcam und Kinect}
 \end{figure}
 
-Um eine robuste Fahrbahnerkennung zu implemetieren, sind ordentliche Ausgangsdaten von großer Wichtigkeit.
+Um eine robuste Fahrbahnerkennung zu implementieren, sind ordentliche Ausgangsdaten von großer Wichtigkeit.
 In unserem Fall benötigen wir eine natürliche Farbdarstellung, ein ausreichend großes Sichtfeld das möglichst nah am Fahrzeug beginnt und eine flüssige Bildrate. 
 Alle diese Anforderungen werden von der Webcam erfüllt.
 Die Webcam kann zudem sehr flexibel auf dem Fahrzeug angebracht werden.
 \\
-Die Halterung der Webcam verursacht allerdings ein weiteres Problem.
-Die Webcam sakt durch Vibrationen die beim Fahren entstehen nach einiger Zeit etwas ab.
-Das heißt die Webcam zeigt mehr in Richtung Boden.
-Das hat merkliche Auswirkungen auf die Transformation zum Bird-Eye View.
+Die Halterung der Webcam verursacht allerdings ein weiteres Problem: eine geringfügige Änderung des Kamerawinkels hat merkliche Auswirkungen auf die Transformation zum Bird-Eye View.
 Wenn der Bird-Eye View nicht mehr korrekt berechnet wird, funktioniert die Erkennung der Fahrsituation nicht mehr so gut.
 Genauer wird nicht mehr erkannt, wann sich das Fahrzeug auf einer Geraden befindet.
-Da die Regelung abhängig von der Fahrsituation ist, kann das Fahrverhalten schlechter werden.
+Da die Regelung abhängig von der Fahrsituation ist, kann das Fahrverhalten erheblich schlechter werden. Eine stabile Befestigung der Webcam ist daher wichtig. Näheres dazu im folgenden Abschnitt.
+
+\subsection{Befestigung der Webcam}
+\label{sec:befestigung}
+Während die Kinect-Kamera fest mit dem Fahrzeug verschraubt ist, stellt sich bei Verwendung der Webcam die Frage nach deren Positionierung und Befestigung. Der mitgelieferte Standfuß kann nicht sinnvoll auf dem Fahrzeug fixiert werden, da er nur für stationären Betrieb geeignet ist. Zudem kommt es durch die Vibrationen im Fahrbetrieb zu einer schleichenden Veränderung des Kamerawinkels mit den in \ref{sec:sichtfeld} beschriebenen Auswirkungen.
+Um eine stabile und auch optisch ansprechende Lösung zu finden, wurde mittels CAD-Software eine Kamerahalterung entworfen und auf einem 3D-Drucker ausgedruckt. Dies bietet gleich mehrere Vorteile:
+
+\begin{itemize}
+	\item Die Kameraposition kann frei gewählt werden
+	\item Die Halterung ist stabil, aber sehr leicht
+	\item Aufgrund des modularen Aufbaus der Halterung ist ein späterer Umbau sehr einfach möglich
+	\item Die Kinect-Kamera kann demontiert werden, dies entlastet die Vorderachse
+\end{itemize}
+
+Die Halterung besteht aus einem unteren Teil zur Befestigung am Fahrzeug, einem Mittelteil der das Emblem der Gruppe zeigt, sowie einem oberen Teil, auf dem die Webcam montiert wird. Abbildung \ref{fig:halterung} zeigt den kompletten Aufbau.
+
+\todo{Bild fehlt noch}
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.35\textwidth]{images/halterung.png}
+	\caption{3D-gedruckte Kamerahalterung}
+	\label{fig:halterung}
+\end{figure}
+
 
 \subsection{Webcam verändert Belichtung zur Laufzeit}
 \label{sec:belichtung}
