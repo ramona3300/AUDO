@@ -1,6 +1,6 @@
-\chapter{Implementierung}
+\section{Implementierung}
 \label{cha:Implementierung}
-\section{Bildverarbeitung und Erkennung von Fahrspuren}
+\subsection{Bildverarbeitung und Erkennung von Fahrspuren}
 \label{sec:spurerkennung}
 
 Zur Bilderzeugung konnte zwischen zwei Kamerasystemen wählen werden: Einer Kinect Kamera sowie einer Weitwinkel Webcam. Die Entscheidung fiel auf die Weitwinkel Webcam, da sich diese aufgrund ihrer Weitwinkel- und Farbdarstellungseigenschaft und den in Kapitel \ref{cha:Probleme} genannten Problemen der Kinect Kamera sich als besser geeignet herausstellte. 
@@ -16,7 +16,7 @@ Zur Erkennung der Fahrspuren wurden die Farbwerte der grünen äußeren Fahrbahn
 \end{figure}
 \label{Bild von Fahrspuren}
 
-\section{Erkennung von Kurven und Geraden}
+\subsection{Erkennung von Kurven und Geraden}
 \label{sec:kurvenerkennung}
 Um das Fahrverhalten besser anpassen zu können, fiel die Entscheidung darauf Fahrmodi zu erstellen, welche unterschiedliche Reglerparameter besitzen. Um diese Fahrzustände korrekt erkennen zu können ist es von Nöten zwischen Geraden, Kurven, Kurvenein- und Kurvenausfahrten zu unterscheiden.
 
@@ -31,7 +31,7 @@ Um nun auch Kurvenein- und Kurvenausfahrten erkennen zu können wurde ein Puffer
 \end{figure}
 \label{Bild von Kurve}
 
-\section{Erkennung von Hindernissen}
+\subsection{Erkennung von Hindernissen}
 \label{sec:hinderniserkennung}
 
 Wie auch die Fahrspurerkennung basiert die Hinderniserkennung auf der Filterung der Kamerabilder auf eine spezielle Farbe. Aus diesem Grund wurden die Hinderniswürfel, um sie vom Rest der Kulisse unterscheiden zu können mit orangenem Klebeband versehen. Um sicher zu gehen, dass nicht fälschlicherweise ein Hindernis erkannt wird, ein ähnlicher Algorithmus angewandt er zuvor in Kapitel \ref{sec:spurerkennung} beschrieben wurde. Des weiteren wird ein Hindernis nur als solches erkannt, wenn zwei vertikale Linien nebeneinander erkannt werden, wie es bei den Hinderniswürfeln der Fall ist. Prinzipiell wäre es somit auch möglich andere Gegenstände in die Fahrspur zu stellen, solange diese zwei vertikale orangene Streifen besitzen. Abb. \ref{Bild von Hindernis} zeigt die verschiedenen Phasen der Hinderniserkennung.
@@ -57,7 +57,7 @@ Wie auch die Fahrspurerkennung basiert die Hinderniserkennung auf der Filterung 
 \end{figure}
 \label{Bild von Hindernis}
 
-\subsection{Kollisionsvermeidung}
+\subsubsection{Kollisionsvermeidung}
 \label{sec:kollision}
 
 Um in allen Fahrsituationen eine Beschädigung des Fahrzeugs zu vermeiden, wird eine Kollisionsvermeidung eingesetzt. Diese verhindert unabhängig von Fahrspuren oder erkannten Hindernissen, dass es im Fahrbetrieb zu einem Zusammenstoß mit anderen Gegenständen oder der Wand kommt. Hierzu werden die Daten des vorderen Ultraschallsensors ausgewertet, der einen ungefähren Abstandswert zum nächstgelegenen Gegenstand liefert.
@@ -69,7 +69,7 @@ Ein besonderes Problem ergibt sich aus der Tatsache, dass die Werte des Sensors 
 \tod{Codeausschnitt: collision\_protection()}
 \tod{Bild des Ultraschallsensors}
 
-\subsection{Regelungskonzept und Spurhaltung}
+\subsubsection{Regelungskonzept und Spurhaltung}
 \label{sec:wallfollower}
 
 Nach umfangreichen Tests zu Beginn des Projekts wurde ein strukturvariabler Regelungsansatz mit PD-Reglern gewählt. Eine strukturvariable Regelung lässt sich vor Allem dann sinnvoll einsetzen, wenn zwischen wenigen bekannten Arbeitspunkten umgeschaltet werden muss. Die Rennstrecke des Projektseminars Echtzeitsysteme lässt sich Kurven- und Geradenabschnitte aufteilen. Aufgrund der hohen Nichtlinearität der Lenkungsmechanik (insbesondere Lose, Haftreibung, Gleitreibung) lässt sich mit einem einzigen PD-Regler kein zufriedenstellendes Regelverhalten in allen Fahrsituationen erzielen. Eine stationäre Genauigkeit ist in diesem Fall zur Spurhaltung im Übrigen nicht erforderlich, solange die bleibende Regelabweichung in der Praxis so klein ist, dass alle Fahrsituationen der Rennstrecke ohne Linienüberschreitung gefahren werden können. Mit mehreren gut eingestellten PD-Reglern lässt sich diese Anforderung erfüllen.
@@ -77,7 +77,7 @@ Nach umfangreichen Tests zu Beginn des Projekts wurde ein strukturvariabler Rege
 Die Bildverarbeitung liefert die Positionsdaten aller Markierungslinien, die im Bildausschnitt der Kamera erfasst werden. Da die Position der Kamera auf dem Fahrzeug sich nicht ändert, kann ein fester Sollwert für den Abstand zu diesen Linien vorgegeben werden. Es muss zur Berechnung der Regelabweichung lediglich bekannt sein, ob das Fahrzeug sich an der rechten oder an der linken Fahrbahnbegrenzung orientieren soll. Näheres hierzu in Abschnitt \ref{sec:fahrsituationen}.
 
 
-\subsection{Implementierung des PD-Reglers}
+\subsubsection{Implementierung des PD-Reglers}
 \label{sec:pdregler}
 
 Die Berechnung der Lenkwinkelregelung erfolgt in mehreren Schritten. Zunächst wird aus den situationsabhängigen Reglerparametern sowie Führungsgröße und aktueller Position eine Stellgröße berechnet. Der differentielle Anteil des PD-Reglers greift hierbei auf den aktuellen und vorherigen Wert der Regelabweichung, sowie die verstrichene Zeitdauer seit der letzten Berechnung zu.
@@ -90,7 +90,7 @@ Um ein ruhiges Lenkverhalten zu erreichen werden die Ausgangswerte des Reglers z
 
 \tod{Codeausschnitt: Regler Glättung}
 
-\subsection{Implementierung verschiedener Fahrsituationen}
+\subsubsection{Implementierung verschiedener Fahrsituationen}
 \label{sec:fahrsituationen}
 
 Das Konzept sieht die Aufteilung der zu fahrenden Strecke in vier wiederkehrende Fahrsituationen vor:
@@ -107,7 +107,7 @@ Je nach Situation wird zwischen einem Regler für Geradeausfahrt und einem Regle
 Der Regler für die Geradeausfahrt zeichnet sich durch \todo{(.....)} aus, während der Regler für die Kurvenabschnitte \todo{(.....)}.
 
 
-\subsection{Einleitung eines Spurwechsels}
+\subsubsection{Einleitung eines Spurwechsels}
 \label{sec:spurwechsel}
 
 Die Implementierung eines Spurwechsels eröffnet vielfältige Möglichkeiten. Während ein Spurwechsel auf geraden Abschnitten der Strecke unproblematisch ist, kann es im Zusammenhang mit Kurven zu Problemen kommen. Wird eine Kurve auf der äußeren Spur durchfahren, so ist während der Kurvenfahrt grundsätzlich kein Wechsel auf die innere Spur möglich. Die konstruktive Begrenzung des Lenkwinkels wird durch die Kurvenfahrt schon komplett ausgenutzt, sodass kein Spielraum für ein Ausweichen nach innen mehr bleibt. Weniger problematisch ist das Ausweichen von der inneren auf die äußere Spur während einer Kurvenfahrt.
@@ -115,18 +115,18 @@ Die Implementierung eines Spurwechsels eröffnet vielfältige Möglichkeiten. W�
 Auf der Rennstrecke des Projektseminars gibt es nur zwei Varianten eines Spurwechsels: von der rechten auf die linke Spur, und von der linken auf die rechte Spur. Grundsätzlich können diese Wechsel vorgenommen werden, indem der Regler-Sollwert auf den jeweils anderen Fahrbahnrand gesetzt wird. Dazu muss jedoch zunächst sichergestellt werden, dass sich überhaupt beide Fahrbahnmarkierungen im Sichtfeld der Kamera befinden. Daher wird \todo{(....)}
 
 
-\subsection{Fahrmodi und Wettbewerb}
+\subsubsection{Fahrmodi und Wettbewerb}
 \label{sec:fahrmodi}
 
 Im Rahmen dieses Projektseminars sind zwei Aufgaben zu erfüllen: das Absolvieren einer kompletten Runde in möglichst geringer Zeit, und die Hinderniserkennung mit Spurwechsel bei möglichst wenigen Linienübertritten. Um beide Aufgaben möglichst gut zu lösen werden zwei verschiedene Fahrmodi implementiert, die sich durch die Fahrgeschwindigkeit und die Kriterien zur Wahl der Fahrspur unterscheiden.
 
-\subsubsection{Fahrmodus 1: Rundenzeit}
+\paragraph{Fahrmodus 1: Rundenzeit}
 
 \todo{TODO}
 
 Im ersten Fahrmodus liegt die Herausforderung in der Minimierung der Rundenzeiten. In diesem Modus wird ohne Hindernisse auf der Strecke gefahren, daher ist die Hinderniserkennung abgeschaltet. 
 
-\subsubsection{Fahrmodus 2: Hinderniserkennung und Spurwechsel}
+\paragraph{Fahrmodus 2: Hinderniserkennung und Spurwechsel}
 
 In diesem Modus spielt die Fahrgeschwindigkeit eine untergeordnete Rolle, weshalb sie auf einen konstanten und relativ niedrigen Wert gesetzt wird. Zunächst orientiert sich das Fahrzeug am rechten oder linken Fahrbahnrand und folgt der Spur. Solange sich kein Hindernis auf der Strecke befindet, wird dieser Zustand beibehalten. 
 
