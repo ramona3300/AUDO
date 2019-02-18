@@ -65,10 +65,7 @@ Um aus dem fehlerbehafteten Signal verwertbare Daten zu erhalten werden die Wert
 
 Ein besonderes Problem ergibt sich aus der Tatsache, dass die Werte des Sensors in unregelmäßigen Abständen kurzzeitig auf den Wert Null springen. Dies entspräche einem Gegenstand direkt vor dem Sensor, was schon alleine aufgrund der Fahrzeuggeometrie nicht plausibel ist. Diese Werte müssen daher von der Auswertung ausgenommen werden.
 
-\begin{lstlisting}
-
-\end{lstlisting}
-\tod{Codeausschnitt: collision\_protection()}
+\lstinputlisting[firstline=155, lastline=191, caption={Codeausschnitt zu Collision Detection}, label={code:collision}]{../../drive/src/drive_node.cpp}
 \tod{Bild des Ultraschallsensors}
 
 \subsubsection{Regelungskonzept und Spurhaltung}
@@ -82,15 +79,14 @@ Die Bildverarbeitung liefert die Positionsdaten aller Markierungslinien, die im 
 \label{sec:pdregler}
 Die Berechnung der Lenkwinkelregelung erfolgt in mehreren Schritten. Zunächst wird aus den situationsabhängigen Reglerparametern sowie Führungsgröße und aktueller Position eine Stellgröße berechnet. Der differentielle Anteil des PD-Reglers greift hierbei auf den aktuellen und vorherigen Wert der Regelabweichung, sowie die verstrichene Zeitdauer seit der letzten Berechnung zu.
 
+\lstinputlisting[firstline=155, lastline=191, caption={Codeausschnitt zu Collision Detection}, label={code:pdregler}]{../../drive/src/drive_node.cpp}
 \tod{Codeausschnitt: PD Regler}
 
 Anschließend erfolgt eine Begrenzung der Stellgröße. Die Hardware erlaubt Lenkwinkel im Bereich -800....+800. Um Beschädigungen zu vermeiden wird der maximale Lenkwinkel softwareseitig auf -700....+700 begrenzt. Bei höheren Werten kommt es zu einem Blockieren des Lenkgetriebes.
 
 Um ein ruhiges Lenkverhalten zu erreichen, werden die Ausgangswerte des Reglers zum Schluss geglättet. Dazu wird ein gewichteter Mittelwert der letzten Stellgrößen gebildet. Die Gewichtung erfolgt in Abhängigkeit des zeitlichen Verlaufs. Dabei hat der zuletzt berechnete Wert das größte Gewicht, ein 0,3 Sekunden zurückliegender Wert hingegen nur das halbe Gewicht. Der gewichtete Mittelwert erzeugt ein ruhiges Regelverhalten, ohne jedoch die Regelung zu stark zu verzögern.
 
-\begin{lstlisting}
-
-\end{lstlisting}
+\lstinputlisting[firstline=155, lastline=191, caption={Codeausschnitt zu Collision Detection}, label={code:glaettung}]{../../drive/src/drive_node.cpp}
 \tod{Codeausschnitt: Regler Glättung}
 
 \subsubsection{Implementierung verschiedener Fahrsituationen}
@@ -136,8 +132,6 @@ Sobald ein Hindernis in das Sichtfeld der Kamera eintritt liefert die Bildverarb
 
 Der Spurwechsel wird durch die Erkennung eines Hindernisses eingeleitet. Die Bildverarbeitung liefert dabei die Positionen des rechten und linken Randes eines Hindernisses, sodass neben der Position auch dessen Breite bekannt ist (siehe \autoref{sec:hinderniserkennung}). Für den Spurwechsel entscheidend ist die Frage, ob sich das erkannte Hindernis überhaupt auf der gleichen Fahrspur wie das Fahrzeug befindet. Ist das nicht der Fall, stellt es kein Hindernis dar und kann ignoriert werden.
 
-\begin{lstlisting}
-
-\end{lstlisting}
+\lstinputlisting[firstline=155, lastline=191, caption={Codeausschnitt zu Collision Detection}, label={code:hindernis}]{../../drive/src/drive_node.cpp}
 \tod{Codeausschnitt: Hinderniserkennung}
 
