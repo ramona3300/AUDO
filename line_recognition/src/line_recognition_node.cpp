@@ -393,7 +393,7 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg){
     cv::cvtColor(crop, crop, cv::COLOR_BGR2HSV, 3);
     // only keep green
     cv::Mat hsv_filtered   = cv::Mat::zeros( crop.size(), CV_8UC3 );
-    cv::inRange(crop, cv::Scalar(62, 25, 148), cv::Scalar(85, 178, 255), hsv_filtered);
+    cv::inRange(crop, cv::Scalar(57, 25, 148), cv::Scalar(85, 178, 255), hsv_filtered);//62,25,148
     // only keep orange
     cv::Mat hsv_filtered_or   = cv::Mat::zeros( crop.size(), CV_8UC3 );
     cv::inRange(crop, cv::Scalar(2, 150, 180), cv::Scalar(15, 255, 255), hsv_filtered_or);

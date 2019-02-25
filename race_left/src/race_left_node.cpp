@@ -331,7 +331,7 @@ void mySiginthandler(int sig){
 int main(int argc, char** argv)
 {
   // init this node
-  ros::init(argc, argv, "drive_node", ros::init_options::NoSigintHandler);
+  ros::init(argc, argv, "race_left_node", ros::init_options::NoSigintHandler);
   // get ros node handle
   ros::NodeHandle nh;
   signal(SIGINT, mySiginthandler);
@@ -366,8 +366,8 @@ int main(int argc, char** argv)
       nh.advertise<std_msgs::Int16>("/uc_bridge/set_steering_level_msg", 1);
   // variables for controlling
   // 0 = right; 1 = left
-  int line_selection = 0;
-  int line_selection_last = 0;
+  int line_selection = 1;
+  int line_selection_last = 1;
   int motor_speed = 0;
   // PID values
   int pk = 3000.0 * 0.7;
@@ -382,7 +382,7 @@ int main(int argc, char** argv)
   double i_err = 0;
   double istwert = 0;
   double sollwert = 1.4;
-  double sollwert_race = 1.8;
+  double sollwert_race = 1.1;
   double sollwert_obstacle = 1.4;
   int s_out = 0;
   last_t = ((double)clock()/CLOCKS_PER_SEC);
@@ -404,7 +404,7 @@ int main(int argc, char** argv)
   int s_out_av = 0;
 
   // Select drive mode: 1 = Race mode , 0 = Obstacle Detection mode
-  int drive_mode = 0;
+  int drive_mode = 1;
   int switch_state_del_r2l = 0;
   int switch_state_del_l2r = 0;
   int switch_ar[10];

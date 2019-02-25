@@ -331,7 +331,7 @@ void mySiginthandler(int sig){
 int main(int argc, char** argv)
 {
   // init this node
-  ros::init(argc, argv, "drive_node", ros::init_options::NoSigintHandler);
+  ros::init(argc, argv, "race_right_node", ros::init_options::NoSigintHandler);
   // get ros node handle
   ros::NodeHandle nh;
   signal(SIGINT, mySiginthandler);
@@ -404,7 +404,7 @@ int main(int argc, char** argv)
   int s_out_av = 0;
 
   // Select drive mode: 1 = Race mode , 0 = Obstacle Detection mode
-  int drive_mode = 0;
+  int drive_mode = 1;
   int switch_state_del_r2l = 0;
   int switch_state_del_l2r = 0;
   int switch_ar[10];
