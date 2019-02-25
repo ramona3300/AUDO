@@ -12,6 +12,9 @@
 // range of usf value average for collision protection
 #define RANGE_OF_USF_AVERAGE 20
 #define MAX_STEERING_ANGLE 700
+#define MAX_MOTOR_SPEED 1000
+#define MIN_MOTOR_SPEED -500
+
 // driving states
 #define DS_CURVE 1 // curve mode
 #define DS_STRAIGHT 2 // straight mode
@@ -686,6 +689,15 @@ int main(int argc, char** argv)
     // steering adjustments TODO
     int current_steering = steering_characteristic(s_out_av, last_steer);
     last_steer = current_steering;
+    // limit motorspeed 
+    if(motor_speed > MAX_MOTOR_SPEED) 
+    {
+      motor_speed = MAX_MOTOR_SPEED;
+    }
+    else if(motor_speed < MIN_MOTOR_SPEED) 
+    {
+      motor_speed = MIN_MOTOR_SPEED;
+    }
     steering.data = (int)s_out_av;
     ROS_INFO("State = %d, line = %d, steer = %d, IST = %f, I SEE = %d",current_drive_state, line_selection, s_out_av, istwert, recognized);
     // speed control and collision protection
