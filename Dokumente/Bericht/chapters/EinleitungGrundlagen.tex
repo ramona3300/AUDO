@@ -39,25 +39,19 @@ Deswegen  wurde ein 3D-Modell entwickelt und eine passende Halterung im Fablab\f
 In diesem Abschnitt wird die Software vorgestellt, die auf dem Mini-Computer läuft und während der Programmierung genutzt wird. Das Hauptbetriebssystem stellt Lubuntu dar\footnote{https://lubuntu.net/}. Auf diesem ist das Metabetriebssystem ROS installiert, welches die eigentlichen Funktionen übernimmt. Die Programmierung der Nodes geschieht mit dem Programm RoboWare Studio, dort sind alle vorgefertigten Nodes und die selbst erstellten  übersichtlich dargestellt. Programmiert wird in der Programmiersprache C++. \\
 Im folgenden werden häufig genutzte Pakete beschrieben und das Meta-Betriebssystem ROS.
 
-\subsubsection{OpenCV}
-\label{sec:openCV}
-\tod{Nils fragen und dann schreiben}
-opencv::mat Datenstruktur auf der alle Bearbeitungschritte ausgeführt werden
-cv::warpperspective for birdeye view
-Region of interrest
-cv::cvtColor to convert colorspaces (HSV <-> BGR)
-cv::inRange to filter colors
-cv::GaussianBlur to blur...
-cv::rectangle for debuging
-cv::mat .at<uchar>(y,x) to check value at a specific pixel
-cv::imshow and cv::namedWindow to display images for debug with cv::waitKey (doesnt work without it)
-http://wiki.ros.org/cv_camera 
 
 \subsubsection{ROS - Robot Operating System}
 \label{sec:ros}
 ROS ist ein Metabetriebssystem für Roboter, welches auf Linux basiert und in vielen Unternehmen für Steuerung von Robotern genutzt wird. Es stellt mehrere Pakete zur Verfügung, die einige nützliche Funktionen ermöglichen. Dazu gehört die Verteilung auf mehrere Systeme im Netzwerk, Paketverarbeitung und die Kommunikation zwischen den Nodes \cite{einfuehrungROS}.
 Die Kommunikation findet durch ein Publish-Subscribe-System statt. Die einzelnen Nodes publishen zu  bestimmten Themen Nachrichten, deren Inhalt sich auf das Thema bezieht. So erhält man zum Thema \code{/uc\_bridge/usr} über eine Subscription Nachrichten über die Werte des rechten Abstandssensors. Auch die Steuerung des Motors und des Lenkwinkels geschieht über das puplishen von Nachrichten. 
 Die Eigenschaften der Pakete und Tutorials zu den Funktionen sind auf der Website von ROS zu finden und erleichtern den Einstieg. Durch Open Source lässt sich schnell herausfinden was wirklich benötigt wird und welche Funktionen im späteren Verlauf hilfreich sein könnten.
+
+\subsubsection{OpenCV}
+\label{sec:openCV}
+Zur Verarbeitung der Kamerabilder wird die freie Bibliothek OpenCV\footnote{https://opencv.org/} genutzt, diese ist auch durch eine Node in ROS eingebunden und einfach nutzbar. Zur Verwendung wird das von der Kamera erhaltene Objekt in der Datenstruktur von OpenCV als \code{cv::Mat} gespeichert. Darauf lassen sich alle späteren Bearbeitungsschritte ausführen. 
+Sie stellt viele nützliche Funktionen bereit, die das Erkennen der Fahrspuren und der Hindernisse erleichtern. Dazu gehören zum Beispiel \code{cv::wrapperperspective}, mit der das Bild in eine Bird Eye View umgewandelt wird und \code{cv::imshow} zum Anzeigen des aktuellen Bildes. Interessanterweise funktionierte diese Funktion nur, wenn sie im Zusammenhang mit \code{cv:waitKey} aufgerufen wurde. 
+Mittels \code{cv::cvtColor}, \code{cv::inRange} und \code{cv::GaussianBlur} lässt sich der Farbraum des Originalbildes transformieren und in diesem anschließend alle Farben herausfiltern, die in einem bestimmten Bereich liegen. 
+In der späteren Verarbeitung war es nötig Farbwerte von einzelnen Pixeln auszuwerten, dies geschah mit Hilfe der Methode \code{cv::mat.at<uchar>(y,x)}. Auch ein Einzeichnen von neuen Punkten war möglich und für die spätere Kurvenerkennung hilfreich. 
 
 \subsubsection{PSES Packages}
 \label{sec:psespackages}

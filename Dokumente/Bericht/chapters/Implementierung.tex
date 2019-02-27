@@ -1,6 +1,13 @@
 \section{Implementierung}
 \label{cha:Implementierung}
 Im folgenden Kapitel wird die finale Implementierung und die Schritte dahin beschrieben. Es wird auf die Bildverarbeitung, die Erkennung von Fahrspuren und Hindernissen und die darin enthaltenen Regelungsansätze eingegangen.
+Zur Übersicht zeigt \autoref{graph} die Nodes und verwendeten Topics eines Fahrmodi. Es wird dargestellt wie die Bilder von \code{/cv\_camera} an \code{/line\_recognition\_node} weitergegeben und dort verarbeitet werden. Die so entstandenen inhaltlich wichtigen Punkte werden an die \code{/drive\_node} gesendet, welche die Steuerung und Kommunikation mit der \code{/uc\_bridge} übernimmt. 
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=\textwidth]{images/rosgraph.png}
+	\caption{Nodes und Topics der Implementierung}
+\end{figure}
+\label{graph}
 \subsection{Bildverarbeitung und Erkennung von Fahrspuren}
 \label{sec:spurerkennung}
 Zur Bilderzeugung konnte zwischen zwei Kamerasystemen gewählt werden: Einer Kinect Kamera sowie einer Weitwinkel Webcam. Die Entscheidung fiel auf die Weitwinkel Webcam, da sich diese aufgrund ihrer Weitwinkel- und Farbdarstellungseigenschaft und den in \autoref{cha:Probleme} genannten Problemen der Kinect Kamera sich als besser geeignet herausstellte. 
