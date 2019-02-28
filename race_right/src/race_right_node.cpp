@@ -258,10 +258,7 @@ int drive_state(int line_selection, int *curved, bool *actual_curve, int *straig
   }
 }
 
-int steering_characteristic(int s_out_av, int last_steer){
-    // do clever things
-    return s_out_av;
-}
+
 
 // receive and store an INT32 as double
 void INT32_Callback_as_double(std_msgs::Int32::ConstPtr msg, double* data)
@@ -287,6 +284,18 @@ void mySiginthandler(int sig){
 
 int main(int argc, char** argv)
 {
+  ROS_INFO("Race Mode Right Start");
+  /*
+  ROS_INFO("\n
+         /\\        ||     ||   ||==\\\\     //===\\\\          \n
+        //\\\\       ||     ||   ||   \\\\   //     \\\\         \n
+       //  \\\\      ||     ||   ||   ||   ||     ||             \n
+      //==  \\\\     ||     ||   ||   ||   ||     ||          \n
+     //      \\\\    \\\\     //   ||   //   \\\\    //            \n
+    //        \\\\    \\\\===//    ||==//     \\\\==//                 \n");
+  */
+  ROS_INFO("\n       /\\        ||     ||   ||==\\\\     //===\\\\          \n      //\\\\       ||     ||   ||   \\\\   //     \\\\         \n     //  \\\\      ||     ||   ||   ||   ||     ||             \n    //==  \\\\     ||     ||   ||   ||   ||     ||          \n   //      \\\\    \\\\     //   ||   //   \\\\    //            \n  //        \\\\    \\\\===//    ||==//     \\\\==//                 \n");
+  
   // init this node
   ros::init(argc, argv, "race_right_node", ros::init_options::NoSigintHandler);
   // get ros node handle
@@ -319,7 +328,6 @@ int main(int argc, char** argv)
   // variables for controlling
   // 0 = right; 1 = left
   int line_selection = 0;
-  int line_selection_last = 0;
   int motor_speed = 0;
   // PID values
   int pk = 3000.0 * 0.7;
@@ -437,9 +445,9 @@ int main(int argc, char** argv)
         // flatten s_out (Lowpassfilter)
 		// Race mode
           s_out_av = weighted_average(s_out, s_out_ar, &s_out_init, RANGE_OF_STEERING_AVG_RACE);
-    }
+    
     // steering adjustments TODO
-    int current_steering = steering_characteristic(s_out_av, last_steer);
+    int current_steering = s_out_av;
     last_steer = current_steering;
     steering.data = (int)s_out_av;
     ROS_INFO("State = %d, line = %d, steer = %d, IST = %f, I SEE = %d",current_drive_state, line_selection, s_out_av, istwert, recognized);
