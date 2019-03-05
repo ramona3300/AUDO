@@ -12,6 +12,8 @@
 // range of usf value average for collision protection
 #define RANGE_OF_USF_AVERAGE 20
 #define MAX_STEERING_ANGLE 700
+#define MAX_MOTOR_SPEED 1000
+#define MIN_MOTOR_SPEED 0
 // driving states
 #define DS_STARTUP 5 // startup mode (straight mode slow)
 #define DS_CURVE_SLOW 6 // curve mode slow
@@ -625,6 +627,15 @@ int main(int argc, char** argv)
         else if(s_out < -MAX_STEERING_ANGLE) 
         {
           s_out = -MAX_STEERING_ANGLE;
+        }
+        //limit motor_speed
+        if(motor_speed > MAX_MOTOR_SPEED) 
+        {
+          motor_speed = MAX_MOTOR_SPEED;
+        }
+        else if(motor_speed < MIN_MOTOR_SPEED) 
+        {
+          motor_speed = MIN_MOTOR_SPEED;
         }
         // flatten s_out (Lowpassfilter)
         s_out_av = weighted_average(s_out, switch_ar, &switch_init, 10);     

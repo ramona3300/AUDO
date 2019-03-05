@@ -12,6 +12,8 @@
 // range of usf value average for collision protection
 #define RANGE_OF_USF_AVERAGE 20
 #define MAX_STEERING_ANGLE 700
+#define MAX_MOTOR_SPEED 1000
+#define MIN_MOTOR_SPEED 0
 // driving states
 #define DS_CURVE 1 // curve mode
 #define DS_STRAIGHT 2 // straight mode
@@ -296,7 +298,7 @@ int main(int argc, char** argv)
   ROS_INFO("\n       /\\        ||     ||   ||==\\\\     //===\\\\          \n      //\\\\       ||     ||   ||   \\\\   //     \\\\         \n     //  \\\\      ||     ||   ||   ||   ||     ||             \n    //==  \\\\     ||     ||   ||   ||   ||     ||          \n   //      \\\\    \\\\     //   ||   //   \\\\    //            \n  //        \\\\    \\\\===//    ||==//     \\\\==//                 \n");
   
   // init this node
-  ros::init(argc, argv, "race_right_node", ros::init_options::NoSigintHandler);
+  ros::init(argc, argv, "race_left_node", ros::init_options::NoSigintHandler);
   // get ros node handle
   ros::NodeHandle nh;
   signal(SIGINT, mySiginthandler);
@@ -440,6 +442,15 @@ int main(int argc, char** argv)
         else if(s_out < -MAX_STEERING_ANGLE) 
         {
           s_out = -MAX_STEERING_ANGLE;
+        }
+        //limit motor_speed
+        if(motor_speed > MAX_MOTOR_SPEED) 
+        {
+          motor_speed = MAX_MOTOR_SPEED;
+        }
+        else if(motor_speed < MIN_MOTOR_SPEED) 
+        {
+          motor_speed = MIN_MOTOR_SPEED;
         }
         // flatten s_out (Lowpassfilter)
 		// Race mode
