@@ -24,7 +24,7 @@
 
 
 #define RANGE_OF_STEERING_AVG 20 // for s_out lowpassfilter
-#define RANGE_OF_STEERING_AVG_RACE 5 // for s_out lowpassfilter works with 10
+#define RANGE_OF_STEERING_AVG_RACE 8 // for s_out lowpassfilter works with 10
 
 
 double last_t, t;
@@ -197,19 +197,20 @@ int drive_state(int line_selection, int *curved, bool *actual_curve, int *straig
       }
   }
   // is there really a curve
-  for(int i = 29; i > 0; i--)
+  for(int i = 9; i > 0; i--)
   {
     curved[i] = curved[i - 1];
   }
   curved[0] = is_curve ? 1 : 0;
-  for(int i = 0; i < 30; i++)
+  for(int i = 0; i < 10; i++)
   {
     curve_count += curved[i];
   }
   //ROS_INFO("count = %d curve = %d curve_del = %d straight_del = %d, diff = %f, diff_2 = %f",curve_count,*actual_curve,*curve_delay,*straight_delay, diff, diff_2);
   //ROS_INFO("x_right = %f x_left = %f x_right_2 = %f x_left_2 = %f x_right_3 = %f x_left_3 = %f",x_right, x_left, x_right_2, x_left_2, x_right_3, x_left_3);
   // when approaching a curve wait for some time before switching to curve mode
-  if(curve_count >= 16){
+  ROS_INFO("----------------------------------------------------------------------------count = %d",curve_count);
+  if(curve_count > 4){
     // approaching a curve
     if(!(*actual_curve))
     {
@@ -217,7 +218,7 @@ int drive_state(int line_selection, int *curved, bool *actual_curve, int *straig
       if(*straight_delay == 0)
       {
         *actual_curve = true;
-        *curve_delay = 20;
+        *curve_delay = 10;
         return DS_CURVE;
       }
       else
@@ -229,11 +230,11 @@ int drive_state(int line_selection, int *curved, bool *actual_curve, int *straig
     else
     {
       *actual_curve = true;
-      *curve_delay = 20;
+      *curve_delay = 10;
       return DS_CURVE;
     }
   }
-  else if(curve_count <= 15)
+  else
   {
     // approaching a straight
     if(*actual_curve)
@@ -242,7 +243,7 @@ int drive_state(int line_selection, int *curved, bool *actual_curve, int *straig
       if(*curve_delay == 0)
       {
         *actual_curve = false;
-        *straight_delay = 20;
+        *straight_delay = 10;
         return DS_STRAIGHT;
       }
       else
@@ -254,13 +255,11 @@ int drive_state(int line_selection, int *curved, bool *actual_curve, int *straig
     else
     {
       *actual_curve = false;
-      *straight_delay = 20;
+      *straight_delay = 10;
       return DS_STRAIGHT;
     }
   }
 }
-
-
 
 // receive and store an INT32 as double
 void INT32_Callback_as_double(std_msgs::Int32::ConstPtr msg, double* data)
@@ -351,15 +350,15 @@ int main(int argc, char** argv)
   //for(int i = 0; i < RANGE_OF_STEERING_AVG; i++){s_out_ar[i] = 0;}
   // drive_state variables
   int current_drive_state = DS_STARTUP;
-  int curved[30];
-  for(int i = 0; i < 30; i++)
+  int curved[10];
+  for(int i = 0; i < 10; i++)
   {
     curved[i] = 0;
   }
-  bool actual_curve = false;
-  int straight_delay = 0;
-  int curve_delay = 0;
-  int startup_delay = 20;
+  bool actual_curve = true;
+  int straight_delay = 10;
+  int curve_delay = 10;
+  int startup_delay = 10;
   int s_out_av = 0;
 
 
@@ -371,7 +370,7 @@ int main(int argc, char** argv)
   {
     t = ((double)clock()/CLOCKS_PER_SEC);
     s_out = 0;
-    motor_speed = 900; // works with 300 for obstacle and 600 for race
+    motor_speed = 500; // works with 300 for obstacle and 600 for race
     
     // which line to follow
     if(line_selection)
@@ -401,27 +400,27 @@ int main(int argc, char** argv)
     {
       // ####################### Race Mode ################################## Mode Detail ### No ###
       case DS_CURVE: //                                                   ### Curve       ###  1 ###
-        motor_speed = (int) ( (double)motor_speed * 0.65 );
+        motor_speed = (int) ( (double)motor_speed * 1.0 );
         pk = (int) (3000.0 * 0.7 * ( 300.0  / (double)motor_speed ) );
         pd = (int) (1000.0 * 0.05 * ( 300.0  / (double)motor_speed ) );
         break;
-      case DS_CURVE_AP: //                                                ### Straight    ###  2 ###
-        motor_speed = (int) ( (double)motor_speed * 0.65 );
-        pk = (int) (3000.0 * 0.1 * ( 300.0  / (double)motor_speed ) );
+      case DS_CURVE_AP: //                                                ### Straight    ###  3 ###
+        motor_speed = (int) ( (double)motor_speed * 1.0 );
+        pk = (int) (3000.0 * 0.5 * ( 300.0  / (double)motor_speed ) );
         pd = (int) (1000.0 * 0.01 * ( 300.0  / (double)motor_speed ) );
         break;
-      case DS_STRAIGHT: //                                                ### Straight    ###  3 ###
-        motor_speed = (int) ( (double)motor_speed * 1.2 );
+      case DS_STRAIGHT: //                                                ### Straight    ###  2 ###
+        motor_speed = (int) ( (double)motor_speed * 1.1 );
         pk = (int) (3000.0 * 0.1 * ( 300.0  / (double)motor_speed ) );
         pd = (int) (1000.0 * 0.01 * ( 300.0 / (double)motor_speed ) );
         break;
       case DS_STRAIGHT_AP: //                                             ### Curve       ###  4 ###
-        motor_speed = (int) ( (double)motor_speed * 1 );
+        motor_speed = (int) ( (double)motor_speed * 1.0 );
         pk = (int) (3000.0 * 0.2 * ( 300.0  / (double)motor_speed ) );
-        pd = (int) (1000.0 * 0.005 * ( 300.0  / (double)motor_speed ) );
+        pd = (int) (1000.0 * 0.05 * ( 300.0  / (double)motor_speed ) );
         break;
       // ####################### Startup Mode ############################### Mode Detail ### No ###
-      case DS_STARTUP://                                                ### Straight slow ###  2 ###
+      case DS_STARTUP://                                                ### Straight slow ###  5 ###
         motor_speed = 300;
         pk = (int) (3000.0 * 0.15 * ( 300.0  / (double)motor_speed ) );
         pd = (int) (1000.0 * 0.05 * ( 300.0  / (double)motor_speed ) );
