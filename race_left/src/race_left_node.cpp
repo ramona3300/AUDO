@@ -206,10 +206,7 @@ int drive_state(int line_selection, int *curved, bool *actual_curve, int *straig
   {
     curve_count += curved[i];
   }
-  //ROS_INFO("count = %d curve = %d curve_del = %d straight_del = %d, diff = %f, diff_2 = %f",curve_count,*actual_curve,*curve_delay,*straight_delay, diff, diff_2);
-  //ROS_INFO("x_right = %f x_left = %f x_right_2 = %f x_left_2 = %f x_right_3 = %f x_left_3 = %f",x_right, x_left, x_right_2, x_left_2, x_right_3, x_left_3);
   // when approaching a curve wait for some time before switching to curve mode
-  ROS_INFO("----------------------------------------------------------------------------count = %d",curve_count);
   if(curve_count > 4){
     // approaching a curve
     if(!(*actual_curve))
@@ -347,7 +344,6 @@ int main(int argc, char** argv)
   last_t = ((double)clock()/CLOCKS_PER_SEC);
   int s_out_ar[RANGE_OF_STEERING_AVG];
   int s_out_init = 1;
-  //for(int i = 0; i < RANGE_OF_STEERING_AVG; i++){s_out_ar[i] = 0;}
   // drive_state variables
   int current_drive_state = DS_STARTUP;
   int curved[10];

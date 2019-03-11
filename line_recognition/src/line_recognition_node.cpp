@@ -313,6 +313,8 @@ void obstacle_detection(cv::Mat image, int height, int index, int* obstacle, int
           }
           break;
         case OD_FIND_LEFT_LINE:
+          // found a white area if there are:
+          // four consecutive pixel with a combined value of more than 60
           if(image_regional_value_check(image, x, y, 4, 60, MORE))
           {
             x_left_od = x - 5;
@@ -377,9 +379,7 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg){
     cv::Rect roi;
     roi.x = offset_x;
     roi.y = offset_y;
-    //roi.width = bird.size().width - (offset_x*2);
     roi.width = 240;
-    //roi.height = bird.size().height - 150;
     roi.height = bird.size().height - 240;
     //Crop the original image to the defined ROI
     cv::Mat crop = bird(roi);
