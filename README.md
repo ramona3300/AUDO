@@ -7,4 +7,6 @@
 <p>Node drive_left: Hindernisvermeidung, Startrichtung linke Linie</p>
 <p>Node race_right: Race Mode, Startrichtung rechte Linie</p>
 <p>Node race_left: Race Mode, Startrichtung linke Linie</p>
+<p>Node line_recognition: Bildverarbeitung und Linienerkennung, benötigt für jede Drive/Race Node</p>
+<p>Zum Starten Nodes pses_ucbridge, cv_camera, line_recognition und eine der 5 oberen Nodes starten</p>
 
