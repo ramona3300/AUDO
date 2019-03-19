@@ -156,40 +156,32 @@ int obstacle_detection(int line_selection)
   double range from usf value
   return true, if there is an object
 */
-bool collision_protection(double range)
-{
+bool collision_protection(double range){
   // initialization
-  if(usf_flag)
-  {
-    for(int i = 0; i < RANGE_OF_USF_AVERAGE; i++)
-    {
+  if(usf_flag){
+    for(int i = 0; i < RANGE_OF_USF_AVERAGE; i++){
       usf_history[i] = 0;
     }
     usf_flag = false;
     return true;
   }
   // refresh array 
-  if(range > 0)
-  {
-    for(int i = 0; i < RANGE_OF_USF_AVERAGE - 1; i++)
-    {
+  if(range > 0){
+    for(int i = 0; i < RANGE_OF_USF_AVERAGE - 1; i++){
       usf_history[i + 1] = usf_history[i];
     }
       usf_history[0] = range;
   }
   // average
   double average = 0;
-  for(int i = 0; i < RANGE_OF_USF_AVERAGE; i++)
-  {
+  for(int i = 0; i < RANGE_OF_USF_AVERAGE; i++){
     average += usf_history[i];
   }
   average = average / RANGE_OF_USF_AVERAGE;
-  if(average < 0.35) 
-  {
+  if(average < 0.35) {
     return true;
   }
-  else
-  {
+  else{
     return false;
   }
 }
@@ -645,8 +637,8 @@ int main(int argc, char** argv)
       case DS_SWITCH_HARD:
         // calculate controller values
         err = sollwert - istwert;
-        p_err = pk * err;// P-portion
-        d_err = pd * (err - last_err) / (t - last_t);// D-portion
+        p_err = pk * err;
+        d_err = pd * (err - last_err) / (t - last_t);
         s_out = -(p_err +  d_err);
         // limit s_out to +-MAX_STEERING_ANGLE
         if(s_out > MAX_STEERING_ANGLE) 
@@ -663,35 +655,31 @@ int main(int argc, char** argv)
       default:
         // calculate controller values
         err = sollwert - istwert;
-        p_err = pk * err;// P-portion
-        d_err = pd * (err - last_err) / (t - last_t);// D-portion
+        p_err = pk * err;
+        d_err = pd * (err - last_err) / (t - last_t);
         s_out = -(p_err +  d_err);
         // limit s_out to +-MAX_STEERING_ANGLE
-        if(s_out > MAX_STEERING_ANGLE) 
-        {
+        if(s_out > MAX_STEERING_ANGLE) {
           s_out = MAX_STEERING_ANGLE;
         }
-        else if(s_out < -MAX_STEERING_ANGLE) 
-        {
+        else if(s_out < -MAX_STEERING_ANGLE) {
           s_out = -MAX_STEERING_ANGLE;
         }
         //limit motor_speed
-        if(motor_speed > MAX_MOTOR_SPEED) 
-        {
+        if(motor_speed > MAX_MOTOR_SPEED) {
           motor_speed = MAX_MOTOR_SPEED;
         }
-        else if(motor_speed < MIN_MOTOR_SPEED) 
-        {
+        else if(motor_speed < MIN_MOTOR_SPEED) {
           motor_speed = MIN_MOTOR_SPEED;
         }
         // flatten s_out (Lowpassfilter)
-        if(drive_mode)
-        {// Race mode
-          s_out_av = weighted_average(s_out, s_out_ar, &s_out_init, RANGE_OF_STEERING_AVG_RACE);
+        if(drive_mode){// Race mode
+          s_out_av = weighted_average(s_out, s_out_ar, 
+		  &s_out_init, RANGE_OF_STEERING_AVG_RACE);
         }
-        else
-        {// Obstacle Detection mode
-          s_out_av = weighted_average(s_out, s_out_ar, &s_out_init, RANGE_OF_STEERING_AVG);
+        else{// Obstacle Detection mode
+          s_out_av = weighted_average(s_out, s_out_ar, 
+		  &s_out_init, RANGE_OF_STEERING_AVG);
         }
         break;
     }
