@@ -5,7 +5,7 @@ Das folgende Kapitel beschäftigt sich mit den Problemen, die während der Imple
 \subsection{Kinect - unnatürliche Farben}
 \label{sec:farben}
 Die Kamera der Kinect hat eine unnatürliche Farbdarstellung.
-Es sind sind starke Unterschiede zwischen Kamerabild und der Wirklichkeit zur erkennen.
+Es sind starke Unterschiede zwischen Kamerabild und der Wirklichkeit zu erkennen.
 
 \begin{figure}[ht]
 	\centering
@@ -27,10 +27,10 @@ Die Farben der Kinect sind übersaturiert und haben teilweise nicht einmal den r
 \subsection{Kinect - kleines Sichtfeld}
 \label{sec:sichtfeld}
 Das Sichtfeld der Kinect Kamera fällt relativ klein aus.
-Das hat auch damit zu tun, dass die Kinect in einem Winkel auf dem Fahrzeug angebracht ist, mit dem das Sichtfeld erst circa 30cm vom Fahrzeug entfernt beginnt.
+Das hat auch damit zu tun, dass die Kinect in einem Winkel auf dem Fahrzeug angebracht ist, mit dem das Sichtfeld erst circa 30cm vor dem Fahrzeug beginnt.
 Dadurch kann der Abstand des Fahrzeuges zur Fahrbahnbegrenzung zum aktuellen Zeitpunkt nicht ohne weiteres bestimmt werden. 
 Zudem ist die Kamera in der Kinect am rechten Rand platziert.
-Dadurch ist die linke Fahrbahnbegrenzung häufig nicht im Sichtfeld.
+Demzufolge ist die linke Fahrbahnbegrenzung häufig nicht im Sichtfeld.
 Dieser Effekt wird noch durch die Transformation zum Bird-Eye View verstärkt.
 
 \begin{figure}[ht]
@@ -48,20 +48,20 @@ Dieser Effekt wird noch durch die Transformation zum Bird-Eye View verstärkt.
 	\caption{Sichtfeld von Webcam und Kinect}
 \end{figure}
 
-Um eine robuste Fahrbahnerkennung zu implementieren, sind ordentliche Ausgangsdaten von großer Wichtigkeit.
-In unserem Fall benötigen wir eine natürliche Farbdarstellung, ein ausreichend großes Sichtfeld das möglichst nah am Fahrzeug beginnt und eine flüssige Bildrate. 
-Alle diese Anforderungen werden von der Webcam erfüllt.
+Um eine robuste Fahrbahnerkennung zu implementieren, sind anwendungsoptimierte Eingangsdaten von großer Wichtigkeit.
+In unserem Fall benötigen wir eine natürliche Farbdarstellung, ein ausreichend großes Sichtfeld, das möglichst nah am Fahrzeug beginnt und eine flüssige Bildrate. 
+Diese Anforderungen werden alle von der Webcam erfüllt.
 Die Webcam kann zudem sehr flexibel auf dem Fahrzeug angebracht werden.
 \\
-Die Halterung der Webcam verursacht allerdings ein weiteres Problem: eine geringfügige Änderung des Kamerawinkels hat merkliche Auswirkungen auf die Transformation zum Bird-Eye View.
-Wenn der Bird-Eye View nicht mehr korrekt berechnet wird, funktioniert die Erkennung der Fahrsituation nicht mehr so gut.
+Die Halterung der Webcam verursacht allerdings ein weiteres Problem, da eine geringfügige Änderung des Kamerawinkels deutliche Auswirkungen auf die Transformation zum Bird-Eye View hat.
+Wenn der Bird-Eye View nicht mehr korrekt berechnet wird, funktioniert die Erkennung der Fahrsituation nicht mehr gut.
 Genauer wird nicht mehr erkannt, wann sich das Fahrzeug auf einer Geraden befindet.
-Da die Regelung abhängig von der Fahrsituation ist, kann das Fahrverhalten erheblich schlechter werden. Eine stabile Befestigung der Webcam ist daher wichtig. Näheres dazu im folgenden Abschnitt.
+Da die Regelung abhängig von der Fahrsituation ist, kann das Fahrverhalten dadurch erheblich schlechter werden. Eine stabile Befestigung der Webcam ist daher wichtig. Näheres dazu im folgenden Abschnitt.
 
 \subsection{Befestigung der Weitwinkelkamera}
 \label{sec:befestigung}
-Während die Kinect Kamera fest mit dem Fahrzeug verschraubt ist, stellt sich bei Verwendung der Weitwinkelkamera die Frage nach deren Positionierung und Befestigung. Der mitgelieferte Standfuß kann nicht sinnvoll auf dem Fahrzeug fixiert werden, da er nur für stationären Betrieb geeignet ist. Zudem kommt es durch die Vibrationen im Fahrbetrieb zu einer schleichenden Veränderung des Kamerawinkels mit den in \autoref{sec:sichtfeld} beschriebenen Auswirkungen.
-Um eine stabile und auch optisch ansprechende Lösung zu finden, wurde mittels CAD-Software eine Kamerahalterung entworfen und auf einem 3D-Drucker ausgedruckt. Dies bietet gleich mehrere Vorteile:
+Während die Kinect fest mit dem Fahrzeug verschraubt ist, stellt sich bei Verwendung der Weitwinkelkamera die Frage nach deren Positionierung und Befestigung. Der mitgelieferte Standfuß kann nicht sinnvoll auf dem Fahrzeug fixiert werden, da er nur für stationären Betrieb geeignet ist. Zudem kommt es durch die Vibrationen im Fahrbetrieb zu einer schleichenden Veränderung des Kamerawinkels mit den in \autoref{sec:sichtfeld} beschriebenen Auswirkungen.
+Um eine stabile und auch optisch ansprechende Lösung zu finden, wurde mittels CAD-Software eine Kamerahalterung entworfen und mit einem 3D-Drucker ausgedruckt. Dies bietet gleich mehrere Vorteile:
 
 \begin{itemize}
 	\item Die Kameraposition kann frei gewählt werden
@@ -83,20 +83,19 @@ Die Halterung besteht aus einem unteren Teil zur Befestigung am Fahrzeug, einem 
 \subsection{Weitwinkelkamera verändert Belichtung zur Laufzeit}
 \label{sec:belichtung}
 Die Weitwinkelkamera passt ihre Belichtung an die aktuellen Lichtverhältnisse zur Laufzeit an.
-Das führt leider dazu, dass selbst kleine Veränderungen der Lichtverhältnisse die Belichtung ändern, wie zum Beispiel Lichtspiegelungen auf dem Boden.
+Das führt dazu, dass selbst kleine Veränderungen der Lichtverhältnisse die Belichtung ändern, wie zum Beispiel Lichtspiegelungen auf dem Boden.
 Wenn sich die Belichtung ändert, ändern sich auch schlagartig die Farbwerte.
 Um keine komplizierte Anpassung der Filterparameter während der Laufzeit vornehmen zu müssen, muss die Belichtung konstant gehalten werden.
 Das ist bei dieser Weitwinkelkamera nicht in der Software einstellbar.
 Deshalb wurde ein pragmatischer Ansatz gewählt, um dieses Problem zu lösen.
-Die Weitwinkelkamera wird mit einer LED Leiste geblendet, welche über das 12V Boardnetz gespeißt wird.
+Die Weitwinkelkamera wird mit einer LED Leiste geblendet, welche über das 12V-Boardnetz gespeißt wird.
 Damit nimmt die Weitwinkelkamera die Umgebung immer sehr hell wahr.
 Leichte Veränderungen der tatsächlichen Lichtverhältnisse werden durch das Blenden einfach herausgefiltert. 
 Das Ergebnis ist eine konstante Belichtung und somit auch konstante Farbwerte.
 
 \subsection{Fahrwerk}
 \label{sec:fahrwerk}
-Die Räder kollidieren bei zu hohem Lenkwinkel mit dem Gehäuse.
-Deswegen wird der maximale Lenkwinkel auf einen ausgemessenen Wert begrenzt.
+Die Räder kollidieren bei zu hohem Lenkwinkel mit dem Gehäuse, deswegen wird der maximale Lenkwinkel auf einen ausgemessenen Wert begrenzt.
 \\
 Die Lenkmechanik des Fahrzeugs ist aus Plastik und nicht sonderlich genau gefertigt.
 Das hat zur Folge, dass die Lenkung ein merkliches Spiel hat. 

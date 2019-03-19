@@ -47,7 +47,7 @@ Die Eigenschaften der Pakete und Tutorials zu den Funktionen sind auf der Websit
 \subsubsection{OpenCV}
 \label{sec:openCV}
 Zur Verarbeitung der Kamerabilder wird die freie Bibliothek OpenCV\footnote{https://opencv.org/} genutzt, diese ist auch durch eine Node in ROS eingebunden und einfach nutzbar. Zur Verwendung wird das von der Kamera erhaltene Objekt in der Datenstruktur von OpenCV als \code{cv::Mat} gespeichert. Darauf lassen sich alle späteren Bearbeitungsschritte ausführen. 
-Sie stellt viele nützliche Funktionen bereit, die das Erkennen der Fahrspuren und der Hindernisse erleichtern. Dazu gehören zum Beispiel \code{cv::wrapperperspective}, mit der das Bild in eine Bird Eye View umgewandelt wird und \code{cv::imshow} zum Anzeigen des aktuellen Bildes. Interessanterweise funktionierte diese Funktion nur, wenn sie im Zusammenhang mit \code{cv:waitKey} aufgerufen wurde. 
+Sie stellt viele nützliche Funktionen bereit, die das Erkennen der Fahrspuren und der Hindernisse erleichtern. Dazu gehören zum Beispiel \code{cv::wrapperperspective}, mit der das Bild in eine Bird-Eye View umgewandelt wird und \code{cv::imshow} zum Anzeigen des aktuellen Bildes. Interessanterweise funktionierte diese Funktion nur, wenn sie im Zusammenhang mit \code{cv:waitKey} aufgerufen wurde. 
 Mittels \code{cv::cvtColor}, \code{cv::inRange} und \code{cv::GaussianBlur} lässt sich der Farbraum des Originalbildes transformieren und in diesem anschließend alle Farben herausfiltern, die in einem bestimmten Bereich liegen. 
 In der späteren Verarbeitung war es nötig Farbwerte von einzelnen Pixeln auszuwerten, dies geschah mit Hilfe der Methode \code{cv::mat.at<uchar>(y,x)}. Auch ein Einzeichnen von neuen Punkten war möglich und für die spätere Kurvenerkennung hilfreich. 
 
