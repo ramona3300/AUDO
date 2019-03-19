@@ -18,7 +18,12 @@ Die benötigte Hardware für das Projektseminar wurde allen Gruppen zur Verfügu
 Das zur Verfügung gesellte Fahrzeug ist einem Auto ähnlich. Es wurde speziell für das Projektseminar entwickelt und durch die TU Darmstadt gepflegt. Es besitzt vier Räder einen Motor und ist mit verschiedenen Sensoren, einer Kamera einem Mini-Computer und Mikrocontrollern ausgestattet. Da sich die Aufgabenstellung dieses Seminars auf Bildverarbeitung fokussierte, wird hier nicht näher auf die anderen Sensoren eingegangen. 
 Die Steuerung erfolgt über den Computer, auf welchem ROS läuft (siehe \autoref{sec:ros}). Das Fahrzeug besitzt einen maximalen Lenkwinkel und eine maximale Geschwindigkeit, diese wurden durch eine bereitgestellte Fernsteuerung gemessen.
 Das Mainboard ist mit diversen Anschlüssen ausgestattet, die es erlauben eine Tastatur, Maus und einen Bildschirm anzuschließen. Des Weiteren ist eine Kinect und eine Weitwinkelkamera vorhanden (siehe \autoref{sec:kameras}). Die Stromversorgung während der Fahrt übernehmen zwei Akkupacks.
-\tod{Bild Auto}
+\begin{figure}
+	\centering
+	\includegraphics[width=0.7\textwidth]{images/audo.jpg}
+	\caption{Das Fahrzeug}
+	\label{abb:audo}
+\end{figure}
 \subsubsection{Kameras}
 \label{sec:kameras}
 Zu Beginn war eine Kinect Kamera auf dem Fahrzeug verbaut. Diese wurde in den frühen Phasen der Entwicklung genutzt, jedoch kurz nach der Zwischenpräsentation durch die Weitwinkelkamera ersetzt. Diese zeichnet sich durch ein 120° Sichtfeld, eine FullHD Auflösung und einem leicht einstellbaren Positionswinkel aus.
@@ -27,11 +32,10 @@ Mit der Weitwinkelkamera wurde dieses Problem gelöst. Die Farben wirken natürl
 Deswegen  wurde ein 3D-Modell entwickelt und eine passende Halterung im Fablab\footnote{https://www.fablab.tu-darmstadt.de/} gedruckt. Mit dieser konnte die Kamera stabil am Fahrzeug befestigt werden und es gab keine Schwankungen mehr durch andere Kamerapositionen (nähere Informationen in \autoref{sec:befestigung}). 
 \begin{figure}
 	\centering
-	\includegraphics[width=0.5\textwidth]{images/Foto_Halterung.jpg}
+	\includegraphics[width=0.4\textwidth]{images/Foto_Halterung.jpg}
 	\caption{Halterung der Weitwinkelkamera}
 	\label{abb:halterung}
 \end{figure}
-\tod{Bild updaten}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Software}
 \label{sec:software}
