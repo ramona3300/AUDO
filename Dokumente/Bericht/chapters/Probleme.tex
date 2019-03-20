@@ -100,15 +100,12 @@ Die Räder kollidieren bei zu hohem Lenkwinkel mit dem Gehäuse, deswegen wird d
 Die Lenkmechanik des Fahrzeugs ist aus Plastik und nicht sonderlich genau gefertigt.
 Das hat zur Folge, dass die Lenkung ein merkliches Spiel hat. 
 Dies bedeutet, dass kleine Veränderungen am Lenkwinkel keine realen Auswirken haben. 
-Außerdem liegt relativ viel Last auf der Vorderachse, weil der Akku und die Kinect vorne im Fahrzeug platziert sind.
-Dadurch wird die Lenkmechanik noch zusätzlich belastet.
-Bei höheren Geschwindigkeiten sollte sich dieser Effekt allerdings abschwächen. 
-Durch diese Effekte kann sich nicht darauf verlassen werden, dass nach dem Einstellen eines Lenkwinkels, dieser auch tatsächlich anliegt.
+Außerdem liegt relativ viel Last auf der Vorderachse, weil der Akku und die Kinect vorne im Fahrzeug platziert sind. Dies belastet die Lenkmechanik zusätzlich.
+Bei höheren Geschwindigkeiten nimmt der Einfluss dieser Effekte zwar ab, grundsätzlich kann man sich jedoch nicht darauf verlassen, dass der Lenkwinkel exakt den vorgegebenen Werten folgt.
 In der Praxis wird allerdings immer mindestens so schnell gefahren, dass dieser Effekt keine allzu großen Auswirkungen hat.
 \\
 Ein weiteres Problem besteht darin, dass der Lenkwert der an die \code{UC\_Bridge} gesendet wird, sich nicht linear in einen Lenkwinkel umrechnen lässt.
-Die Beziehung zwischen Lenkwert und Lenkwinkel auszumessen gestaltet sich schwierig.
-Da diese Beziehung stark von der Geschwindigkeit und der Last auf die Lenkmechanik abhängt.
+Die Beziehung zwischen Lenkwert und Lenkwinkel auszumessen gestaltet sich schwierig, da diese Beziehung von der Geschwindigkeit und der Last auf die Lenkmechanik abhängt.
 Wenn der tatsächliche Lenkwinkel durch passende Sensoren regelmäßig gemessen werden würde, könnte eine Regelung für den Lenkwinkel konzipiert werden.
 Dieses Problem wurde jedoch nicht weiter beachtet, da sich auf eine möglichst robuste Regelung zur Fahrspurhaltung konzentriert wurde und diese das Problem teilweise ausgleichen kann. 
 Um die Lenkmechanik nicht unnötig zu belasten, wurde eine möglichst ruhige Regelung implementiert.

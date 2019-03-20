@@ -66,7 +66,7 @@ oneside
   %do not add your student id!
   %\studentidx{1145456}
 \thesisnumber{}
-  \referee{}{Institut f\"ur Datentechnik\textbar Fachgebiet Echtzeitsysteme}
+  \referee{Stefan Tomaszek, Eric Lenz}{Institut f\"ur Datentechnik\textbar Fachgebiet Echtzeitsysteme}
 	
   \iflanguage{english}{
 		\department{	\mbox{Department of Electrical Engineering}\\ and Information Technology (FB18)\\\\Adjunct Member Department of\\ Computer Science (FB20)\\\\Prof. Dr. rer. nat. A. Sch"urr\\\ Merckstra"se 25\\64283 Darmstadt\\\\www.es.tu-darmstadt.de}
@@ -76,9 +76,9 @@ oneside
 		\group{Fachgebiet Echtzeitsysteme}
 	}
   
-%  \dateofsubmit{\today}
-%  \makethesistitle
-%  \affidavit{N. Ziegelmayer, N. Wittig, F. Burger, R. Volz, M. Latsch}
+  \dateofsubmit{\today}
+  \makethesistitle
+  \affidavit{N. Ziegelmayer, N. Wittig, F. Burger, R. Volz, M. Latsch}
 	
 %	\cleardoublepage
 %	\begin {abstract}
@@ -87,11 +87,9 @@ oneside
 	
 
 	\pagenumbering{roman}
-	\addtocontents{Anhang}{}
 	\tableofcontents
 	\clearpage
 	\listoffigures
-	\listoftables
 	\clearpage
 	
 	\pagenumbering{arabic}
@@ -103,14 +101,10 @@ oneside
 	\clearpage
 	\input{chapters/Probleme}
 	\clearpage
-	\tod{Liste of todos entfernen ganz am Ende}
-	\listoftodos
+
   
 	\bibliographystyle{alphadin}
 	\bibliography{literature}
 	
-	\begin{appendix}
-	\section{Anhang}
-	\end{appendix}
 
 \end{document}
